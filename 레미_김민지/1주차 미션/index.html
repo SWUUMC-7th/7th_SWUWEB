@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>UMC TodoList - Week 1 Mission</title>
+  </head>
+  <body>
+    <header>
+      <h1 id="main-title">UMC Todo List</h1>
+    </header>
+    <main>
+      <section>
+        <h2 class="sr-only">Todo Input Box</h2>
+        <input id="todo-input" type="text" placeholder="스터디 계획을 작성해보세요!" />
+      </section>
+      <section>
+        <h2 class="sr-only">할 일/했던 일 목록 섹션</h2>
+        <div class="lists">
+          <div class="todo-list">
+            <h3>해야 할 일</h3>
+            <ul id="todo-items">
+              <!-- <li class="todo-item">
+                <p>리액트</p>
+                <button class="done-button">완료</button>
+              </li> -->
+            </ul>
+          </div>
+          <div class="completed-list">
+            <h3>해낸 일</h3>
+            <ul id="completed-items">
+              <!-- <li class="completed-item">
+                <p>JS</p>
+                <button class="delete-button">삭제</button>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
