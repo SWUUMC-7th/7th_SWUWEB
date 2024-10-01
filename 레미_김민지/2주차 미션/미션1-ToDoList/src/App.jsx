@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Input from "./components/Input";
 import Button from "./components/Button";
+import "./App.css";
 
 function App() {
   const [toDos, setToDos] = useState([{ id: 1, task: "투두 만들어보기" }]);
@@ -30,68 +31,60 @@ function App() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <Input value={text} onChange={(e) => setText(e.target.value)} />
-        <Button
-          onClick={() => {
-            addToDo();
-          }}
-        >
+    <div className="container">
+      <h1>2주차 실습 - To Do List</h1>
+      <form onSubmit={handleSubmit} className="form">
+        <Input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="할 일을 입력하세요"
+        />
+        <Button onClick={addToDo} type="submit" className="">
           할 일 등록
         </Button>
       </form>
-      <div>
+      <ul className="todo-list">
         {toDos.map((toDo) => (
-          <div key={toDo.id} style={{ display: "flex", gap: "20px" }}>
+          <li key={toDo.id} className="todo-item">
             {editingId === toDo.id ? (
-              <>
-                <div style={{ display: "flex", gap: "20px", fontWeight: 600 }}>
-                  <p>{toDo.id}.</p>
-                  <Input
-                    placeholder={"할 일을 수정해주세요"}
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                </div>
-              </>
+              <div className="task">
+                <span>{toDo.id}) </span>
+                <Input
+                  placeholder="할 일을 수정해주세요"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+              </div>
             ) : (
-              <>
-                <div style={{ display: "flex", gap: "20px", fontWeight: 600 }}>
-                  <p>{toDo.id}. </p>
-                  <p>{toDo.task}</p>
-                </div>
-              </>
+              <div className="task">
+                <span>{toDo.id}) </span>
+                <span>{toDo.task}</span>
+              </div>
             )}
-            <Button
-              onClick={() => {
-                deleteToDo(toDo.id);
-              }}
-            >
-              삭제하기
-            </Button>
-            {editingId === toDo.id ? (
-              <Button
-                onClick={() => {
-                  modifyToDo(editingId, editText);
-                }}
-              >
-                수정 완료
+            <div className="button-group">
+              <Button onClick={() => deleteToDo(toDo.id)} className="delete">
+                삭제하기
               </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  setEditingId(toDo.id);
-                  setEditText(toDo.task);
-                }}
-              >
-                수정 진행
-              </Button>
-            )}
-          </div>
+              {editingId === toDo.id ? (
+                <Button onClick={() => modifyToDo(editingId, editText)} className="complete">
+                  수정 완료
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setEditingId(toDo.id);
+                    setEditText(toDo.task);
+                  }}
+                  className="modify"
+                >
+                  수정 진행
+                </Button>
+              )}
+            </div>
+          </li>
         ))}
-      </div>
-    </>
+      </ul>
+    </div>
   );
 }
 
