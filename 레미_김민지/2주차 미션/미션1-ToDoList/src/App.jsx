@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Input from "./components/Input";
+import Button from "./components/Button";
+
 function App() {
   const [toDos, setToDos] = useState([{ id: 1, task: "투두 만들어보기" }]);
   const [text, setText] = useState("");
@@ -29,13 +31,13 @@ function App() {
     <>
       <form onSubmit={handleSubmit}>
         <Input value={text} onChange={(e) => setText(e.target.value)} />
-        <button
+        <Button
           onClick={() => {
             addToDo();
           }}
         >
           할 일 등록
-        </button>
+        </Button>
       </form>
       <div>
         {toDos.map((toDo) => (
@@ -59,11 +61,29 @@ function App() {
                 </div>
               </>
             )}
-            <button onClick={() => deleteToDo(toDo.id)}>삭제하기</button>
+            <Button
+              onClick={() => {
+                deleteToDo(toDo.id);
+              }}
+            >
+              삭제하기
+            </Button>
             {editingId === toDo.id ? (
-              <button onClick={() => modifyToDo(editingId, editText)}>수정 완료</button>
+              <Button
+                onClick={() => {
+                  modifyToDo(editingId, editText);
+                }}
+              >
+                수정 완료
+              </Button>
             ) : (
-              <button onClick={() => setEditingId(toDo.id)}>수정 진행</button>
+              <Button
+                onClick={() => {
+                  setEditingId(toDo.id);
+                }}
+              >
+                수정 진행
+              </Button>
             )}
           </div>
         ))}
