@@ -14,6 +14,7 @@ function App() {
   };
 
   const addToDo = () => {
+if (text.trim() === "") return;
     setToDos((prev) => [...prev, { id: Math.floor(Math.random() * 100) + 2, task: text }]);
     setText("");
   };
@@ -23,6 +24,7 @@ function App() {
   };
 
   const modifyToDo = (id, text) => {
+    if (text.trim() === "") return;
     setToDos((prev) => prev.map((item) => (item.id === id ? { ...item, task: text } : item)));
     setEditingId("");
   };
