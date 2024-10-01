@@ -50,9 +50,8 @@ function App() {
       <button onClick={()=> addTodo()} type="submit">할 일 등록</button>
     </form>
     <div>
-      {todos.map((todo, _)=> (
-        <>
-        <div style={{display:'flex' ,gap:'20px'}}>
+      {todos.map((todo)=> (
+        <div key={todo.id} style={{display:'flex' ,gap:'20px'}}>
           <div key={todo.id} style={{display:'flex' ,gap:'5px'}}>
             {editingId === todo.id ? (
           // 수정 중일 때
@@ -76,7 +75,6 @@ function App() {
           )}
           
         </div>
-        </>
       ))}
     </div>
     </>
