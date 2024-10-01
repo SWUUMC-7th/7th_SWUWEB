@@ -18,6 +18,9 @@ function App() {
 
   //추가하기
   const addTodo= ()=>{
+    if(text.trim().length ===0 ){
+      alert('텍스트를 입력해주세요.')
+    }
     setTodos((prev)=> [
       ...prev, 
       {id:Math.floor(Math.random()*100 +2), task: text}
