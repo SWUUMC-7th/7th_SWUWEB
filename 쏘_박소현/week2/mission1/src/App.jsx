@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Button from "./components/Button";
 import Input from "./components/Input";
+import './App.css';
+
 
 function App() {
   const [todos, setTodos] = useState([{ id: 1, task: "투두 만들기" }]);
@@ -37,44 +39,48 @@ function App() {
   };
 
   return (
-    <>
+    <div className="container">
+      <h1>Todo List</h1>
       <form onSubmit={handleSubmit}>
-        <Input value={text} onChange={(e) => setText(e.target.value)} />
-        <Button onClick={addTodo} type="submit">
-          할 일 등록
-        </Button>
+        <div className="addTodo">
+          <Input value={text} onChange={(e) => setText(e.target.value)} />
+          <Button onClick={addTodo} type="submit">
+            할 일 등록
+          </Button>
+        </div>
       </form>
       <div>
         {todos.map((todo) => (
-          <div key={todo.id} style={{ display: "flex", gap: "20px" }}>
+          <div key={todo.id} className="todoContainer">
             <div style={{ display: "flex", gap: "5px" }}>
               {editingId === todo.id ? (
-                // 수정 중일 때
-                <>
+                <div className="todoText">
                   <p>{todo.id}</p>
                   <Input
                     defaultValue={todo.task}
                     onChange={(e) => setEditText(e.target.value)}
                   />
-                </>
+                </div>
               ) : (
-                // 수정 중이 아닐 때
-                <>
+                <div className="todoText">
                   <p>{todo.id}</p>
                   <p>{todo.task}</p>
-                </>
+                </div>
               )}
             </div>
-            <Button onClick={() => deleteTodo(todo.id)}>삭제하기</Button>
+            <div className="buttonContainer">
+              <Button onClick={() => deleteTodo(todo.id)}>삭제하기</Button>
             {editingId === todo.id ? (
               <Button onClick={() => updateTodo(editingId, editText)}>수정 완료</Button>
             ) : (
               <Button onClick={() => setEditingId(todo.id)}>수정 진행</Button>
             )}
+            </div>
+            
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
