@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import Input from "./components/Input";
 function App() {
   const [toDos, setToDos] = useState([{ id: 1, task: "투두 만들어보기" }]);
   const [text, setText] = useState("");
@@ -28,7 +28,7 @@ function App() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+        <Input value={text} onChange={(e) => setText(e.target.value)} />
         <button
           onClick={() => {
             addToDo();
@@ -44,7 +44,11 @@ function App() {
               <>
                 <div style={{ display: "flex", gap: "20px", fontWeight: 600 }}>
                   <p>{toDo.id}.</p>
-                  <input defaultValue={toDo.task} onChange={(e) => setEditText(e.target.value)} />
+                  <Input
+                    placeholder={"할 일을 수정해주세요"}
+                    defaultValue={toDo.task}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
                 </div>
               </>
             ) : (
