@@ -14,7 +14,7 @@ function App() {
   };
 
   const addToDo = () => {
-if (text.trim() === "") return;
+    if (text.trim() === "") return;
     setToDos((prev) => [...prev, { id: Math.floor(Math.random() * 100) + 2, task: text }]);
     setText("");
   };
@@ -50,7 +50,7 @@ if (text.trim() === "") return;
                   <p>{toDo.id}.</p>
                   <Input
                     placeholder={"할 일을 수정해주세요"}
-                    defaultValue={toDo.task}
+                    value={editText}
                     onChange={(e) => setEditText(e.target.value)}
                   />
                 </div>
@@ -82,6 +82,7 @@ if (text.trim() === "") return;
               <Button
                 onClick={() => {
                   setEditingId(toDo.id);
+                  setEditText(toDo.task);
                 }}
               >
                 수정 진행
