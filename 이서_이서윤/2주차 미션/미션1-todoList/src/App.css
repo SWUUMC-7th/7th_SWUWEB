@@ -1,0 +1,53 @@
+*{
+    background-color: #F7F8F0;
+    text-align: center;
+    justify-content: center;
+}
+h1{
+    color:rgb(0, 0, 0);
+}
+#inputContainer{
+    margin-left: 50px;
+}
+#main_input{
+    width:700px; height:40px;
+    border: 2px solid #ED5D47;
+    background-color:white;
+    border-radius:10px;
+}
+#input_button{
+    color:rgb(43, 130, 43);
+    font-weight:800;
+    background-color:rgb(213, 255, 213);
+    border:2px solid rgb(43, 130, 43);
+    height:40px;
+    border-radius:5px;
+    margin:0 10px;
+}
+.button{
+    color: #ed5d47;
+    font-weight:800;
+    background-color: #FFB1AB;
+    border:none;
+    height:40px;
+    border-radius:5px;
+    margin:0 10px;
+}
+.todo{
+    font-size:20px;
+    font-weight:800;
+    height:40px;
+    line-height:40px;
+}
+.listContainer{
+    width:500px;
+    display: flex;
+    justify-content: space-between;
+    margin:0 auto;
+    border-bottom:2px solid #ed5d47;
+    padding: 5px;
+}
+#list{
+    width:500px;
+    margin:10px auto;
+}
