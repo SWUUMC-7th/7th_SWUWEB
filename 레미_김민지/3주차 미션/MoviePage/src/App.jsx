@@ -1,7 +1,9 @@
+import Movies from "./components/Movies";
+
 function App() {
   return (
     <>
-      <div>영화 페이지 미션</div>
+      <Movies />
     </>
   );
 }
