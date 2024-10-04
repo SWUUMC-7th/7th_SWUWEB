@@ -7,9 +7,8 @@ const Main=styled.div`
     width:100vw;
     height:100vh;
 `;
-const Container=styled.div`
+const Container=styled.div` 
     display:flex;
-   
 `;
 
 const RootLayout = () => {

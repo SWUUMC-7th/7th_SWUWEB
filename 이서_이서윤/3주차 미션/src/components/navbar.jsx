@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 const Container=styled.div`
     display:flex;
-    padding:0 30px;
+    padding:0 20px;
     justify-content:space-between;
     height:60px;
     line-height:60px;
-    background-color:#0B0C0D;
+    background-color:#141414;
 `;
 const Right=styled.div` 
     font-size:15px;

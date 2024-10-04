@@ -6,6 +6,7 @@ import Movies from "./pages/movies.jsx";
 import RootLayout from './layout/root-layout.jsx';
 import LogIn from './pages/login.jsx';
 import SignUp from './pages/signup.jsx';
+import Search from "./pages/search.jsx";
 
 const router = createBrowserRouter([
     {
@@ -28,7 +29,11 @@ const router = createBrowserRouter([
           {
             path:'signup',
             element:<SignUp/>
-          }
+          },
+          {
+            path:'search',
+            element:<Search/>
+          },
         ]
     }
 ])
@@ -38,12 +43,3 @@ function App() {
 }
 
 export default App
-
-
-// function App() {
-//     return (
-//         <h1>hello!</h1>
-//     )
-// }
-
-// export default App
