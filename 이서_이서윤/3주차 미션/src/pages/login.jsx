@@ -1,6 +1,16 @@
+import styled from "styled-components";
+
+const Container=styled.div`
+    background-color:black;
+    width:calc(100vw - 200px);
+    *{color:white;}
+`;
+
 const LogInPage = () => {
     return (
-        <h1>LogIn Page</h1>
+        <Container>
+            <h1>로그인 페이지</h1>
+        </Container>
     );
 };
 
