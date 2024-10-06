@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getMovies } from '../api/movies/getMovies';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 
 const baseUrl = 'https://image.tmdb.org/t/p/w500';
 
@@ -28,12 +29,13 @@ const MovieImage = styled.img`
 `;
 
 const Movie = () => {
+  const { category } = useParams();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getMovies(); 
+        const data = await getMovies(category);
         setMovies(data.results);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -41,7 +43,7 @@ const Movie = () => {
     };
 
     fetchData();
-  }, []);
+  }, [category]);
 
   return (
     <MovieContainer>

@@ -1,8 +1,8 @@
 import axiosInstance from '..';
 
-export const getMovies = async () => {
+export const getMovies = async (category) => {
   try {
-    const response = await axiosInstance.get(`popular?language=en-US&page=1`);
+    const response = await axiosInstance.get(`${category}?language=ko-KR&page=1`);
     console.log(response.data);
     return response.data;
   } catch (error) {
