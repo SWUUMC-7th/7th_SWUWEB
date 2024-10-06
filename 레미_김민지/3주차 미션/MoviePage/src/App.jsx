@@ -4,6 +4,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <h1>홈 페이지</h1>,
+    errorElement: <h1>없는 페이지 입니다</h1>,
   },
   {
     path: "/movies",
