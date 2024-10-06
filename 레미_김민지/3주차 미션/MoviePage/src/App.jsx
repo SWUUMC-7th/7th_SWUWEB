@@ -1,14 +1,17 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./pages/home.jsx";
+import NotFound from "./pages/not-found.jsx";
+import Movies from "./pages/movies.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <h1>홈 페이지</h1>,
-    errorElement: <h1>없는 페이지 입니다</h1>,
+    element: <HomePage />,
+    errorElement: <NotFound />,
   },
   {
     path: "/movies",
-    element: <h1>영화 페이지</h1>,
+    element: <Movies />,
   },
 ]);
 
