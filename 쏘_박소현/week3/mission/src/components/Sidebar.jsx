@@ -40,7 +40,7 @@ const Sidebar = () => {
         <Icon><FaSearch /></Icon>
         찾기
       </SidebarLink>
-      <SidebarLink to="/movies">
+      <SidebarLink to="/movies/category">
         <Icon><FaFilm /></Icon>
         영화
       </SidebarLink>

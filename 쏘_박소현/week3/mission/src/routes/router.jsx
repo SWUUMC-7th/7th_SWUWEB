@@ -20,7 +20,7 @@ const router = createBrowserRouter([
             element: <HomePage/>
         },
         {
-          path: 'movies/:movieId',
+          path: 'movies/:category',
             element: <MoviesPage/>
         },
         {
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
             element: <SearchPage/>
         },
         {
-          path: 'movies',
+          path: 'movies/category',
             element: <CategoryPage/>
         }
     ]
