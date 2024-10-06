@@ -8,7 +8,6 @@ const Header = styled.header`
   background-color: #282c34; 
   color: white; 
   justify-content: space-between;
-  margin-bottom: 30px;
 `;
 
 const NavLink = styled(Link)`
