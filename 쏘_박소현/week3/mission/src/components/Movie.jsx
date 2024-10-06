@@ -5,16 +5,16 @@ import styled from 'styled-components';
 const baseUrl = 'https://image.tmdb.org/t/p/w500';
 
 const MovieContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap; 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
   gap: 10px;
-  justify-content: center;
+  margin: 0 auto;
+  max-width: 1300px; 
 `;
 
 const MovieItem = styled.div`
   position: relative;
   overflow: hidden;
-  width: 160px;
 
   &:hover img {
     filter: brightness(20%); 
@@ -22,7 +22,7 @@ const MovieItem = styled.div`
 `;
 
 const MovieImage = styled.img`
-  width: 100px;
+  width: 100%;
   border-radius: 5px;
   transition: filter 0.3s ease; 
 `;

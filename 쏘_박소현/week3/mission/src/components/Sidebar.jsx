@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { FaSearch, FaFilm } from 'react-icons/fa';
 
 const SidebarContainer = styled.div`
-  width: 150px;
+  width: 200px;
   background-color: #282c34;
   color: white;
-  padding: 20px;
+  padding: 20px 30px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  box-sizing: border-box;
 `;
 
 const SidebarLink = styled(Link)`
@@ -27,7 +28,9 @@ const SidebarLink = styled(Link)`
 `;
 
 const Icon = styled.div`
-  margin-right: 10px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
 `;
 
 const Sidebar = () => {
