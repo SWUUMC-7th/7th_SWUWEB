@@ -4,36 +4,27 @@ import styled from 'styled-components';
 
 const baseUrl = 'https://image.tmdb.org/t/p/w500';
 
-const MovieGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
+const MovieContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap; 
   gap: 10px;
+  justify-content: center;
 `;
 
 const MovieItem = styled.div`
   position: relative;
   overflow: hidden;
+  width: 160px;
 
-  &:hover div {
-    opacity: 1;
+  &:hover img {
+    filter: brightness(20%); 
   }
 `;
 
 const MovieImage = styled.img`
-  width: 100%;
+  width: 100px;
   border-radius: 5px;
-`;
-
-const HoverOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0; 
-  transition: opacity 0.3s ease; 
+  transition: filter 0.3s ease; 
 `;
 
 const Movie = () => {
@@ -53,21 +44,18 @@ const Movie = () => {
   }, []);
 
   return (
-    <MovieGrid>
+    <MovieContainer>
       {movies.map(movie => (
-        <div key={movie.id}>
-          <MovieItem key={movie.id}>
+        <MovieItem key={movie.id}>
           <MovieImage
             src={`${baseUrl}${movie.poster_path}`}
             alt={movie.title}
           />
-          <HoverOverlay /> 
+          <p>{movie.title}</p>
+          <p>{movie.release_date}</p>
         </MovieItem>
-        <p>{movie.title}</p>
-        <p>{movie.release_date}</p>
-        </div>
       ))}
-    </MovieGrid>
+    </MovieContainer>
   );
 };
 

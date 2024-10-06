@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { FaSearch, FaFilm } from 'react-icons/fa';
 
 const SidebarContainer = styled.div`
-  width: 200px;
+  width: 150px;
   background-color: #282c34;
   color: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const SidebarLink = styled(Link)`

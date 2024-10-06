@@ -15,13 +15,21 @@ const Container = styled.div`
     flex-direction: row;
 `;
 
+const Content = styled.div`
+    flex: 1; 
+    overflow-y: auto;
+`;
+
+
 const RootLayout = () => {
     return (
         <Layout>
             <Navbar/>
             <Container>
-            <Sidebar/>
-            <Outlet/>    
+                <Sidebar/>
+                <Content>
+                    <Outlet />
+                </Content>
             </Container>
 
         </Layout>
