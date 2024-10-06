@@ -3,6 +3,8 @@ import HomePage from "../pages/HomePage";
 import NotFound from "../pages/NotFound";
 import MoviesPage from "../pages/MoviesPage";
 import RootLayout from "../layout/RootLayout";
+import SigninPage from "../pages/SigninPage";
+import SignupPage from "../pages/SignupPage";
 
 
 const router = createBrowserRouter([
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
         {
           path: 'movies/:movieId',
             element: <MoviesPage/>
+        },
+        {
+          path: 'sign-in',
+            element: <SigninPage/>
+        },
+        {
+          path: 'sign-up',
+            element: <SignupPage/>
         }
     ]
   },
