@@ -7,6 +7,7 @@ const Layout = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: 100vw;
 `;
 
 const Container = styled.div`
