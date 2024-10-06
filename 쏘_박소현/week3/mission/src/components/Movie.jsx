@@ -1,14 +1,28 @@
-import { useState } from 'react';
-import { MOVIES } from '../mocks/movies';
+import { useState, useEffect } from 'react';
+import { getMovies } from '../api/movies/getMovies';
 
 const baseUrl = 'https://image.tmdb.org/t/p/w500';
 
 const Movie = () => {
   const [hoveredMovieId, setHoveredMovieId] = useState(null); 
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getMovies(); 
+        setMovies(data.results);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '10px' }}>
-      {MOVIES.results.map(movie => (
+      {movies.map(movie => (
         <div
           key={movie.id}
           onMouseEnter={() => setHoveredMovieId(movie.id)} 
