@@ -1,7 +1,14 @@
+import Movie from "../components/Movie.jsx";
+
+
+
 const MoviesPage = () => {
-  return (
-      <h1>Movies Page</h1>
-  );
+
+    return (
+      <Movie />
+    )
 };
 
 export default MoviesPage;
+
+
