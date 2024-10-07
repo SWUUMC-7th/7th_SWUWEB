@@ -8,8 +8,12 @@ const Navbar = () => {
         <Link to="/">YONGCHA</Link>
       </Logo>
       <NavItems>
-        <LoginButton>로그인</LoginButton>
-        <SignUpButton>회원가입</SignUpButton>
+        <LoginButton>
+          <Link to="/login">로그인</Link>
+        </LoginButton>
+        <SignUpButton>
+          <Link to="/signup">회원가입</Link>
+        </SignUpButton>
       </NavItems>
     </NavContainer>
   );
@@ -43,17 +47,26 @@ const NavItems = styled.div`
 
 const LoginButton = styled.button`
   background-color: transparent;
-  color: white;
+
   border: none;
   padding: 10px 20px;
   cursor: pointer;
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
 `;
 
 const SignUpButton = styled.button`
   background-color: #ff213b;
-  color: white;
   border: none;
   border-radius: 18px;
   padding: 10px 20px;
   cursor: pointer;
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
 `;
