@@ -2,10 +2,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import HomePage from "./pages/home.jsx";
 import NotFound from "./pages/not-found.jsx";
-import Movies from "./pages/movies.jsx";
+import MoviesPage from "./pages/movies.jsx";
 import Login from "./pages/login.jsx";
 import SignUp from "./pages/signup.jsx";
 import Search from "./pages/search.jsx";
+import NowPlayingMovies from "./pages/nowPlayingMovies.jsx";
+import PopularMovies from "./pages/popularMovies.jsx";
+import UpComingMovies from "./pages/upcomingMovies.jsx";
+import TopRatedMovies from "./pages/topRatedMovies.jsx";
+import Category from "./components/category.jsx";
 import RootLayout from "./layout/root-layout.jsx";
 
 const router = createBrowserRouter([
@@ -19,16 +24,36 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        //path: "movies/:movieId",
         path: "movies",
-        element: <Movies />,
+        element: <MoviesPage />,
+        children: [
+          {
+            index: true, // 기본 경로로 카테고리만 표시
+          },
+          {
+            path: "now-playing",
+            element: <NowPlayingMovies />,
+          },
+          {
+            path: "popular",
+            element: <PopularMovies />,
+          },
+          {
+            path: "top-rated",
+            element: <TopRatedMovies />,
+          },
+          {
+            path: "up-coming",
+            element: <UpComingMovies />,
+          },
+        ],
       },
       {
-        path: "login", // 로그인 페이지 경로 추가
+        path: "login",
         element: <Login />,
       },
       {
-        path: "signup", // 회원가입 페이지 경로 추가
+        path: "signup",
         element: <SignUp />,
       },
       {
