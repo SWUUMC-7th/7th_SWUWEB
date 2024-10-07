@@ -29,6 +29,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true, // 기본 경로로 카테고리만 표시
+            element: <Category />,
           },
           {
             path: "now-playing",
