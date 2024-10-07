@@ -17,41 +17,28 @@ function MovieCards({ movie }) {
   };
 
   return (
-    <Container>
-      <MovieCard
-        onMouseEnter={() => handleMouseEnter(movie.id)}
-        onMouseLeave={handleMouseLeave}
-        onClick={() => handleClick(movie)}
-      >
-        <PosterImage
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          alt={movie.title}
-        />
-        {hoveredMovieId === movie.id && (
-          <HoverInfo>
-            <HoverText bold>{movie.title}</HoverText>
-            <HoverText>{movie.release_date}</HoverText>
-          </HoverInfo>
-        )}
-      </MovieCard>
-    </Container>
+    <MovieCard
+      onMouseEnter={() => handleMouseEnter(movie.id)}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => handleClick(movie)}
+    >
+      <PosterImage src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+      {hoveredMovieId === movie.id && (
+        <HoverInfo>
+          <HoverText bold>{movie.title}</HoverText>
+          <HoverText>{movie.release_date}</HoverText>
+        </HoverInfo>
+      )}
+    </MovieCard>
   );
 }
 
 export default MovieCards;
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 40px 0;
-  gap: 20px;
-`;
-
 const MovieCard = styled.div`
   position: relative;
-  width: 260px;
-  height: 380px;
+  width: 170px;
+  height: 260px;
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
@@ -78,6 +65,7 @@ const HoverInfo = styled.div`
 `;
 
 const HoverText = styled.div`
+  text-align: center;
   color: #fff;
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
 `;
