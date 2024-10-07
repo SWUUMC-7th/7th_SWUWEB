@@ -5,6 +5,7 @@ import NotFound from "./pages/not-found.jsx";
 import Movies from "./pages/movies.jsx";
 import Login from "./pages/login.jsx";
 import SignUp from "./pages/signup.jsx";
+import Search from "./pages/search.jsx";
 import RootLayout from "./layout/root-layout.jsx";
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "signup", // 회원가입 페이지 경로 추가
         element: <SignUp />,
+      },
+      {
+        path: "search",
+        element: <Search />,
       },
     ],
   },
