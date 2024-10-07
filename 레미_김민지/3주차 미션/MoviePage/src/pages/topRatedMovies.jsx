@@ -24,7 +24,9 @@ const TopRatedMovies = () => {
   return (
     <div>
       <h1>높은 평점을 받은 영화</h1>
-      <MovieCards movies={movies} />
+      {movies.map((movie) => (
+        <MovieCards key={movie.id} movie={movie} />
+      ))}
     </div>
   );
 };

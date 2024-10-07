@@ -24,7 +24,9 @@ const PopularMovies = () => {
   return (
     <div>
       <h1>인기있는 영화</h1>
-      <MovieCards movies={movies} />
+      {movies.map((movie) => (
+        <MovieCards key={movie.id} movie={movie} />
+      ))}
     </div>
   );
 };

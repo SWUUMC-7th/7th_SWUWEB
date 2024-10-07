@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import MovieCards from "../components/movieCards";
+import MovieCards from "../components/MovieCards";
 
 const NowPlayingMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -17,14 +17,17 @@ const NowPlayingMovies = () => {
       );
       setMovies(response.data.results);
     };
-
     fetchMovies();
   }, []);
 
   return (
     <div>
       <h1>현재 상영중인 영화</h1>
-      <MovieCards movies={movies} />
+      <div>
+        {movies.map((movie) => (
+          <MovieCards key={movie.id} movie={movie} />
+        ))}
+      </div>
     </div>
   );
 };

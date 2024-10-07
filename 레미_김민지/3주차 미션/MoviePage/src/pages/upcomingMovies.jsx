@@ -24,7 +24,9 @@ const UpComingMovies = () => {
   return (
     <div>
       <h1>개봉 예정인 영화</h1>
-      <MovieCards movies={movies} />
+      {movies.map((movie) => (
+        <MovieCards key={movie.id} movie={movie} />
+      ))}
     </div>
   );
 };
