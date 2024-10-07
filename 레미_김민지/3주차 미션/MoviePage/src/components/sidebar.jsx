@@ -1,12 +1,19 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { IoSearch, IoVideocam } from "react-icons/io5";
 
 const Sidebar = () => {
   return (
     <SidebarContainer>
       <SidebarMenu>
-        <SidebarLink to="/popular">인기</SidebarLink>
-        <SidebarLink to="/chat">채팅</SidebarLink>
+        <SidebarLink to="/search">
+          <IoSearch />
+          찾기
+        </SidebarLink>
+        <SidebarLink to="/movies">
+          <IoVideocam />
+          영화
+        </SidebarLink>
       </SidebarMenu>
     </SidebarContainer>
   );
