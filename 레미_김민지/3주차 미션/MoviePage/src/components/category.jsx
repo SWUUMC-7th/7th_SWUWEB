@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Category = () => {
   return (
-    <CategoryContainer>
+    <>
       <h1>카테고리</h1>
       <CategoryGrid>
         {categories.map((category) => (
@@ -15,7 +15,7 @@ const Category = () => {
           </StyledLink>
         ))}
       </CategoryGrid>
-    </CategoryContainer>
+    </>
   );
 };
 
@@ -48,20 +48,14 @@ const categories = [
 
 export default Category;
 
-const CategoryContainer = styled.div`
-  padding: 20px;
-  color: white;
-`;
-
 const CategoryGrid = styled.div`
   display: flex;
-  gap: 20px;
   justify-content: space-between;
   flex-wrap: wrap;
 `;
 
 const CategoryCard = styled.div`
-  width: 290px;
+  width: 300px;
   height: 180px;
   border-radius: 12px;
   position: relative;
