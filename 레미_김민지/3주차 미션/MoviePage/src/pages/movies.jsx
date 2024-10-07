@@ -1,4 +1,4 @@
-import MovieCards from "../components/MovieCards";
+import MovieCards from "../components/movieCards";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -13,7 +13,7 @@ const MoviesPage = () => {
         {
           headers: {
             accept: "application/json",
-            Authorization: `Bearer ${import.meta.env.MOVIES_API}`,
+            Authorization: `Bearer ${import.meta.env.VITE_MOVIES_API}`,
           },
         },
       );
