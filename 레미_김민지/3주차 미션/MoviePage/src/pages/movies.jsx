@@ -1,4 +1,5 @@
 import MovieCards from "../components/movieCards";
+import Category from "../components/category";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -24,6 +25,7 @@ const MoviesPage = () => {
 
   return (
     <>
+      <Category />
       {movies.data?.results.map((movie) => (
         <MovieCards key={movie.id} movie={movie} />
       ))}
