@@ -1,8 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { MOVIES } from "../mocks/movies";
 
-function Movies() {
+function MovieCards({ movie }) {
   const [hoveredMovieId, setHoveredMovieId] = useState(null);
 
   const handleMouseEnter = (id) => {
@@ -19,30 +18,27 @@ function Movies() {
 
   return (
     <Container>
-      {MOVIES.results.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          onMouseEnter={() => handleMouseEnter(movie.id)}
-          onMouseLeave={handleMouseLeave}
-          onClick={() => handleClick(movie)}
-        >
-          <PosterImage
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
-          />
-          {hoveredMovieId === movie.id && (
-            <HoverInfo>
-              <HoverText bold>{movie.title}</HoverText>
-              <HoverText>{movie.release_date}</HoverText>
-            </HoverInfo>
-          )}
-        </MovieCard>
-      ))}
+      <MovieCard
+        onMouseEnter={() => handleMouseEnter(movie.id)}
+        onMouseLeave={handleMouseLeave}
+        onClick={() => handleClick(movie)}
+      >
+        <PosterImage
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          alt={movie.title}
+        />
+        {hoveredMovieId === movie.id && (
+          <HoverInfo>
+            <HoverText bold>{movie.title}</HoverText>
+            <HoverText>{movie.release_date}</HoverText>
+          </HoverInfo>
+        )}
+      </MovieCard>
     </Container>
   );
 }
 
-export default Movies;
+export default MovieCards;
 
 const Container = styled.div`
   display: flex;
