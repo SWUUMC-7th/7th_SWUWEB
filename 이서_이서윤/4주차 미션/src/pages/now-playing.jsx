@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import MovieCard from "../components/moviecard";
 import styled from "styled-components";
+import useCustomFetch from "../../hooks/useCustomFetch";
 
 const Container=styled.div`
     width: clac(100vw - 200px);
@@ -16,23 +16,20 @@ const Container=styled.div`
 const NowPaying = () => {
     const [movies, setMovies] = useState([]);
 
+    const {data, isLoading, isError} = useCustomFetch('/movie/now_playing?language=ko-KR&page=1')
+
     useEffect(() => {
-        const getMovies = async () => {
-            try {
-                const response = await axios.get(`https://api.themoviedb.org/3/movie/now_playing?language=ko-KR&page=1`,{
-                    headers:{
-                        Authorization:`Bearer ${import.meta.env.VITE_API_KEY}`
-                    }
-                });
-                setMovies(response.data.results);
-            } catch (error) {
-                console.error("Error fetching movies:", error);
-            }
-        };
+        if (data) {
+            setMovies(data); 
+        }
+    }, [data]); 
 
-        getMovies();
-    }, []);
-
+    if(isLoading){
+        return <div>로딩 중 입니다...</div>
+    }
+    if(isError){
+        return <div>오류</div>
+    }
     return (
         <Container>
             {movies.map((movie) => (

@@ -15,7 +15,6 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <RootLayout/>,
-        errorElement: <NotFound/>,
         children:[
           {
             index:true, // 홈 경로
@@ -54,6 +53,10 @@ const router = createBrowserRouter([
             element:<UpComing/>
           },
         ]
+    },
+    {
+      path: '*',
+      element:<NotFound/>
     }
 ])
 
