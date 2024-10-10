@@ -16,7 +16,7 @@ const Container=styled.div`
 const UpComing = () => {
     const [movies, setMovies] = useState([]);
 
-    const {data, isLoading, isError} = useCustomFetch('/movie/up_coming?language=ko-KR&page=1')
+    const {data, isLoading, isError} = useCustomFetch('/movie/upcoming?language=ko-KR&page=1')
 
     useEffect(() => {
         if (data) {
