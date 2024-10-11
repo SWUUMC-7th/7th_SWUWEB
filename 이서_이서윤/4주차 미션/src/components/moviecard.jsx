@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 const Wrapper=styled.div`
     margin:10px;
     height:250px;
@@ -35,15 +35,17 @@ const Title=styled.div`
 const Date=styled.div`
     font-size:11px;
 `;
-const MovieCard=({key, title, poster, release_date})=>{
+const MovieCard=({movie})=>{
     const src='https://image.tmdb.org/t/p/w500';
+    const navigate=useNavigate();
+
     return(
         <>
-            <Wrapper>
+            <Wrapper onClick={()=>{navigate(`/movies/:${movie.id}`,{props:movie})}}>
                 <Div></Div>
-                <Img src={`${src}${poster}`} alt={key}/>
-                <Title>{title}</Title>
-                <Date>{release_date}</Date>
+                <Img src={`${src}${movie.poster_path}`} alt={movie.title}/>
+                <Title>{movie.title}</Title>
+                <Date>{movie.release_date}</Date>
             </Wrapper>
         </>
     );

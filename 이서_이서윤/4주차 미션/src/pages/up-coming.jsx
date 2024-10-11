@@ -7,7 +7,6 @@ import MovieFetchError from "../components/movieFetchError";
 
 const UpComing = () => {
     const [movies, setMovies] = useState([]);
-
     const {data, isLoading, isError} = useCustomFetch('/movie/upcoming?language=ko-KR&page=1')
 
     useEffect(() => {
@@ -19,7 +18,6 @@ const UpComing = () => {
     if(isLoading){
         return <LoadingSpinner/>
     }
-
     if(isError){
         return <MovieFetchError/>
     }
@@ -29,9 +27,7 @@ const UpComing = () => {
             {movies.map((movie) => (
                 <MovieCard 
                     key={movie.id} 
-                    title={movie.title}
-                    poster={movie.poster_path}
-                    release_date={movie.release_date}
+                    movie={movie}
                 />
             ))}
         </MovieGrid>
