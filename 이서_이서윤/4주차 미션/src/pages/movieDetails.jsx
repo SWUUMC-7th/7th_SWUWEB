@@ -11,7 +11,7 @@ const TopWrapper = styled.div`
     margin:10px 30px;
     justify-content:space-between;
     height:350px;
-    border-bottom: 1px solid #F2075D;
+    border-bottom: 1.5px solid #F2075D;
 `;
 const Info = styled.div`
     width:700px;
@@ -53,17 +53,21 @@ const Div=styled.div`
     width:600px; height:300px;
 `;
 const BottomWrapper=styled.div`
+    margin-left:30px;
     h2{
         color:white;
         margin-left:30px;
     }
 `;
+const CreditWrapper=styled.div`
+    margin-left:10px;
+    display:flex;
+    flex-wrap:wrap;
+`;
 const MovieDetails = () =>{
     const params=useParams();
     const {data, isMovieLoading, isMovieError} = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`,true)
     const {data:credits,  isCreditsLoading, isCreditsError} = useCustomFetch(`/movie/${params.movieId}/credits?language=ko-KR`,true)
-    console.log('data:',data)
-    console.log('credits:',credits.cast)
     const src='https://image.tmdb.org/t/p/w500';
 
     if (isMovieLoading || isCreditsLoading) {
@@ -92,13 +96,24 @@ const MovieDetails = () =>{
             </TopWrapper>
             <BottomWrapper>
                 <h2>감독/출연</h2>
-                {credits.cast && credits.cast.map((cast)=>(
-                    <CastInfo 
-                    key={cast.id}
-                    cast={cast}
-                    />
-                    
-                )) }
+                <CreditWrapper>
+                    <>
+                        {credits.crew && credits.crew.map((crew)=>(
+                            crew.job==='Director' && (
+                                <CastInfo 
+                                key={crew.id}
+                                cast={crew}
+                                isCrew={true}
+                                />)
+                        )) }
+                        {credits.cast && credits.cast.map((cast)=>(
+                        <CastInfo 
+                        key={cast.id}
+                        cast={cast}
+                        />
+                    )) }
+                    </>
+                </CreditWrapper>
             </BottomWrapper>
         </>
     )

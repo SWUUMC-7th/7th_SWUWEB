@@ -5,9 +5,10 @@ const Container=styled.div`
     display:flex;
     padding:0 20px;
     justify-content:space-between;
-    height:60px;
+    width:calc(100vw - 40px); height:60px;
     line-height:60px;
     background-color:#141414;
+    position:fixed; left:0;top:0;
 `;
 const Right=styled.div` 
     font-size:15px;

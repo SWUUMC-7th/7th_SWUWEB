@@ -7,6 +7,7 @@ const Container=styled.div`
     width:200px;
     height:calc(100vh - 60px);
     background-color:#141414;
+    position:fixed; top:60px;
 `;
 const List=styled.div`
     width:200px;

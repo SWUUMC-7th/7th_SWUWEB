@@ -12,7 +12,12 @@ const Container=styled.div`
 `;
 const Page=styled.div`
     width:calc(100vw - 200px);
+    height:calc(100vh - 60px);
     background-color:black;
+    position:fixed;
+    left:200px; top:60px;
+    overflow-x: hidden;
+    overflow-y: auto; 
 `;
 const RootLayout = () => {
     return (
