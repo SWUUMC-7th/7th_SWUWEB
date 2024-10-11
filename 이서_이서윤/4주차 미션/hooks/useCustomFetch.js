@@ -17,6 +17,7 @@ const useCustomFetch=(url, isDetail)=>{
                         Authorization : `Bearer ${API_KEY}`
                     },
                 });
+                console.log('response',response.data)
                 setData(isDetail ? response.data : response.data.results);
             }catch(error){
                 setIsError(true);

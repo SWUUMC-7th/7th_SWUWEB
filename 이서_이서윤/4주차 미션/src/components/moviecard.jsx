@@ -38,10 +38,9 @@ const Date=styled.div`
 const MovieCard=({movie})=>{
     const src='https://image.tmdb.org/t/p/w500';
     const navigate=useNavigate();
-
     return(
         <>
-            <Wrapper onClick={()=>{navigate(`/movies/${movie.id}`)}}>
+            <Wrapper onClick={()=>navigate(`/movies/${movie.id}`,{state:movie})}>
                 <Div></Div>
                 <Img src={`${src}${movie.poster_path}`} alt={movie.title}/>
                 <Title>{movie.title}</Title>

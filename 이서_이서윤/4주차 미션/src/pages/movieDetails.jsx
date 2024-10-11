@@ -4,12 +4,14 @@ import MovieFetchError from "../components/movieFetchError";
 import LoadingSpinner from "../components/loadingSpinner";
 import styled from "styled-components";
 import { LuDot } from "react-icons/lu";
+import CastInfo from "../components/castInfo,";
 
 const TopWrapper = styled.div`
     display:flex;
     margin:10px 30px;
     justify-content:space-between;
     height:350px;
+    border-bottom: 1px solid #F2075D;
 `;
 const Info = styled.div`
     width:700px;
@@ -50,17 +52,25 @@ const Div=styled.div`
     top:70px; left:1070px;
     width:600px; height:300px;
 `;
+const BottomWrapper=styled.div`
+    h2{
+        color:white;
+        margin-left:30px;
+    }
+`;
 const MovieDetails = () =>{
     const params=useParams();
-    console.log('movieId',params.movieId);
-    const {data, isLoading, isError} = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`,true)
-    console.log('data:',data);
+    const {data, isMovieLoading, isMovieError} = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`,true)
+    const {data:credits,  isCreditsLoading, isCreditsError} = useCustomFetch(`/movie/${params.movieId}/credits?language=ko-KR`,true)
+    console.log('data:',data)
+    console.log('credits:',credits.cast)
     const src='https://image.tmdb.org/t/p/w500';
-    if(isLoading){
-        return <LoadingSpinner/>
+
+    if (isMovieLoading || isCreditsLoading) {
+        return <LoadingSpinner />;
     }
-    if(isError){
-        return <MovieFetchError/>
+    if (isMovieError || isCreditsError) {
+        return <MovieFetchError />;
     }
 
     return(
@@ -80,6 +90,16 @@ const MovieDetails = () =>{
                 <Div/>
                 <Poster src={`${src}${data.backdrop_path}`} alt={data.title}/>
             </TopWrapper>
+            <BottomWrapper>
+                <h2>감독/출연</h2>
+                {credits.cast && credits.cast.map((cast)=>(
+                    <CastInfo 
+                    key={cast.id}
+                    cast={cast}
+                    />
+                    
+                )) }
+            </BottomWrapper>
         </>
     )
 }
