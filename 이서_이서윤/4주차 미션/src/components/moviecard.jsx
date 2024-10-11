@@ -41,7 +41,7 @@ const MovieCard=({movie})=>{
 
     return(
         <>
-            <Wrapper onClick={()=>{navigate(`/movies/:${movie.id}`,{props:movie})}}>
+            <Wrapper onClick={()=>{navigate(`/movies/${movie.id}`)}}>
                 <Div></Div>
                 <Img src={`${src}${movie.poster_path}`} alt={movie.title}/>
                 <Title>{movie.title}</Title>
