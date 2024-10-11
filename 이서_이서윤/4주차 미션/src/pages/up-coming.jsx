@@ -3,6 +3,7 @@ import MovieCard from "../components/moviecard";
 import useCustomFetch from "../../hooks/useCustomFetch";
 import LoadingSpinner from "../components/loadingSpinner"
 import { MovieGrid } from "../layout/movieGrid";
+import MovieFetchError from "../components/movieFetchError";
 
 const UpComing = () => {
     const [movies, setMovies] = useState([]);
@@ -15,15 +16,14 @@ const UpComing = () => {
         }
     }, [data]); 
 
-    <LoadingSpinner isLoading={isLoading}/>
+    if(isLoading){
+        return <LoadingSpinner/>
+    }
 
     if(isError){
-        return(
-            <>
-                <LoadingSpinner isLoading={isLoading}/>
-            </>
-        )
+        return <MovieFetchError/>
     }
+
     return (
         <MovieGrid>
             {movies.map((movie) => (

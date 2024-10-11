@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import MovieCard from "../components/moviecard";
 import useCustomFetch from "../../hooks/useCustomFetch";
+import LoadingSpinner from "../components/loadingSpinner"
 import { MovieGrid } from "../layout/movieGrid";
+import MovieFetchError from "../components/movieFetchError";
 
 const TopRated = () => {
     const [movies, setMovies] = useState([]);
@@ -15,10 +17,11 @@ const TopRated = () => {
     }, [data]); 
 
     if(isLoading){
-        return <div>로딩 중 입니다...</div>
+        return <LoadingSpinner/>
     }
+
     if(isError){
-        return <div>오류</div>
+        return <MovieFetchError/>
     }
 
     return (

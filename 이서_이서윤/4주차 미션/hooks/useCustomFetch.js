@@ -16,7 +16,7 @@ const useCustomFetch=(url)=>{
                 setIsError(true);
                 console.log(error)
             }finally{
-                setIsLoading(true);
+                setIsLoading(false);
             }
         };
 

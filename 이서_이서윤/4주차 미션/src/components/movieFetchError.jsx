@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ClipLoader } from "react-spinners";
+import { MdOutlineErrorOutline } from "react-icons/md";
 
 const Container = styled.div`
     position:fixed;
@@ -16,19 +16,27 @@ const Wrapper = styled.div`
     text-align:center;
 `;
 const Text = styled.div`
-    font-size:30px;
+    font-size:20px;
+    font-weight:700;
     color:white;
-    margin-top:20px;
 `;
-const LoadingSpinner=()=>{
+const Error = styled.div`
+    font-size:50px;
+    font-weight:800;
+    color:#F2075D;
+    margin-bottom:10px;
+`;
+const MovieFetchError = () =>{
     return(
         <Container>
             <Wrapper>
-                <ClipLoader color="#F2075D" size='150'/>
-                <Text>로딩 중입니다...</Text>
+                <MdOutlineErrorOutline color="#F2075D" size='150'/>
+                <Error>ERROR</Error>
+                <Text>영화 목록을 불러올 수 없습니다 </Text>
+                <Text>다시 시도해주세요</Text>
             </Wrapper>
         </Container>
     )
 }
 
-export default LoadingSpinner
+export default MovieFetchError
