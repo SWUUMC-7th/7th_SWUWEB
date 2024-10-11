@@ -1,17 +1,8 @@
 import { useState, useEffect } from "react";
 import MovieCard from "../components/moviecard";
-import styled from "styled-components";
 import useCustomFetch from "../../hooks/useCustomFetch";
-
-const Container=styled.div`
-    width: clac(100vw - 200px);
-    background-color:black;
-    display:flex;
-    flex-wrap:wrap;
-    padding-top:10px;
-    padding-left:25px;
-    gap:10px;
-`;
+import LoadingSpinner from "../components/loadingSpinner"
+import { MovieGrid } from "../layout/movieGrid";
 
 const NowPaying = () => {
     const [movies, setMovies] = useState([]);
@@ -25,13 +16,13 @@ const NowPaying = () => {
     }, [data]); 
 
     if(isLoading){
-        return <div>로딩 중 입니다...</div>
+        return <LoadingSpinner/>
     }
     if(isError){
         return <div>오류</div>
     }
     return (
-        <Container>
+        <MovieGrid>
             {movies.map((movie) => (
                 <MovieCard 
                     key={movie.id} 
@@ -40,7 +31,7 @@ const NowPaying = () => {
                     release_date={movie.release_date}
                 />
             ))}
-        </Container>
+        </MovieGrid>
     );
 };
 

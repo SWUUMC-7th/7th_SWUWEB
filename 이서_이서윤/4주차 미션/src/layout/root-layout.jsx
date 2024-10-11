@@ -10,14 +10,19 @@ const Main=styled.div`
 const Container=styled.div` 
     display:flex;
 `;
-
+const Page=styled.div`
+    width:calc(100vw - 200px);
+    background-color:black;
+`;
 const RootLayout = () => {
     return (
         <Main>
             <Navbar/>
             <Container>
                 <Sidebar/>
-                <Outlet/>
+                <Page>
+                    <Outlet/>
+                </Page>
             </Container>
         </Main>
     );
