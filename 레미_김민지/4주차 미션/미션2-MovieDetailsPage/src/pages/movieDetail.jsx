@@ -64,10 +64,14 @@ const MovieDetail = () => {
         <CreditsGrid>
           {cast.map((person) => (
             <CreditCard key={person.id}>
-              <ProfileImage
-                src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
-                alt={person.name}
-              />
+              {person.profile_path ? (
+                <ProfileImage
+                  src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
+                  alt={person.name}
+                />
+              ) : (
+                <DefaultProfile />
+              )}
               <PersonName>{person.name}</PersonName>
               <PersonRole>{person.character}</PersonRole>
             </CreditCard>
@@ -212,6 +216,19 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 4px;
+`;
+
+const DefaultProfile = styled.div`
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #777777;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
 `;
 
 const PersonName = styled.span`
