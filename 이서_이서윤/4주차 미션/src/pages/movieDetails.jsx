@@ -62,6 +62,7 @@ const BottomWrapper=styled.div`
 const CreditWrapper=styled.div`
     margin-left:10px;
     display:flex;
+    gap:5px;
     flex-wrap:wrap;
 `;
 const MovieDetails = () =>{

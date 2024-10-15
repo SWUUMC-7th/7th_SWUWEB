@@ -15,10 +15,17 @@ const Img=styled.img`
 const Name=styled.div`
     color:white;
     font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 `;
 const Character=styled.div`
     color:#CDCDCD;
     font-size:14px;
+    display: -webkit-box;   
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
 `;
 const CastInfo = ({cast, isCrew}) =>{
     const src='https://image.tmdb.org/t/p/w500';
