@@ -1,5 +1,5 @@
 import { useParams , useNavigate } from 'react-router-dom';
-import useMovie from '../../hooks/useMovie';
+import useMovie from '../hooks/useMovie';
 import styled from 'styled-components';
 
 const baseUrl = 'https://image.tmdb.org/t/p/w500';

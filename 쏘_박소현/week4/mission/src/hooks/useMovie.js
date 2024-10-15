@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { getMovies } from "../src/api/movies/getMovies";
+import { getMovies } from "../api/movies/getMovies";
 
 const useMovie = (category) => {
   const [data, setData] = useState([]);
