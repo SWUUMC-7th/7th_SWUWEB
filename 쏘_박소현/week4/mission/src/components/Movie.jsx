@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams , useNavigate } from 'react-router-dom';
 import useMovie from '../../hooks/useMovie';
 import styled from 'styled-components';
 
@@ -41,8 +41,13 @@ const ErrorMessage = styled.p`
 `;
 
 const Movie = () => {
+  const navigate = useNavigate();
   const { category } = useParams();
   const { data: movies, isLoading, isError } = useMovie(category);
+
+  const handleMovieClick = (movieId) => {
+    navigate(`/movies/${movieId}`);
+  };
 
   if (isLoading) {
     return <LoadingMessage>Loading movies...</LoadingMessage>;
@@ -55,7 +60,7 @@ const Movie = () => {
   return (
     <MovieContainer>
       {movies.map(movie => (
-        <MovieItem key={movie.id}>
+        <MovieItem key={movie.id} onClick={() => handleMovieClick(movie.id)}>
           <MovieImage
             src={`${baseUrl}${movie.poster_path}`}
             alt={movie.title}

@@ -39,7 +39,7 @@ const CategoryPage = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (category) => {
-    navigate(`/movies/${category}`); 
+    navigate(`/movies/categories/${category}`); 
   };
 
   return (
