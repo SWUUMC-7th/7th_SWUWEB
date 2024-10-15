@@ -1,7 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 function MovieCards({ movie }) {
+  const navigate = useNavigate();
   const [hoveredMovieId, setHoveredMovieId] = useState(null);
 
   const handleMouseEnter = (id) => {
@@ -12,15 +14,15 @@ function MovieCards({ movie }) {
     setHoveredMovieId(null);
   };
 
-  const handleClick = (movie) => {
-    alert(`Overview: ${movie.overview}\nRating: ${movie.vote_average}`);
+  const handleClick = () => {
+    navigate(`/movies/${movie.id}`);
   };
 
   return (
     <MovieCard
       onMouseEnter={() => handleMouseEnter(movie.id)}
       onMouseLeave={handleMouseLeave}
-      onClick={() => handleClick(movie)}
+      onClick={() => handleClick()}
     >
       <PosterImage src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
       {hoveredMovieId === movie.id && (
