@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieDetail } from '../api/movies/getMovieDetail';
+import useMovie from '../hooks/useMovie'; 
 import styled from 'styled-components';
 
 const Container = styled.div`
-  margin: 50px ;
+  margin: 50px;
   padding: 20px;
   display: flex;
   gap: 30px;
@@ -45,25 +44,7 @@ const Description = styled.p`
 
 const DetailPage = () => {
   const { movieId } = useParams();
-  const [movie, setMovie] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const fetchMovieDetail = async () => {
-      try {
-        const data = await getMovieDetail(movieId);
-        setMovie(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-        setIsError(true);
-        setIsLoading(false);
-      }
-    };
-
-    fetchMovieDetail();
-  }, [movieId]);
+  const { movie, isLoading, isError } = useMovie(null, movieId);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -75,17 +56,20 @@ const DetailPage = () => {
 
   return (
     <Container>
-      <Poster src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-      <div>
-      <Title>{movie.title}</Title>
-      <InfoContainer>
-        <InfoItem>{movie.release_date}</InfoItem>
-        <InfoItem>{movie.vote_average}/10</InfoItem>
-        <InfoItem>{movie.runtime}분</InfoItem>
-      </InfoContainer>
-      <Description>{movie.overview}</Description> 
-      </div>
-
+      {movie && (
+        <>
+          <Poster src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+          <div>
+            <Title>{movie.title}</Title>
+            <InfoContainer>
+              <InfoItem>{movie.release_date}</InfoItem>
+              <InfoItem>{movie.vote_average}/10</InfoItem>
+              <InfoItem>{movie.runtime}분</InfoItem>
+            </InfoContainer>
+            <Description>{movie.overview}</Description>
+          </div>
+        </>
+      )}
     </Container>
   );
 };

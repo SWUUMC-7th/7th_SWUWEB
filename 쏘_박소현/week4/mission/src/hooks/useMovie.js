@@ -1,8 +1,10 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { getMovies } from "../api/movies/getMovies";
+import { getMovieDetail } from "../api/movies/getMovieDetail"; 
 
-const useMovie = (category) => {
+const useMovie = (category, movieId) => {
   const [data, setData] = useState([]);
+  const [movie, setMovie] = useState(null); 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -10,20 +12,24 @@ const useMovie = (category) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const data = await getMovies(category);
-        setData(data.results);
+        if (movieId) { 
+          const movieDetail = await getMovieDetail(movieId);
+          setMovie(movieDetail);
+        } else {
+          const data = await getMovies(category);
+          setData(data.results);
+        }
       } catch (error) {
         setIsError(true);
-      }
-      finally{
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [category]);
+  }, [category, movieId]); 
 
-  return {data, isLoading, isError}
-}
+  return { data, movie, isLoading, isError };
+};
 
-export default useMovie
+export default useMovie;
