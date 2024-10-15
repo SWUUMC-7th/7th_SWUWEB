@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
-import { getMovies } from '../api/movies/getMovies';
-import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import useMovie from '../../hooks/useMovie';
+import styled from 'styled-components';
 
 const baseUrl = 'https://image.tmdb.org/t/p/w500';
 
@@ -29,10 +27,30 @@ const MovieImage = styled.img`
   transition: filter 0.3s ease; 
 `;
 
+const LoadingMessage = styled.p`
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const ErrorMessage = styled.p`
+  text-align: center;
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
 const Movie = () => {
   const { category } = useParams();
+  const { data: movies, isLoading, isError } = useMovie(category);
 
-  const {data: movies, isLoading, isFrror} = useMovie(category);
+  if (isLoading) {
+    return <LoadingMessage>Loading movies...</LoadingMessage>;
+  }
+
+  if (isError) {
+    return <ErrorMessage>Failed to load movies. Please try again later.</ErrorMessage>;
+  }
 
   return (
     <MovieContainer>

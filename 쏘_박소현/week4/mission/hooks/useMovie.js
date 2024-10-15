@@ -16,7 +16,7 @@ const useMovie = (category) => {
         setIsError(true);
       }
       finally{
-        setIsLoading(true);
+        setIsLoading(false);
       }
     };
 
