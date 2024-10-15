@@ -23,7 +23,7 @@ export default Sidebar;
 
 const SidebarContainer = styled.div`
   width: 160px;
-  height: 100vh;
+  height: 100%;
   background-color: #282727;
   padding: 20px;
   color: white;
