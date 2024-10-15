@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 import HomePage from "./pages/home.jsx";
 import NotFound from "./pages/not-found.jsx";
 import MoviesPage from "./pages/movies.jsx";
@@ -10,6 +9,7 @@ import NowPlayingMovies from "./pages/nowPlayingMovies.jsx";
 import PopularMovies from "./pages/popularMovies.jsx";
 import UpComingMovies from "./pages/upcomingMovies.jsx";
 import TopRatedMovies from "./pages/topRatedMovies.jsx";
+import MovieDetail from "./pages/movieDetail.jsx";
 import Category from "./components/category.jsx";
 import RootLayout from "./layout/root-layout.jsx";
 
@@ -46,6 +46,10 @@ const router = createBrowserRouter([
           {
             path: "up-coming",
             element: <UpComingMovies />,
+          },
+          {
+            path: ":movieId",
+            element: <MovieDetail />,
           },
         ],
       },
