@@ -4,7 +4,7 @@ import MovieFetchError from "../components/movieFetchError";
 import LoadingSpinner from "../components/loadingSpinner";
 import styled from "styled-components";
 import { LuDot } from "react-icons/lu";
-import CastInfo from "../components/castInfo,";
+import CastInfo from "../components/castInfo";
 
 const TopWrapper = styled.div`
     display:flex;
@@ -66,8 +66,8 @@ const CreditWrapper=styled.div`
 `;
 const MovieDetails = () =>{
     const params=useParams();
-    const {data, isMovieLoading, isMovieError} = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`,true)
-    const {data:credits,  isCreditsLoading, isCreditsError} = useCustomFetch(`/movie/${params.movieId}/credits?language=ko-KR`,true)
+    const {data, isLoading: isMovieLoading, isError: isMovieError} = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`,true)
+    const {data: credits, isLoading:  isCreditsLoading, isError: isCreditsError} = useCustomFetch(`/movie/${params.movieId}/credits?language=ko-KR`,true)
     const src='https://image.tmdb.org/t/p/w500';
 
     if (isMovieLoading || isCreditsLoading) {
