@@ -11,7 +11,12 @@ const MovieDetail = () => {
   const { data: credits, isLoading: isCreditsLoading } = useCustomFetch(
     `/movie/${movieId}/credits?language=ko`,
   );
+
+  // TODO: 수정 - useCustomFetch안에서 처리,,,아마 DOM 호출,,,
   const movieData = data?.data;
+
+  console.log(movieData);
+  // TODO: 왜 이게 될지 공부
   if (!movieData) {
     return <></>;
   }
