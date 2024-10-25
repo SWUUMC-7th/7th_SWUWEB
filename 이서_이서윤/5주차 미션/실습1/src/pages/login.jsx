@@ -30,7 +30,7 @@ const Input=styled.input`
 const LoginBtn=styled.button`
     width:410px;
     height:45px;
-    background-color:#F2075D;
+    background-color:${(props)=>props.disabled ? 'gray' : '#F2075D'};
     color:white;
 `;
 const Error=styled.div`
@@ -46,6 +46,7 @@ const LogInPage = () => {
     const[pw,setPW]=useState("");
     const[emailError,setEmailError]=useState(false);
     const[pwError,setPwError]=useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
 
     const setFocusPh=(e)=>{
         e.target.placeholder='';
@@ -70,6 +71,10 @@ const LogInPage = () => {
         pwCheck();
     },[pw])
 
+    useEffect(()=>{
+        setIsDisabled(!email || !pw || emailError || pwError);
+    },[email, pw,emailError, pwError])
+
     return (
         <Container>
             <LogInBox>
@@ -88,7 +93,7 @@ const LogInPage = () => {
                     onChange={(e)=>setPW(e.target.value)}   
                 />
                 <Error>{pwError && "비밀번호는 8~16자 이내로 입력해주세요."}</Error>
-                <LoginBtn>로그인</LoginBtn>
+                <LoginBtn disabled={isDisabled}>로그인</LoginBtn>
             </LogInBox>
         </Container>
     );  
