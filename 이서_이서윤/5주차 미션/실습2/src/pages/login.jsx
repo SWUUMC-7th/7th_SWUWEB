@@ -50,31 +50,21 @@ const LogInPage = () => {
         },
         validate: validateLogin 
     }); 
-    const setFocusPh=(e)=>{
-        e.target.placeholder='';
-    }
-    const setBlurPh=(e,type)=>{
-        e.target.placeholder=`${type} 입력해주세요`
-    }
     return (
         <Container>
             <LogInBox>
                 <Title>로그인</Title>
                 <Input 
                     placeholder="이메일을 입력해주세요" 
-                    onFocus={(e)=>setFocusPh(e)} 
-                    onBlur={(e)=>setBlurPh(e,'이메일을')}
                     {...login.getTextInputProps('email')}
                 />
-                {login.errors.email && <Error>{login.errors.email}</Error>}
+                {login.touched.email && login.errors.email && <Error>{login.errors.email}</Error>}
                 <Input 
                     type="password"
                     placeholder="비밀번호를 입력해주세요" 
-                    onFocus={(e)=>setFocusPh(e)} 
-                    onBlur={(e)=>setBlurPh(e,'비밀번호를')}
                     {...login.getTextInputProps('password')}
                 />
-                {login.errors.password && <Error>{login.errors.password}</Error>}
+                {login.touched.password && login.errors.password && <Error>{login.errors.password}</Error>}
                 <LoginBtn>로그인</LoginBtn>
             </LogInBox>
         </Container>
