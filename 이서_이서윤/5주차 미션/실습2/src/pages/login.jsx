@@ -34,14 +34,14 @@ const LoginBtn=styled.button`
     background-color:${(props)=>props.disabled ? 'gray' : '#F2075D'};
     color:white;
 `;
-// const Error=styled.div`
-//     color:red;
-//     font-size:15px;
-//     text-align:left;
-//     margin-left:50px;
-//     margin-top:-5px;
-//     margin-bottom:15px;
-// `;
+const Error=styled.div`
+    color:red;
+    font-size:15px;
+    text-align:left;
+    margin-left:50px;
+    margin-top:-5px;
+    margin-bottom:15px;
+`;
 const LogInPage = () => {
     const login = useForm({
         initialValue:{
@@ -49,7 +49,7 @@ const LogInPage = () => {
             password:'',
         },
         validate: validateLogin 
-    })
+    }); 
     const setFocusPh=(e)=>{
         e.target.placeholder='';
     }
@@ -66,6 +66,7 @@ const LogInPage = () => {
                     onBlur={(e)=>setBlurPh(e,'이메일을')}
                     {...login.getTextInputProps('email')}
                 />
+                {login.errors.email && <Error>{login.errors.email}</Error>}
                 <Input 
                     type="password"
                     placeholder="비밀번호를 입력해주세요" 
@@ -73,6 +74,7 @@ const LogInPage = () => {
                     onBlur={(e)=>setBlurPh(e,'비밀번호를')}
                     {...login.getTextInputProps('password')}
                 />
+                {login.errors.password && <Error>{login.errors.password}</Error>}
                 <LoginBtn>로그인</LoginBtn>
             </LogInBox>
         </Container>
