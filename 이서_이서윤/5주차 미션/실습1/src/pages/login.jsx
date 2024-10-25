@@ -87,6 +87,7 @@ const LogInPage = () => {
                 />
                 <Error>{emailError && "올바른 이메일 형식이 아닙니다."}</Error>
                 <Input 
+                    type="password"
                     placeholder="비밀번호를 입력해주세요" 
                     onFocus={(e)=>setFocusPh(e)} 
                     onBlur={(e)=>setBlurPh(e,'비밀번호를')}
