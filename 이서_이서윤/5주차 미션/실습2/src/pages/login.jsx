@@ -70,7 +70,11 @@ const LogInPage = () => {
                     {...login.getTextInputProps('password')}
                 />
                 {pwCheck && <Error>{login.errors.password}</Error>}
-                <LoginBtn disabled={!login.values.email || !login.values.password || emailCheck || pwCheck}>로그인</LoginBtn>
+                <LoginBtn
+                    disabled={!login.values.email || !login.values.password || login.errors.email || login.errors.password}
+                >
+                    로그인
+                </LoginBtn>
             </LogInBox>
         </Container>
     );  
