@@ -37,21 +37,24 @@ const SignupBtn=styled.button`
     background-color:${(props)=>props.disabled ? 'gray' : '#F2075D'};
     color:white;
 `;
-// const Error=styled.div`
-//     color:red;
-//     font-size:15px;
-//     text-align:left;
-//     margin-left:50px;
-//     margin-top:-5px;
-//     margin-bottom:15px;
-// `;
+const Error=styled.div`
+    color:red;
+    font-size:15px;
+    text-align:left;
+    margin-left:50px;
+    margin-top:-5px;
+    margin-bottom:15px;
+`;
 
 const SignUpPage = () => {
     const schema = yup.object().shape({
-        email:yup.string().email().required(),
-        password:yup.string().min(8).max(16).required()
+        email:yup.string().email('유효한 이메일이 아닙니다.').required('이메일을 입력해주세요.'),
+        password:yup.string().min(8,'비밀번호는 8자 이상이어야 합니다.').max(16,'비밀번호는 16자 이하여야 합니다.')
+        .required('비밀번호를 입력해주세요.')
     })
-    const {register, handleSubmit} = useForm();
+    const {register, handleSubmit, formState: {errors}} = useForm({
+        resolver:yupResolver(schema)
+    });
     const onSubmit = (data) => {
         console.log('폼 데이터 제출');
         console.log(data);
@@ -65,12 +68,13 @@ const SignUpPage = () => {
                         placeholder="이메일을 입력해주세요" 
                         {...register("email")}
                     />
-                    {/* {emailCheck && <Error>{login.errors.email}</Error>} */}
+                    <Error>{errors.email?.message}</Error>
                     <Input 
                         type="password"
                         placeholder="비밀번호를 입력해주세요" 
                         {...register("password")}
                     />
+                    <Error>{errors.password?.message}</Error>
                     {/* <Input 
                         type="password"
                         placeholder="비밀번호를 다시 입력해주세요" 
