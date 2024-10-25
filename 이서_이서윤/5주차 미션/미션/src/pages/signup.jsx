@@ -50,7 +50,10 @@ const SignUpPage = () => {
     const schema = yup.object().shape({
         email:yup.string().email('유효한 이메일이 아닙니다.').required('이메일을 입력해주세요.'),
         password:yup.string().min(8,'비밀번호는 8자 이상이어야 합니다.').max(16,'비밀번호는 16자 이하여야 합니다.')
-        .required('비밀번호를 입력해주세요.')
+        .required('비밀번호를 입력해주세요.'),
+        passwordCheck: yup.string()
+        .oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.')
+        .required('비밀번호 확인은 필수입니다.')
     })
     const {register, handleSubmit, formState: {errors}} = useForm({
         resolver:yupResolver(schema)
@@ -75,12 +78,12 @@ const SignUpPage = () => {
                         {...register("password")}
                     />
                     <Error>{errors.password?.message}</Error>
-                    {/* <Input 
+                    <Input 
                         type="password"
                         placeholder="비밀번호를 다시 입력해주세요" 
-                        {...register("password")}
-                    /> */}
-                    {/* {pwCheck && <Error>{login.errors.password}</Error>} */}
+                        {...register("passwordCheck")}
+                    /> 
+                    <Error>{errors.passwordCheck?.message}</Error>
                     <SignupBtn type="submit">제출</SignupBtn>
                 </form>
             </LogInBox>
