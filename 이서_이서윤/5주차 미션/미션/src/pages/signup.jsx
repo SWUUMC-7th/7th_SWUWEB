@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {useForm} from 'react-hook-form'
 
 const Container=styled.div`
     background-color:black;
@@ -43,22 +44,30 @@ const SignupBtn=styled.button`
 // `;
 
 const SignUpPage = () => {
+    const {register, handleSubmit} = useForm();
+    const onSubmit = (data) => {
+        console.log('폼 데이터 제출');
+        console.log(data);
+    }
     return (
         <Container>
-            <LogInBox>
+            <LogInBox onSubmit={handleSubmit(onSubmit)}>
                 <Title>회원가입</Title>
                 <Input 
                     placeholder="이메일을 입력해주세요" 
+                    {...register("email")}
                 />
                 {/* {emailCheck && <Error>{login.errors.email}</Error>} */}
                 <Input 
                     type="password"
                     placeholder="비밀번호를 입력해주세요" 
+                    {...register("password")}
                 />
-                <Input 
+                {/* <Input 
                     type="password"
                     placeholder="비밀번호를 다시 입력해주세요" 
-                />
+                    {...register("password")}
+                /> */}
                 {/* {pwCheck && <Error>{login.errors.password}</Error>} */}
                 <SignupBtn>제출</SignupBtn>
             </LogInBox>
