@@ -25,6 +25,7 @@ const Title=styled.div`
 const Input=styled.input`
     width:400px;
     height:35px;
+    border-color:${(props)=>props.error ? 'red' : 'black'};
     border-radius:10px;
     margin-bottom:10px;
 `;
@@ -50,22 +51,26 @@ const LogInPage = () => {
         },
         validate: validateLogin 
     }); 
+    const emailCheck = login.touched.email && login.errors.email;
+    const pwCheck = login.touched.password && login.errors.password;
     return (
         <Container>
             <LogInBox>
                 <Title>로그인</Title>
                 <Input 
                     placeholder="이메일을 입력해주세요" 
+                    error={emailCheck}
                     {...login.getTextInputProps('email')}
                 />
-                {login.touched.email && login.errors.email && <Error>{login.errors.email}</Error>}
+                {emailCheck && <Error>{login.errors.email}</Error>}
                 <Input 
                     type="password"
                     placeholder="비밀번호를 입력해주세요" 
+                    error={pwCheck}
                     {...login.getTextInputProps('password')}
                 />
-                {login.touched.password && login.errors.password && <Error>{login.errors.password}</Error>}
-                <LoginBtn>로그인</LoginBtn>
+                {pwCheck && <Error>{login.errors.password}</Error>}
+                <LoginBtn disabled={!login.values.email || !login.values.password || emailCheck || pwCheck}>로그인</LoginBtn>
             </LogInBox>
         </Container>
     );  
