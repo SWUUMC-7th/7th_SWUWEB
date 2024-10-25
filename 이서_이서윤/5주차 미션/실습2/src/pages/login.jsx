@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import useForm from "../../hooks/useForm";
+import { validateLogin } from "../../utils/validate";
 
 const Container=styled.div`
     background-color:black;
@@ -29,10 +31,25 @@ const Input=styled.input`
 const LoginBtn=styled.button`
     width:410px;
     height:45px;
-    background-color:#F2075D;
+    background-color:${(props)=>props.disabled ? 'gray' : '#F2075D'};
     color:white;
 `;
+// const Error=styled.div`
+//     color:red;
+//     font-size:15px;
+//     text-align:left;
+//     margin-left:50px;
+//     margin-top:-5px;
+//     margin-bottom:15px;
+// `;
 const LogInPage = () => {
+    const login = useForm({
+        initialValue:{
+            email:'',
+            password:'',
+        },
+        validate: validateLogin 
+    })
     const setFocusPh=(e)=>{
         e.target.placeholder='';
     }
@@ -43,8 +60,19 @@ const LogInPage = () => {
         <Container>
             <LogInBox>
                 <Title>로그인</Title>
-                <Input placeholder="이메일을 입력해주세요" onFocus={(e)=>setFocusPh(e)} onBlur={(e)=>setBlurPh(e,'이메일을')}/>
-                <Input placeholder="비밀번호를 입력해주세요" onFocus={(e)=>setFocusPh(e)} onBlur={(e)=>setBlurPh(e,'비밀번호를')}/>
+                <Input 
+                    placeholder="이메일을 입력해주세요" 
+                    onFocus={(e)=>setFocusPh(e)} 
+                    onBlur={(e)=>setBlurPh(e,'이메일을')}
+                    {...login.getTextInputProps('email')}
+                />
+                <Input 
+                    type="password"
+                    placeholder="비밀번호를 입력해주세요" 
+                    onFocus={(e)=>setFocusPh(e)} 
+                    onBlur={(e)=>setBlurPh(e,'비밀번호를')}
+                    {...login.getTextInputProps('password')}
+                />
                 <LoginBtn>로그인</LoginBtn>
             </LogInBox>
         </Container>
