@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import styled from "styled-components";
 
 const Container=styled.div`
@@ -14,7 +14,6 @@ const LogInBox=styled.div`
     width: 500px;
     height:700px;
     text-align:center;
-    border:1px solid red; 
 `;
 const Title=styled.div`
     font-size:25px;
@@ -37,16 +36,16 @@ const LoginBtn=styled.button`
 const Error=styled.div`
     color:red;
     font-size:15px;
-    border:1px solid yellow; 
-    margin-left:-180px;
+    text-align:left;
+    margin-left:50px;
     margin-top:-5px;
+    margin-bottom:15px;
 `;
 const LogInPage = () => {
     const[email,setEmail]=useState("");
     const[pw,setPW]=useState("");
     const[emailError,setEmailError]=useState(false);
     const[pwError,setPwError]=useState(false);
-    const emailValidation = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     const setFocusPh=(e)=>{
         e.target.placeholder='';
@@ -55,11 +54,21 @@ const LogInPage = () => {
         e.target.placeholder=`${type} 입력해주세요`
     }
 
-    const emailCheck=()=>{
-        const isEmailValid = emailValidation.test(email);
-        setEmailError(!isEmailValid);
-        console.log(email,":",emailError);
-    }
+    useEffect(()=>{
+        const emailCheck=()=>{
+            const emailValidation = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const isEmailValid = emailValidation.test(email);
+            setEmailError(email.length>0 && !isEmailValid);
+        }
+        emailCheck();
+    },[email])
+
+    useEffect(()=>{
+        const pwCheck=()=>{
+            setPwError(pw.length>0 && !(pw.length>=8 && pw.length<=16));
+        }
+        pwCheck();
+    },[pw])
 
     return (
         <Container>
@@ -68,7 +77,7 @@ const LogInPage = () => {
                 <Input 
                     placeholder="이메일을 입력해주세요" 
                     onFocus={(e)=>setFocusPh(e)} 
-                    onBlur={(e)=>{setBlurPh(e,'이메일을'),emailCheck()}}
+                    onBlur={(e)=>setBlurPh(e,'이메일을')}
                     onChange={(e)=>setEmail(e.target.value)}
                 />
                 <Error>{emailError && "올바른 이메일 형식이 아닙니다."}</Error>
@@ -78,6 +87,7 @@ const LogInPage = () => {
                     onBlur={(e)=>setBlurPh(e,'비밀번호를')}
                     onChange={(e)=>setPW(e.target.value)}   
                 />
+                <Error>{pwError && "비밀번호는 8~16자 이내로 입력해주세요."}</Error>
                 <LoginBtn>로그인</LoginBtn>
             </LogInBox>
         </Container>
