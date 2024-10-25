@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import {useForm} from 'react-hook-form'
+import * as yup from 'yup'
+import {yupResolver} from '@hookform/resolvers/yup'
+
 
 const Container=styled.div`
     background-color:black;
@@ -44,6 +47,10 @@ const SignupBtn=styled.button`
 // `;
 
 const SignUpPage = () => {
+    const schema = yup.object().shape({
+        email:yup.string().email().required(),
+        password:yup.string().min(8).max(16).required()
+    })
     const {register, handleSubmit} = useForm();
     const onSubmit = (data) => {
         console.log('폼 데이터 제출');
