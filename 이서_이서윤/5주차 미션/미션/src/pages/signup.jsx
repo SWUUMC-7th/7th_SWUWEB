@@ -51,25 +51,27 @@ const SignUpPage = () => {
     }
     return (
         <Container>
-            <LogInBox onSubmit={handleSubmit(onSubmit)}>
+            <LogInBox>
                 <Title>회원가입</Title>
-                <Input 
-                    placeholder="이메일을 입력해주세요" 
-                    {...register("email")}
-                />
-                {/* {emailCheck && <Error>{login.errors.email}</Error>} */}
-                <Input 
-                    type="password"
-                    placeholder="비밀번호를 입력해주세요" 
-                    {...register("password")}
-                />
-                {/* <Input 
-                    type="password"
-                    placeholder="비밀번호를 다시 입력해주세요" 
-                    {...register("password")}
-                /> */}
-                {/* {pwCheck && <Error>{login.errors.password}</Error>} */}
-                <SignupBtn>제출</SignupBtn>
+                <form  onSubmit={handleSubmit(onSubmit)}>
+                    <Input 
+                        placeholder="이메일을 입력해주세요" 
+                        {...register("email")}
+                    />
+                    {/* {emailCheck && <Error>{login.errors.email}</Error>} */}
+                    <Input 
+                        type="password"
+                        placeholder="비밀번호를 입력해주세요" 
+                        {...register("password")}
+                    />
+                    {/* <Input 
+                        type="password"
+                        placeholder="비밀번호를 다시 입력해주세요" 
+                        {...register("password")}
+                    /> */}
+                    {/* {pwCheck && <Error>{login.errors.password}</Error>} */}
+                    <SignupBtn type="submit">제출</SignupBtn>
+                </form>
             </LogInBox>
         </Container>
     );
