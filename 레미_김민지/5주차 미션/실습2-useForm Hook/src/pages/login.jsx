@@ -1,22 +1,17 @@
-import { useState } from "react";
 import styled from "styled-components";
+import useForm from "../hooks/useForm.js";
+import { validateLogin } from "../utils/validate.js";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const login = useForm({
+    initialValue: {
+      email: "",
+      password: "",
+    },
+    validate: validateLogin,
+  });
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 8 && password.length <= 16;
-  };
-
-  const isFormValid = validateEmail(email) && validatePassword(password);
+  const isFormValid = !login.errors.email && !login.errors.password;
 
   return (
     <Container>
@@ -26,26 +21,20 @@ const Login = () => {
           <InputBox
             type="email"
             placeholder="이메일을 입력해주세요!"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={() => setIsEmailFocused(true)}
-            onFocus={() => setIsEmailFocused(true)}
+            {...login.getTextInputProps("email")}
           />
-          {isEmailFocused && !validateEmail(email) && (
-            <ErrorMessage>올바른 이메일 형식이 아닙니다.</ErrorMessage>
+          {login.touched.email && login.errors.email && (
+            <ErrorMessage>{login.errors.email}</ErrorMessage>
           )}
         </InputWrapper>
         <InputWrapper>
           <InputBox
             type="password"
             placeholder="비밀번호를 입력해주세요!"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={() => setIsPasswordFocused(true)}
-            onFocus={() => setIsPasswordFocused(true)}
+            {...login.getTextInputProps("password")}
           />
-          {isPasswordFocused && !validatePassword(password) && (
-            <ErrorMessage>비밀번호는 8자리 이상 16자리 이하입니다.</ErrorMessage>
+          {login.touched.password && login.errors.password && (
+            <ErrorMessage>{login.errors.password}</ErrorMessage>
           )}
         </InputWrapper>
         <Button disabled={!isFormValid} title={!isFormValid ? "정보를 입력하세요" : ""}>
@@ -118,11 +107,12 @@ const Button = styled.button`
   background-color: ${(props) => (props.disabled ? "#ccc" : "#ff213b")};
   font-weight: bold;
   text-align: center;
-  cursor: "pointer";
+  cursor: pointer;
   color: white;
   transition: background-color 0.2s;
 
   &:hover {
+    color: ${(props) => (props.disabled ? "#fff" : "#ffffffa6")};
     background-color: ${(props) => (props.disabled ? "#ccc" : "#ff213b8b")};
   }
 `;
