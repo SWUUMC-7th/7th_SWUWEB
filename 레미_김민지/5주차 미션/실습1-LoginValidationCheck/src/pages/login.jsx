@@ -48,7 +48,9 @@ const Login = () => {
             <ErrorMessage>비밀번호는 8자리 이상 16자리 이하입니다.</ErrorMessage>
           )}
         </InputWrapper>
-        <Button disabled={!isFormValid}>로그인</Button>
+        <Button disabled={!isFormValid} title={!isFormValid ? "정보를 입력하세요" : ""}>
+          로그인
+        </Button>
       </InfoWrapper>
     </Container>
   );
