@@ -14,6 +14,8 @@ const schema = yup.object({
     .string()
     .oneOf([yup.ref("password")], "비밀번호가 일치하지 않습니다.")
     .required("비밀번호 다시 확인해주세요."),
+  gender: yup.string().required("성별을 선택 해주세요."),
+  birthDate: yup.date().required("생년월일을 입력 해주세요."),
 });
 
 const Signup = () => {
@@ -35,6 +37,39 @@ const Signup = () => {
       <InfoWrapper>
         <Title>회원가입</Title>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "102%",
+            }}
+          >
+            <InputWrapper>
+              <LabelTitle>성별</LabelTitle>
+              <GenderWrapper>
+                <Label>
+                  <input type="radio" value="male" {...register("gender")} />
+                  남성
+                </Label>
+                <Label>
+                  <input type="radio" value="female" {...register("gender")} />
+                  여성
+                </Label>
+              </GenderWrapper>
+              {errors.gender && <ErrorMessage>{errors.gender.message}</ErrorMessage>}
+            </InputWrapper>
+            <InputWrapper>
+              <LabelTitle>생년월일</LabelTitle>
+              <InputBox
+                type="date"
+                placeholder="생년월일을 입력해주세요!"
+                {...register("birthDate")}
+                style={{ width: "50%" }}
+              />
+              {errors.birthDate && <ErrorMessage>{errors.birthDate.message}</ErrorMessage>}
+            </InputWrapper>
+          </div>
           <InputWrapper>
             <InputBox type="email" placeholder="이메일을 입력해주세요!" {...register("email")} />
             {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
@@ -91,6 +126,7 @@ const Form = styled.form`
 
 const InputWrapper = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
   margin-bottom: 28px;
   position: relative;
@@ -111,6 +147,23 @@ const InputBox = styled.input`
   &:focus {
     border-color: #ff213b;
   }
+`;
+
+const LabelTitle = styled.h1`
+  margin-right: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #ff213b;
+`;
+
+const GenderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+`;
+
+const Label = styled.label`
+  margin-right: 15px;
 `;
 
 const ErrorMessage = styled.span`
