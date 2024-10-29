@@ -16,6 +16,8 @@ const Login = () => {
     return password.length >= 8 && password.length <= 16;
   };
 
+  const isFormValid = validateEmail(email) && validatePassword(password);
+
   return (
     <Container>
       <InfoWrapper>
@@ -46,7 +48,7 @@ const Login = () => {
             <ErrorMessage>비밀번호는 8자리 이상 16자리 이하입니다.</ErrorMessage>
           )}
         </InputWrapper>
-        <Button>로그인</Button>
+        <Button disabled={!isFormValid}>로그인</Button>
       </InfoWrapper>
     </Container>
   );
@@ -109,16 +111,17 @@ const ErrorMessage = styled.span`
 const Button = styled.button`
   all: unset;
   width: 100%;
-  padding: 12px 0px;
+  padding: 12px 0;
   border-radius: 12px;
-  background-color: #ff213b;
+  background-color: ${(props) => (props.disabled ? "#ccc" : "#ff213b")};
   font-weight: bold;
   text-align: center;
-  cursor: pointer;
+  cursor: "pointer";
+  color: white;
   transition: background-color 0.2s;
+
   &:hover {
-    color: #ffffff96;
-    background-color: #ff213b8b;
+    background-color: ${(props) => (props.disabled ? "#ccc" : "#ff213b8b")};
   }
 `;
 
