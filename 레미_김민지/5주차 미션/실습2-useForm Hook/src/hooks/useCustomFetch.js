@@ -14,6 +14,7 @@ const useCustomFetch = (url) => {
       try {
         const response = await axiosInstance.get(url);
         // TODO: 수정 setData(response.data);
+        setData(response);
       } catch (error) {
         setIsError(true);
       } finally {
