@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
+import useForm from "../hooks/useForm";
+import { validateLogin } from "../utils/validate";
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const Input = styled.input`
   border-radius: 4px;
   padding: 5px;
   color: black;
-  border: ${(props) => (props.$hasError ? "2px solid red" : "1px solid #ccc")};
+  border: ${(props) => (props.error ? "2px solid red" : "1px solid #ccc")};
 `;
 
 const ErrorMessage = styled.p`
@@ -43,65 +44,40 @@ const Button = styled.button`
 `;
 
 const SigninPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [touchedFields, setTouchedFields] = useState({
-    email: false,
-    password: false,
+  const login = useForm({
+    initialValue: {
+      email: "",
+      password: "",
+    },
+    validate: validateLogin,
   });
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 8 && password.length <= 16;
-  };
-
-  useEffect(() => {
-    if (touchedFields.email) {
-      setEmailError(
-        validateEmail(email) ? "" : "올바른 이메일 형식이 아닙니다."
-      );
-    }
-
-    if (touchedFields.password) {
-      setPasswordError(
-        validatePassword(password)
-          ? ""
-          : "비밀번호는 8자리 이상 16자리 이하여야 합니다."
-      );
-    }
-  }, [email, password, touchedFields]);
-
-  const isFormValid = !emailError && !passwordError && email && password;
+  const isFormValid = !login.errors.email && !login.errors.password
 
   return (
     <Container>
       <Title>로그인</Title>
-
       <Input
+        error={login.touched.email && login.errors.email}
         type="email"
         placeholder="이메일을 입력해주세요."
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        onBlur={() => setTouchedFields((prev) => ({ ...prev, email: true }))}
-        $hasError={!!emailError}
+        {...login.getTextInputProps("email")}
       />
-      {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+
+      {login.touched.email && login.errors.email && (
+        <ErrorMessage>{login.errors.email}</ErrorMessage>
+      )}
 
       <Input
+        error={login.touched.password && login.errors.password}
         type="password"
         placeholder="비밀번호를 입력해주세요."
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        onBlur={() => setTouchedFields((prev) => ({ ...prev, password: true }))}
-        $hasError={!!passwordError}
+        {...login.getTextInputProps("password")}
       />
-      {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+
+      {login.touched.password && login.errors.password && (
+        <ErrorMessage>{login.errors.password}</ErrorMessage>
+      )}
 
       <Button type="button" disabled={!isFormValid}>
         로그인
