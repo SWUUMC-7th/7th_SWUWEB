@@ -1,5 +1,5 @@
 const emailPattern=/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/;
-const namePattern=/^[a-zA-Z0-9._%+-]$/;
+const namePattern = /^[가-힣]+$/;
 function validateUser(values){
     const errors={
         name:'',
@@ -8,10 +8,10 @@ function validateUser(values){
         password:'',
         passwordCheck:'',
     }
-    if(namePattern.test(values.name)){
+    if(namePattern.test(values.name)===false){
         errors.name="이름은 한글로 입력해야합니다.";
     }
-    if(values.birth.length != 8){
+    if(values.birth && values.birth.length != 8){
         errors.birth="생년월일은 8자리로 입력해주세요.";
     }
     if(emailPattern.test(values.email)===false){

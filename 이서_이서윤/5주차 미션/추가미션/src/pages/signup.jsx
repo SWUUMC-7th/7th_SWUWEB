@@ -60,6 +60,9 @@ const SignUpPage = () => {
     const emailCheck = signup.touched.email && signup.errors.email;
     const pwCheck = signup.touched.password && signup.errors.password;
     const pwcCheck = signup.touched.passwordCheck && signup.errors.passwordCheck;
+    const handlePressSignup=()=>{
+        console.log(signup.values);
+    }
     return (
         <Container>
             <LogInBox>
@@ -103,6 +106,7 @@ const SignUpPage = () => {
                                 signup.errors.name || signup.errorsbirth || signup.errors.email || 
                                 signup.errors.password || signup.errors.passwordCheck
                     }
+                    onClick={handlePressSignup}
                 >
                     제출
                 </SignupBtn>
