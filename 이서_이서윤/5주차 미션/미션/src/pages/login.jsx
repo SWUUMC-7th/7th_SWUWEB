@@ -53,6 +53,9 @@ const LogInPage = () => {
     }); 
     const emailCheck = login.touched.email && login.errors.email;
     const pwCheck = login.touched.password && login.errors.password;
+    const handlePressLogin=()=>{
+        console.log(login.values);
+    }
     return (
         <Container>
             <LogInBox>
@@ -72,6 +75,7 @@ const LogInPage = () => {
                 {pwCheck && <Error>{login.errors.password}</Error>}
                 <LoginBtn
                     disabled={!login.values.email || !login.values.password || login.errors.email || login.errors.password}
+                    onClick={handlePressLogin}
                 >
                     로그인
                 </LoginBtn>
