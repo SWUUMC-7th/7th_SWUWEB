@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import useForm from "../../hooks/useForm";
+import { validateSignup } from "../../utils/validate";
 
 const Container=styled.div`
     background-color:black;
@@ -33,32 +35,58 @@ const SignupBtn=styled.button`
     background-color:${(props)=>props.disabled ? 'gray' : '#F2075D'};
     color:white;
 `;
-// const Error=styled.div`
-//     color:red;
-//     font-size:15px;
-//     text-align:left;
-//     margin-left:50px;
-//     margin-top:-5px;
-//     margin-bottom:15px;
-// `;
+const Error=styled.div`
+    color:red;
+    font-size:15px;
+    text-align:left;
+    margin-left:50px;
+    margin-top:-5px;
+    margin-bottom:15px;
+`;
 
 const SignUpPage = () => {
+    const signup = useForm({
+        initialValue:{
+            email:'',
+            password:'',
+            passwordCheck:'',
+        },
+        validate: validateSignup
+    }); 
+    const emailCheck = signup.touched.email && signup.errors.email;
+    const pwCheck = signup.touched.password && signup.errors.password;
+    const pwcCheck = signup.touched.passwordCheck && signup.errors.passwordCheck;
     return (
         <Container>
             <LogInBox>
                 <Title>회원가입</Title>
                 <Input 
                     placeholder="이메일을 입력해주세요" 
+                    error={emailCheck}
+                    {...signup.getTextInputProps('email')}
                 />
+                {emailCheck && <Error>{signup.errors.email}</Error>}
                 <Input 
                     type="password"
                     placeholder="비밀번호를 입력해주세요" 
+                    error={pwCheck}
+                    {...signup.getTextInputProps('password')}
                 />
+                {pwCheck && <Error>{signup.errors.password}</Error>}
                 <Input 
                     type="password"
                     placeholder="비밀번호를 다시 입력해주세요" 
+                    error={pwcCheck}
+                    {...signup.getTextInputProps('passwordCheck')}
                 /> 
-                <SignupBtn type="submit">제출</SignupBtn>
+                {pwcCheck && <Error>{signup.errors.passwordCheck}</Error>}
+                <SignupBtn 
+                    type="submit"
+                    disabled={ !signup.values.email || !signup.values.password || !signup.values.passwordCheck ||
+                                signup.errors.email || signup.errors.password || signup.errors.password}
+                >
+                    제출
+                </SignupBtn>
             </LogInBox>
         </Container>
     );
