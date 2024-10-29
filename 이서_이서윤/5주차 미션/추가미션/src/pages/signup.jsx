@@ -47,12 +47,16 @@ const Error=styled.div`
 const SignUpPage = () => {
     const signup = useForm({
         initialValue:{
+            name:'',
+            birth:'',
             email:'',
             password:'',
             passwordCheck:'',
         },
         validate: validateSignup
     }); 
+    const nameCheck = signup.touched.name && signup.errors.name;
+    const birthCheck = signup.touched.birth && signup.errors.birth;
     const emailCheck = signup.touched.email && signup.errors.email;
     const pwCheck = signup.touched.password && signup.errors.password;
     const pwcCheck = signup.touched.passwordCheck && signup.errors.passwordCheck;
@@ -60,6 +64,18 @@ const SignUpPage = () => {
         <Container>
             <LogInBox>
                 <Title>회원가입</Title>
+                <Input 
+                    placeholder="성함을 입력해주세요" 
+                    error={nameCheck}
+                    {...signup.getTextInputProps('name')}
+                />
+                {nameCheck && <Error>{signup.errors.name}</Error>}
+                <Input 
+                    placeholder="생년월일을 입력해주세요 (YYYYMMDD)" 
+                    error={birthCheck}
+                    {...signup.getTextInputProps('birth')}
+                />
+                {birthCheck && <Error>{signup.errors.birth}</Error>}
                 <Input 
                     placeholder="이메일을 입력해주세요" 
                     error={emailCheck}
@@ -82,8 +98,11 @@ const SignUpPage = () => {
                 {pwcCheck && <Error>{signup.errors.passwordCheck}</Error>}
                 <SignupBtn 
                     type="submit"
-                    disabled={ !signup.values.email || !signup.values.password || !signup.values.passwordCheck ||
-                                signup.errors.email || signup.errors.password || signup.errors.password}
+                    disabled={ !signup.values.name || !signup.values.birth || !signup.values.email || 
+                                !signup.values.password || !signup.values.passwordCheck ||
+                                signup.errors.name || signup.errorsbirth || signup.errors.email || 
+                                signup.errors.password || signup.errors.passwordCheck
+                    }
                 >
                     제출
                 </SignupBtn>
