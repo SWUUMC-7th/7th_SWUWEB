@@ -2,8 +2,41 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "../components/Input";
+import styled from "styled-components";
+import { useState } from "react";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+const Title = styled.div`
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 100px;
+`;
+
+const GenderContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+`;
+
+const Button = styled.button`
+  width: 404px;
+  border-radius: 4px;
+  border: none;
+  background-color: ${(props) => (props.disabled ? "gray" : "#ff3557")};
+  color: white;
+  padding: 10px;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+`;
 
 const SignupPage = () => {
+  const [birthdate, setBirthdate] = useState(null);
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -23,38 +56,71 @@ const SignupPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    formState: { errors, isValid }, 
   } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange", 
   });
 
   const onSubmit = (data) => {
     console.log("폼 데이터 제출");
-    console.log(data); 
+    console.log(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        label="Email"
-        type="email"
-        register={{ ...register("email") }}
-        error={errors.email?.message}
-      />
-      <Input
-        label="Password"
-        type="password"
-        register={{ ...register("password") }}
-        error={errors.password?.message}
-      />
-      <Input
-        label="Password Check"
-        type="password"
-        register={{ ...register("passwordCheck") }}
-        error={errors.passwordCheck?.message}
-      />
-      <input type="submit" />
-    </form>
+    <Container>
+      <Title>회원가입</Title>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          label="Email"
+          type="email"
+          register={{ ...register("email") }}
+          error={errors.email?.message}
+          placeholder="이메일을 입력하세요"
+        />
+        <Input
+          label="Password"
+          type="password"
+          register={{ ...register("password") }}
+          error={errors.password?.message}
+          placeholder="비밀번호를 입력하세요"
+        />
+        <Input
+          label="Password Check"
+          type="password"
+          register={{ ...register("passwordCheck") }}
+          error={errors.passwordCheck?.message}
+          placeholder="비밀번호를 다시 입력하세요"
+        />
+        <GenderContainer>
+          <label>
+            <input type="radio" {...register("gender")} value="male" />
+            남성
+          </label>
+          <label>
+            <input type="radio" {...register("gender")} value="female" />
+            여성
+          </label>
+        </GenderContainer>
+
+        <Input
+          type="date"
+          register={{ ...register("birthdate") }}
+          error={errors.birthdate?.message}
+          onChange={(date) => {
+            setValue("birthdate", date);
+            setBirthdate(date);
+          }}
+          placeholder="생년월일을 입력해주세요."
+          value={birthdate}
+        />
+
+        <Button type="submit" disabled={!isValid}>
+          가입하기
+        </Button>
+      </form>
+    </Container>
   );
 };
 
