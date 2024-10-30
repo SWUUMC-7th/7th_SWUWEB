@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Input from "../components/Input";
 
 const SignupPage = () => {
   const schema = yup.object().shape({
@@ -29,29 +30,29 @@ const SignupPage = () => {
 
   const onSubmit = (data) => {
     console.log("폼 데이터 제출");
-    console.log(data);
+    console.log(data); 
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label>
-        Email
-        <input type="email" {...register("email")} />
-      </label>
-      <p style={{ color: "red" }}>{errors.email?.message}</p>
-
-      <label>
-        Password
-        <input type="password" {...register("password")} />
-      </label>
-      <p style={{ color: "red" }}>{errors.password?.message}</p>
-
-      <label>
-        Password Check
-        <input type="password" {...register("passwordCheck")} />
-      </label>
-      <p style={{ color: "red" }}>{errors.passwordCheck?.message}</p>
-
+      <Input
+        label="Email"
+        type="email"
+        register={{ ...register("email") }}
+        error={errors.email?.message}
+      />
+      <Input
+        label="Password"
+        type="password"
+        register={{ ...register("password") }}
+        error={errors.password?.message}
+      />
+      <Input
+        label="Password Check"
+        type="password"
+        register={{ ...register("passwordCheck") }}
+        error={errors.passwordCheck?.message}
+      />
       <input type="submit" />
     </form>
   );
