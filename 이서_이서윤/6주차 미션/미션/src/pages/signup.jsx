@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import {useForm} from 'react-hook-form'
 import * as yup from 'yup'
-import {yupResolver} from '@hookform/resolvers/yup'
-
+import {yupResolver} from '@hookform/resolvers/yup';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Container=styled.div`
     background-color:black;
     width:calc(100vw - 200px);
@@ -70,7 +71,7 @@ const Birth=styled.div`
 `;
 const SignUpPage = () => {
     const schema = yup.object().shape({
-        name:yup.string().required('이름을 입력해주세요.'),
+        // name:yup.string().required('이름을 입력해주세요.'),
         email:yup.string().email('유효한 이메일이 아닙니다.').required('이메일을 입력해주세요.'),
         password:yup.string().min(8,'비밀번호는 8자 이상이어야 합니다.').max(16,'비밀번호는 16자 이하여야 합니다.')
         .required('비밀번호를 입력해주세요.'),
@@ -82,21 +83,28 @@ const SignUpPage = () => {
         resolver:yupResolver(schema),
         mode: 'onChange' 
     });
-    const onSubmit = (data) => {
-        console.log('폼 데이터 제출');
-        console.log(data);
-    }
+    const navigate =useNavigate();
+    const onSubmit = async (data) => {
+        try{
+            const response = await axios.post("http://localhost:3000/auth/register",data);
+            console.log('회원가입 성공',response.data);
+            navigate('/login');
+        }catch(error){
+            console.log('회원가입 실패!',error);
+        }
+    };
+
     return (
         <Container>
             <SignupBox>
                 <Title>회원가입</Title>
                 <form  onSubmit={handleSubmit(onSubmit)}> 
-                    <Input 
+                    {/* <Input 
                         placeholder="이름을 입력해주세요" 
                         error={errors.name}
                         {...register("name")}
                     />
-                    <Error>{errors.name?.message}</Error>
+                    <Error>{errors.name?.message}</Error> */}
                     <GenderBirth>
                         <Gender>
                             <div>성별</div>
