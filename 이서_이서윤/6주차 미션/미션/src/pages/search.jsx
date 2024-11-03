@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCustomFetch from "../../hooks/useCustomFetch";
 import MovieFetchError from "../components/movieFetchError";
 import MovieCard from "../components/moviecard";
 import Skeleton from "../components/skeleton";
+import { debounce } from "../../utils/debounce";
 const Container=styled.div`
     background-color:black;
     width:calc(100vw - 200px);
@@ -42,9 +43,20 @@ const Search = () => {
     const handleSearch=()=>{
         if (data) {
             setMovies(data); 
-            console.log(data);
         }
     }
+
+    const debouncedSearch = debounce(() => {
+        if (searchValue) {
+            setMovies(data); 
+        } else {
+            setMovies([]); 
+        }
+    }, 1000);
+
+    useEffect(()=>{
+        debouncedSearch();
+    },[data,searchValue,debouncedSearch])
 
     if(isError){
         return <MovieFetchError/>
@@ -71,7 +83,7 @@ const Search = () => {
                         movie={movie}
                     />
                 ))}
-                {!isLoading && movies.length ===0 && searchValue &&
+                {!isLoading && !movies && searchValue &&
                  <NoMovie>{`검색하신 "${searchValue}"에 해당하는 영화가 없습니다.`}</NoMovie>}
             </Movie>
         </Container>
