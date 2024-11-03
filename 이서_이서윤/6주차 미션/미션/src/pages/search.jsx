@@ -28,6 +28,12 @@ const Movie=styled.div`
     gap:10px;
     overflow-y:auto;
 `;
+const NoMovie=styled.div`
+    font-size:30px;
+    font-weight:600;
+    color:white;
+    margin: 10% auto;
+`;
 const Search = () => {
     const [movies, setMovies] = useState([]);
     const [searchValue,setSearchValue]=useState("");
@@ -65,6 +71,8 @@ const Search = () => {
                         movie={movie}
                     />
                 ))}
+                {!isLoading && movies.length ===0 && searchValue &&
+                 <NoMovie>{`검색하신 "${searchValue}"에 해당하는 영화가 없습니다.`}</NoMovie>}
             </Movie>
         </Container>
     );
