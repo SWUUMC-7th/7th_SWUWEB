@@ -1,42 +1,22 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import './App.css'
-import Button from './Button'
+import Button from './components/Button'
 import Input from './Input'
+import { TodoContext } from './context/TodoContext'
 
 function App() {
-  const [todoList,setTodoList]=useState([])
-  const [id,setId]=useState(1)
-  const [text,setText]=useState('')
-  const [newText,setNewText]=useState(text)
-  const [editingId,setEditingId]=useState('')
+  const {todoList,
+    text,
+    newText,
+    setText,
+    setNewText,
+    addTodo,
+    deleteTodo,
+    updateTodo,
+    editingId,
+    setEditingId,
+    handleSubmit} = useContext(TodoContext);
 
-  console.log('todoList:',todoList)
-  console.log('edititngId:',editingId)
-
-  //렌더링 방지
-  const handleSubmit=(e)=>{
-    e.preventDefault();
-  }
-  //1. 추가
-  const addTodo=()=>{
-    // setTodoList((prev)=>[
-    //   ...prev,{id:Math.floor(Math.random()*100)+1,task:text}
-    // ])
-    setTodoList((prev)=>[
-        ...prev, {id:id,task:text}
-    ])
-    setId((prev)=>prev+1);
-  }
-  //2. 삭제
-  const deleteTodo=(todoId)=>{
-    setTodoList(todoList.filter((todo)=>todo.id!=todoId))
-    setEditingId(editingId.filter((todo)=>todo.id!=todoId))
-  }
-  //3. 수정
-  const updateTodo=(todoId, newText)=>{
-    setTodoList((prev)=>prev.map((item)=>(item.id===todoId ? {...item, task:newText}:item)))
-    setEditingId('')
-  }
   return (
     <>
      <h1>🍒Todo List🍒</h1>
