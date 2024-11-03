@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 import useCustomFetch from "../../hooks/useCustomFetch";
-import LoadingSpinner from "../components/loadingSpinner";
 import MovieFetchError from "../components/movieFetchError";
 import MovieCard from "../components/moviecard";
+import Skeleton from "../components/skeleton";
 const Container=styled.div`
     background-color:black;
     width:calc(100vw - 200px);
@@ -40,9 +40,6 @@ const Search = () => {
         }
     }
 
-    if(isLoading){
-        return <LoadingSpinner/>
-    }
     if(isError){
         return <MovieFetchError/>
     }
@@ -57,7 +54,12 @@ const Search = () => {
                 <SearchBtn onClick={handleSearch}>검색</SearchBtn>
             </Wrapper>
             <Movie>
-                {movies.map((movie) => (
+                {isLoading && (
+                    Array.from({ length: 20 }).map((_, index) => (
+                        <Skeleton key={index} />
+                    ))
+                )}
+                {!isLoading && movies && movies.map((movie) => (
                     <MovieCard 
                         key={movie.id} 
                         movie={movie}
