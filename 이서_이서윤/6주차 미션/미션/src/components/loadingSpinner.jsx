@@ -24,7 +24,7 @@ const LoadingSpinner=()=>{
     return(
         <Container>
             <Wrapper>
-                <ClipLoader color="#F2075D" size='150'/>
+                <ClipLoader color="#F2075D" size='150px'/>
                 <Text>로딩 중입니다...</Text>
             </Wrapper>
         </Container>
