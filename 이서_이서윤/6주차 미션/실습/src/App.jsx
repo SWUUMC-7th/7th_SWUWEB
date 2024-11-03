@@ -15,7 +15,7 @@ function App() {
     updateTodo,
     editingId,
     setEditingId,
-    handleSubmit} = useContext(TodoContext);
+    handleSubmit,} = useContext(TodoContext);
 
   return (
     <>
