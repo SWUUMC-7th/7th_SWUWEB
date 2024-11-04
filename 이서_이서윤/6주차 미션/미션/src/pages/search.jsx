@@ -39,7 +39,7 @@ const Search = () => {
     const [movies, setMovies] = useState([]);
     const [searchValue,setSearchValue]=useState("");
     const {data, isLoading, isError} = useCustomFetch(`/search/movie?query=${searchValue}&language=ko-KR`);
-    
+    const [noMovie, setNoMovie]=useState(true);
     const handleSearch=()=>{
         if (data) {
             setMovies(data); 
@@ -56,7 +56,8 @@ const Search = () => {
 
     useEffect(()=>{
         debouncedSearch();
-    },[data,searchValue,debouncedSearch])
+        setNoMovie(!isLoading && movies.length===0)
+    },[isLoading,movies,debouncedSearch] )
 
     if(isError){
         return <MovieFetchError/>
@@ -77,13 +78,13 @@ const Search = () => {
                         <Skeleton key={index} />
                     ))
                 )}
-                {!isLoading && movies && movies.map((movie) => (
+                {!isLoading && movies.length > 0 && movies.map((movie) => (
                     <MovieCard 
                         key={movie.id} 
                         movie={movie}
                     />
                 ))}
-                {!isLoading && !movies && searchValue &&
+                { noMovie && searchValue &&
                  <NoMovie>{`검색하신 "${searchValue}"에 해당하는 영화가 없습니다.`}</NoMovie>}
             </Movie>
         </Container>
