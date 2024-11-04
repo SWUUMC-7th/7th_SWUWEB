@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import {useForm} from 'react-hook-form'
+import {useForm,useNavigate } from 'react-hook-form'
 import * as yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
+import axios from "axios";
 
 const Container=styled.div`
     background-color:black;
@@ -82,9 +83,20 @@ const SignUpPage = () => {
         resolver:yupResolver(schema),
         mode: 'onChange' 
     });
+    const navigate=useNavigate();
     const onSubmit = (data) => {
-        console.log('폼 데이터 제출');
-        console.log(data);
+        const fetchDataSignUp = async () => {
+            try{
+                const response = await axios.post('http://localhost:3000/auth/register',data
+                );
+                alert('회원가입 성공');
+                console.log(response);
+                navigate('/login',{state:{SignupData:data}});
+            }catch(error){
+                alert('회원가입 실패:',error)
+            }
+        };
+        fetchDataSignUp();
     }
     return (
         <Container>

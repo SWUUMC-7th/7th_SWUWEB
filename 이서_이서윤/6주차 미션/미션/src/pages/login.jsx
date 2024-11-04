@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import useForm from "../../hooks/useForm";
 import { validateLogin } from "../../utils/validate";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Container=styled.div`
     background-color:black;
@@ -53,8 +55,24 @@ const LogInPage = () => {
     }); 
     const emailCheck = login.touched.email && login.errors.email;
     const pwCheck = login.touched.password && login.errors.password;
+
+    const navigate=useNavigate();
     const handlePressLogin=()=>{
-        console.log(login.values);
+        const data=login.values;
+        const fetchDataLogin = async () => {
+            try{
+                const response = await axios.post('http://localhost:3000/auth/login',data
+                );
+                alert('로그인 성공');
+                console.log(response);
+                localStorage.setItem('refreshToken',response.refreshToken);
+                localStorage.setItem('accessToken',response.accessToken);
+                navigate('/',{state:{LoginData:data}});
+            }catch(error){
+                alert('로그인 실패:',error)
+            }
+        };
+        fetchDataLogin();
     }
     return (
         <Container>
