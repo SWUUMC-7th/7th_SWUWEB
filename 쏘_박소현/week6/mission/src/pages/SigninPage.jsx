@@ -62,7 +62,6 @@ const SignInPage = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     const data = login.values; 
-    console.log(data); 
   
     try {
       await handleSignIn(data);
