@@ -10,9 +10,8 @@ const useAuth = () => {
   const [loading, setLoading] = useState(false);
 
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (data) => {
     try {
-      const data = { email, password, passwordCheck };
       const response = await postSignUp(data);
       console.log('회원가입 성공:', response);
       return response;

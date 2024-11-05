@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "../components/Input";
 import styled from "styled-components";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -35,7 +37,9 @@ const Button = styled.button`
 `;
 
 const SignUpPage = () => {
+  const { handleSignUp } = useAuth();
   const [birthdate, setBirthdate] = useState(null);
+  const navigate = useNavigate();
 
   const schema = yup.object().shape({
     email: yup
@@ -57,15 +61,20 @@ const SignUpPage = () => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isValid }, 
+    formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
-    mode: "onChange", 
+    mode: "onChange",
   });
 
-  const onSubmit = (data) => {
-    console.log("폼 데이터 제출");
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      await handleSignUp(data);
+      navigate("/sign-in");
+    } catch (error) {
+      console.error("회원가입 실패:", error);
+    }
   };
 
   return (
@@ -108,7 +117,8 @@ const SignUpPage = () => {
           type="date"
           register={{ ...register("birthdate") }}
           error={errors.birthdate?.message}
-          onChange={(date) => {
+          onChange={(e) => {
+            const date = e.target.value;
             setValue("birthdate", date);
             setBirthdate(date);
           }}
