@@ -59,7 +59,11 @@ const SignInPage = () => {
 
   const isFormValid = !login.errors.email && !login.errors.password;
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    const data = login.values; 
+    console.log(data); 
+  
     try {
       await handleSignIn(data);
       navigate("/");
