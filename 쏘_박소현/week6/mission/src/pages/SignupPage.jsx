@@ -68,7 +68,6 @@ const SignUpPage = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       await handleSignUp(data);
       navigate("/sign-in");

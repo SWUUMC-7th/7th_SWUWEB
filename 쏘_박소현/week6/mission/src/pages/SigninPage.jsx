@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import useForm from "../hooks/useForm";
 import { validateLogin } from "../utils/validate";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +46,9 @@ const Button = styled.button`
 `;
 
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const { handleSignIn } = useAuth();
+
   const login = useForm({
     initialValue: {
       email: "",
@@ -52,37 +57,49 @@ const SignInPage = () => {
     validate: validateLogin,
   });
 
-  const isFormValid = !login.errors.email && !login.errors.password
+  const isFormValid = !login.errors.email && !login.errors.password;
+
+  const onSubmit = async (data) => {
+    try {
+      await handleSignIn(data);
+      navigate("/");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
+  };
 
   return (
-    <Container>
-      <Title>로그인</Title>
-      <Input
-        error={login.touched.email && login.errors.email}
-        type="email"
-        placeholder="이메일을 입력해주세요."
-        {...login.getTextInputProps("email")}
-      />
+    <form onSubmit={onSubmit}>
+      <Container>
+        <Title>로그인</Title>
 
-      {login.touched.email && login.errors.email && (
-        <ErrorMessage>{login.errors.email}</ErrorMessage>
-      )}
+        <Input
+          error={login.touched.email && login.errors.email}
+          type="email"
+          placeholder="이메일을 입력해주세요."
+          {...login.getTextInputProps("email")}
+        />
 
-      <Input
-        error={login.touched.password && login.errors.password}
-        type="password"
-        placeholder="비밀번호를 입력해주세요."
-        {...login.getTextInputProps("password")}
-      />
+        {login.touched.email && login.errors.email && (
+          <ErrorMessage>{login.errors.email}</ErrorMessage>
+        )}
 
-      {login.touched.password && login.errors.password && (
-        <ErrorMessage>{login.errors.password}</ErrorMessage>
-      )}
+        <Input
+          error={login.touched.password && login.errors.password}
+          type="password"
+          placeholder="비밀번호를 입력해주세요."
+          {...login.getTextInputProps("password")}
+        />
 
-      <Button type="button" disabled={!isFormValid}>
-        로그인
-      </Button>
-    </Container>
+        {login.touched.password && login.errors.password && (
+          <ErrorMessage>{login.errors.password}</ErrorMessage>
+        )}
+
+        <Button type="submit" disabled={!isFormValid}>
+          로그인
+        </Button>
+      </Container>
+    </form>
   );
 };
 
