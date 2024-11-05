@@ -65,8 +65,8 @@ const LogInPage = () => {
                 );
                 alert('로그인 성공');
                 console.log(response);
-                localStorage.setItem('refreshToken',response.refreshToken);
-                localStorage.setItem('accessToken',response.accessToken);
+                localStorage.setItem('refreshToken',response.data.refreshToken);
+                localStorage.setItem('accessToken',response.data.accessToken);
                 navigate('/',{state:{LoginData:data}});
             }catch(error){
                 alert('로그인 실패:',error)
