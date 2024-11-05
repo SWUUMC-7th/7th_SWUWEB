@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { postSignUp } from '../api/auth/postSignUp';
 import { postSignIn } from '../api/auth/postSignIn';
 
-const useAuthForm = () => {
+const useAuth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -51,4 +51,4 @@ const useAuthForm = () => {
   };
 };
 
-export default useAuthForm;
+export default useAuth;

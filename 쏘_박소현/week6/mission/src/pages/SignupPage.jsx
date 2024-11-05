@@ -34,7 +34,7 @@ const Button = styled.button`
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
-const SignupPage = () => {
+const SignUpPage = () => {
   const [birthdate, setBirthdate] = useState(null);
 
   const schema = yup.object().shape({
@@ -124,4 +124,4 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default SignUpPage;

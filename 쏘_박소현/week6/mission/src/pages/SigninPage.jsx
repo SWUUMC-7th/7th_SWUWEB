@@ -43,7 +43,7 @@ const Button = styled.button`
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 
-const SigninPage = () => {
+const SignInPage = () => {
   const login = useForm({
     initialValue: {
       email: "",
@@ -86,4 +86,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default SignInPage;
