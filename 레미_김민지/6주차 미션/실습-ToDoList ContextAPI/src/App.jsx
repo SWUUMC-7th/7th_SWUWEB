@@ -1,34 +1,23 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Input from "./components/Input";
 import Button from "./components/Button";
 import "./App.css";
+import { TodoContext } from "./context/TodoContext";
 
 function App() {
-  const [toDos, setToDos] = useState([{ id: 1, task: "투두 만들어보기" }]);
-  const [text, setText] = useState("");
-  const [editText, setEditText] = useState("");
-  const [editingId, setEditingId] = useState("");
-
-  // 핸들링 방지
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  const addToDo = () => {
-    if (text.trim() === "") return;
-    setToDos((prev) => [...prev, { id: Math.floor(Math.random() * 100) + 2, task: text }]);
-    setText("");
-  };
-
-  const deleteToDo = (id) => {
-    setToDos((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const modifyToDo = (id, text) => {
-    if (text.trim() === "") return;
-    setToDos((prev) => prev.map((item) => (item.id === id ? { ...item, task: text } : item)));
-    setEditingId("");
-  };
+  const {
+    toDos,
+    text,
+    setText,
+    editingId,
+    setEditingId,
+    editText,
+    setEditText,
+    handleSubmit,
+    addToDo,
+    deleteToDo,
+    modifyToDo,
+  } = useContext(TodoContext);
 
   return (
     <div className="container">
