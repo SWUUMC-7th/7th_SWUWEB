@@ -23,7 +23,7 @@ const NowPlayingMovies = () => {
     <>
       <h1>현재 상영중인 영화</h1>
       <MovieGrid>
-        {movies.data?.results.map((movie) => (
+        {movies.map((movie) => (
           <MovieCards key={movie.id} movie={movie} />
         ))}
       </MovieGrid>

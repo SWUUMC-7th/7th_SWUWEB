@@ -19,7 +19,7 @@ const UpComingMovies = () => {
     <>
       <h1>개봉 예정인 영화</h1>
       <MovieGrid>
-        {movies.data?.results.map((movie) => (
+        {movies.map((movie) => (
           <MovieCards key={movie.id} movie={movie} />
         ))}
       </MovieGrid>

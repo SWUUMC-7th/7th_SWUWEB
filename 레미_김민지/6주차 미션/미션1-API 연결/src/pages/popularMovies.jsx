@@ -19,7 +19,7 @@ const PopularMovies = () => {
     <div>
       <h1>인기있는 영화</h1>
       <MovieGrid>
-        {movies.data?.results.map((movie) => (
+        {movies.map((movie) => (
           <MovieCards key={movie.id} movie={movie} />
         ))}
       </MovieGrid>
