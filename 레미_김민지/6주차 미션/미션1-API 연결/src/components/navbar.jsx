@@ -1,33 +1,13 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getUserInfo } from "../api/auth";
+import useAuth from "../hooks/useAuth.js";
 
 const Navbar = () => {
-  const [nickname, setNickname] = useState(null);
+  const { nickname, logout } = useAuth();
   const navigate = useNavigate();
 
-  // 유저 정보 가져오기
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const userInfo = await getUserInfo();
-        const userNickname = userInfo.email.split("@")[0];
-        setNickname(userNickname);
-      } catch (error) {
-        console.log("유저 정보를 가져오지 못했습니다.");
-      }
-    };
-
-    if (localStorage.getItem("accessToken")) {
-      fetchUserInfo();
-    }
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    setNickname(null);
+    logout();
     navigate("/login");
   };
 

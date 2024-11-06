@@ -3,11 +3,13 @@ import useForm from "../hooks/useForm.js";
 import { validateLogin } from "../utils/validate.js";
 import { loginUser } from "../api/auth.js";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const login = useForm({
+  const loginForm = useForm({
     initialValue: {
       email: "",
       password: "",
@@ -15,17 +17,18 @@ const Login = () => {
     validate: validateLogin,
   });
 
-  const isFormValid = !login.errors.email && !login.errors.password;
+  const isFormValid = !loginForm.errors.email && !loginForm.errors.password;
 
   const handleLogin = async () => {
     if (isFormValid) {
       try {
         const { accessToken, refreshToken } = await loginUser({
-          email: login.values.email,
-          password: login.values.password,
+          email: loginForm.values.email,
+          password: loginForm.values.password,
         });
-        // 토큰을 로컬 스토리지에 저장
-        localStorage.setItem("accessToken", accessToken);
+
+        await login(accessToken);
+
         localStorage.setItem("refreshToken", refreshToken);
 
         console.log("로그인 성공:", { accessToken, refreshToken });
@@ -45,20 +48,20 @@ const Login = () => {
           <InputBox
             type="email"
             placeholder="이메일을 입력해주세요!"
-            {...login.getTextInputProps("email")}
+            {...loginForm.getTextInputProps("email")}
           />
-          {login.touched.email && login.errors.email && (
-            <ErrorMessage>{login.errors.email}</ErrorMessage>
+          {loginForm.touched.email && loginForm.errors.email && (
+            <ErrorMessage>{loginForm.errors.email}</ErrorMessage>
           )}
         </InputWrapper>
         <InputWrapper>
           <InputBox
             type="password"
             placeholder="비밀번호를 입력해주세요!"
-            {...login.getTextInputProps("password")}
+            {...loginForm.getTextInputProps("password")}
           />
-          {login.touched.password && login.errors.password && (
-            <ErrorMessage>{login.errors.password}</ErrorMessage>
+          {loginForm.touched.password && loginForm.errors.password && (
+            <ErrorMessage>{loginForm.errors.password}</ErrorMessage>
           )}
         </InputWrapper>
         <Button
