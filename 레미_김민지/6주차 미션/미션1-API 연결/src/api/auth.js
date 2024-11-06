@@ -21,3 +21,20 @@ export const loginUser = async (credentials) => {
     throw error;
   }
 };
+
+export const getUserInfo = async () => {
+  const token = localStorage.getItem("accessToken");
+  if (!token) throw new Error("No access token");
+
+  try {
+    const response = await api.get("/user/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("유저 정보 불러오기 실패:", error.response?.data);
+    throw error;
+  }
+};
