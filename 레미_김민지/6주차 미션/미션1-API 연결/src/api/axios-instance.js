@@ -7,4 +7,8 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_MOVIES_API_URL,
 });
 
-export { axiosInstance };
+const api = axios.create({
+  baseURL: "http://localhost:3000",
+});
+
+export { axiosInstance, api };

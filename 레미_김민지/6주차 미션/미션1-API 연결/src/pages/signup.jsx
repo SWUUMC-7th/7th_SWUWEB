@@ -1,7 +1,9 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { registerUser } from "../api/auth.js";
 
 const schema = yup.object({
   email: yup.string().email("유효한 이메일 형식이 아닙니다.").required("이메일을 입력 해주세요."),
@@ -19,6 +21,8 @@ const schema = yup.object({
 });
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -28,8 +32,15 @@ const Signup = () => {
     mode: "onChange",
   });
 
-  const onSubmit = (data) => {
-    console.log("회원가입 데이터:", data);
+  const onSubmit = async (data) => {
+    try {
+      const responseData = await registerUser(data); // 회원가입 API 호출
+      console.log("회원가입 성공:", responseData);
+      navigate("/login");
+    } catch (error) {
+      console.error("회원가입 실패:", error.response?.data);
+      // 에러 처리 로직 추가
+    }
   };
 
   return (
@@ -37,6 +48,7 @@ const Signup = () => {
       <InfoWrapper>
         <Title>회원가입</Title>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          {/* 성별 및 생년월일 입력 */}
           <div
             style={{
               display: "flex",
@@ -70,6 +82,7 @@ const Signup = () => {
               {errors.birthDate && <ErrorMessage>{errors.birthDate.message}</ErrorMessage>}
             </InputWrapper>
           </div>
+          {/* 이메일, 비밀번호 입력 */}
           <InputWrapper>
             <InputBox type="email" placeholder="이메일을 입력해주세요!" {...register("email")} />
             {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
