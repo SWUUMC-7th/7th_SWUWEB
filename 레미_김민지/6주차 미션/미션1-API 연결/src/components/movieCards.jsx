@@ -1,8 +1,8 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-function MovieCards({ movie }) {
+function MovieCards({ movie, isLoading }) {
   const navigate = useNavigate();
   const [hoveredMovieId, setHoveredMovieId] = useState(null);
 
@@ -17,6 +17,10 @@ function MovieCards({ movie }) {
   const handleClick = () => {
     navigate(`/movies/${movie.id}`);
   };
+
+  if (isLoading) {
+    return <SkeletonCard />;
+  }
 
   return (
     <MovieCard
@@ -70,4 +74,23 @@ const HoverText = styled.div`
   text-align: center;
   color: #fff;
   font-weight: ${(props) => (props.bold ? "bold" : "normal")};
+`;
+
+const loading = keyframes`
+  0% {
+    background-color: #e0e0e0;
+  }
+  50% {
+    background-color: #c0c0c0;
+  }
+  100% {
+    background-color: #e0e0e0;
+  }
+`;
+
+const SkeletonCard = styled.div`
+  width: 170px;
+  height: 260px;
+  border-radius: 16px;
+  animation: ${loading} 1.5s infinite;
 `;
