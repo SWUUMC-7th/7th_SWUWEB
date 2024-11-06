@@ -31,8 +31,6 @@ const Movie = ({ movie }) => {
       <MovieImage src={`${baseUrl}${movie.poster_path}`} alt={movie.title} />
       <p>{movie.title}</p>
       <p>{movie.release_date}</p>
-      <p>{movie.vote_average} / 10</p>
-      <p>{movie.overview}</p>
     </MovieItem>
   );
 };

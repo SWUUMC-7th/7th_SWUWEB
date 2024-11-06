@@ -1,13 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { getSearch } from "../api/movies/getSearch";
-import Movie from "../components/Movie"; 
+import Movie from "../components/Movie";
 
 const Container = styled.div`
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 const InputContainer = styled.div`
@@ -21,7 +22,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  background-color: #ff3557; 
+  background-color: #ff3557;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -30,22 +31,25 @@ const Button = styled.button`
 `;
 
 const MoviesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 0 auto;
+  max-width: 1300px;
 `;
 
 const SearchPage = () => {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
+  const [isSearched, setIsSearched] = useState(false);
 
   const handleSearch = async () => {
-    if (!search) return; 
+    if (!search) return;
 
     try {
-      const data = await getSearch(search); 
-      setMovies(data.results); 
+      const data = await getSearch(search);
+      setMovies(data.results);
+      setIsSearched(true);
     } catch (error) {
       console.error("검색 중 오류 발생:", error);
     }
@@ -62,16 +66,15 @@ const SearchPage = () => {
         />
         <Button onClick={handleSearch}>검색</Button>
       </InputContainer>
-
-      <MoviesContainer>
-        {movies.length > 0 ? (
-          movies.map((movie) => (
+      {movies.length > 0 ? (
+        <MoviesContainer>
+          {movies.map((movie) => (
             <Movie key={movie.id} movie={movie} />
-          ))
-        ) : (
-          <p>영화를 찾을 수 없습니다.</p>
-        )}
-      </MoviesContainer>
+          ))}
+        </MoviesContainer>
+      ) : (
+        isSearched && <h2>영화를 찾을 수 없습니다.</h2>
+      )}
     </Container>
   );
 };
