@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import useForm from "../hooks/useForm.js";
 import { validateLogin } from "../utils/validate.js";
+import { loginUser } from "../api/auth.js";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const login = useForm({
     initialValue: {
       email: "",
@@ -12,6 +16,26 @@ const Login = () => {
   });
 
   const isFormValid = !login.errors.email && !login.errors.password;
+
+  const handleLogin = async () => {
+    if (isFormValid) {
+      try {
+        const { accessToken, refreshToken } = await loginUser({
+          email: login.values.email,
+          password: login.values.password,
+        });
+        // 토큰을 로컬 스토리지에 저장
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        console.log("로그인 성공:", { accessToken, refreshToken });
+
+        navigate("/");
+      } catch (error) {
+        console.error("로그인 실패:", error.response?.data);
+      }
+    }
+  };
 
   return (
     <Container>
@@ -37,7 +61,11 @@ const Login = () => {
             <ErrorMessage>{login.errors.password}</ErrorMessage>
           )}
         </InputWrapper>
-        <Button disabled={!isFormValid} title={!isFormValid ? "정보를 입력하세요" : ""}>
+        <Button
+          onClick={handleLogin}
+          disabled={!isFormValid}
+          title={!isFormValid ? "정보를 입력하세요" : ""}
+        >
           로그인
         </Button>
       </InfoWrapper>
