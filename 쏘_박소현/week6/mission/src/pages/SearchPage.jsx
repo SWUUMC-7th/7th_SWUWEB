@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getSearch } from "../api/movies/getSearch";
 import Movie from "../components/Movie";
@@ -69,7 +69,7 @@ const SearchPage = () => {
 
     setLoading(true);
     setIsSearched(false);
-    setMovies([]); 
+    setMovies([]);
 
     try {
       const data = await getSearch(search);
@@ -81,6 +81,16 @@ const SearchPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      if (search) {
+        handleSearch();
+      }
+    }, 500); 
+
+    return () => clearTimeout(debounceTimeout);
+  }, [search]); 
 
   return (
     <Container>
