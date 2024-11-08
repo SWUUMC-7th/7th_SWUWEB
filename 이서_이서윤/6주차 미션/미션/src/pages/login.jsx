@@ -3,6 +3,7 @@ import useForm from "../../hooks/useForm";
 import { validateLogin } from "../../utils/validate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import useIsLogin from '../../hooks/useIsLogin';
 
 const Container=styled.div`
     background-color:black;
@@ -53,6 +54,7 @@ const LogInPage = () => {
         },
         validate: validateLogin 
     }); 
+    const {setLogin}=useIsLogin();
     const emailCheck = login.touched.email && login.errors.email;
     const pwCheck = login.touched.password && login.errors.password;
 
@@ -63,13 +65,13 @@ const LogInPage = () => {
             try{
                 const response = await axios.post('http://localhost:3000/auth/login',data
                 );
-                alert('로그인 성공');
-                console.log(response);
+                console.log('로그인 성공');
                 localStorage.setItem('refreshToken',response.data.refreshToken);
                 localStorage.setItem('accessToken',response.data.accessToken);
+                await setLogin(response.data.accessToken);
                 navigate('/',{state:{LoginData:data}});
             }catch(error){
-                alert('로그인 실패:',error)
+                console.log('로그인 실패:',error)
             }
         };
         fetchDataLogin();
