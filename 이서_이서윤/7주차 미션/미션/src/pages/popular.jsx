@@ -1,22 +1,25 @@
-import { useState, useEffect } from "react";
 import MovieCard from "../components/moviecard";
-import useCustomFetch from "../../hooks/useCustomFetch";
-import LoadingSpinner from "../components/loadingSpinner"
 import { MovieGrid } from "../layout/movieGrid";
 import MovieFetchError from "../components/movieFetchError";
+import { useGetMovies } from "../../hooks/queries/useGetMovies";
+import { useQuery } from "@tanstack/react-query";
+import Skeleton from "../components/skeleton";
 
 const Popular = () => {
-    const [movies, setMovies] = useState([]);
-    const {data, isLoading, isError} = useCustomFetch('/movie/popular?language=ko-KR&page=1')
+    const {data, isPending, isError} = useQuery({
+        queryFn:()=>useGetMovies({category:'popular',pageParam:1}),
+        queryKey:['movies','popular'],
+        cacheTime:10000,
+        staleTime:10000
+    })
 
-    useEffect(() => {
-        if (data) {
-            setMovies(data); 
-        }
-    }, [data]); 
-    
-    if(isLoading){
-        return <LoadingSpinner/>
+    if(isPending){
+        return (
+            <MovieGrid>
+                {Array.from({ length: 20 }).map((_, index) => (
+                <Skeleton key={index} />))}
+            </MovieGrid>
+        );
     }
     if(isError){
         return <MovieFetchError/>
@@ -24,7 +27,7 @@ const Popular = () => {
 
     return (
         <MovieGrid>
-            {movies.map((movie) => (
+            {data.results.map((movie) => (
                 <MovieCard 
                     key={movie.id} 
                     movie={movie}
@@ -35,3 +38,4 @@ const Popular = () => {
 };
 
 export default Popular;
+

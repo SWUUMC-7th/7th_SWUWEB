@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom"
-import useCustomFetch from "../../hooks/useCustomFetch"
 import MovieFetchError from "../components/movieFetchError";
 import LoadingSpinner from "../components/loadingSpinner";
 import styled from "styled-components";
 import { LuDot } from "react-icons/lu";
 import CastInfo from "../components/castInfo";
+import { useGetMovies } from "../../hooks/queries/useGetMovies";
+import { useQuery } from "@tanstack/react-query";
 
 const TopWrapper = styled.div`
     display:flex;
@@ -67,8 +68,20 @@ const CreditWrapper=styled.div`
 `;
 const MovieDetails = () =>{
     const params=useParams();
-    const {data, isLoading: isMovieLoading, isError: isMovieError} = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`,true)
-    const {data: credits, isLoading:  isCreditsLoading, isError: isCreditsError} = useCustomFetch(`/movie/${params.movieId}/credits?language=ko-KR`,true)
+    const param=params.movieId;
+    const {data, isPending:isMovieLoading, isError:isMovieError} = useQuery({
+        queryFn:()=>useGetMovies({category:`${param}`,isDetail:true}),
+        queryKey:['movies','detail'],
+        cacheTime:10000,
+        staleTime:10000
+    })
+    const {data:credits, isPending:isCreditsLoading, isError:isCreditsError} = useQuery({
+        queryFn:()=>useGetMovies({category:`${param}/credits`,isDetail:true}),
+        queryKey:['movies','credit'],
+        cacheTime:10000,
+        staleTime:10000
+    })
+
     const src='https://image.tmdb.org/t/p/w500';
 
     if (isMovieLoading || isCreditsLoading) {

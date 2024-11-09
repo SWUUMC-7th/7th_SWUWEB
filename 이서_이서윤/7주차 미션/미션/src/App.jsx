@@ -12,7 +12,7 @@ import TopRated from "./pages/top-rated.jsx";
 import UpComing from "./pages/up-coming.jsx";
 import MovieDetails from "./pages/movieDetails.jsx";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const router = createBrowserRouter([
     {
@@ -68,13 +68,11 @@ const router = createBrowserRouter([
 ])
 
 const queryClient = new QueryClient()
-console.log('queryClient',queryClient);
-console.log('queryClient.getQueryCache',queryClient.getQueryCache);
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }
