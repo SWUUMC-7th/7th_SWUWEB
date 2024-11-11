@@ -17,7 +17,7 @@ const useGetMovies = async ({ category, pageParam, isDetail }) => {
         });
         data = response.data; 
     }
-
+    console.log('data fetch:',category)
     return data; // 최종적으로 데이터를 반환
 };
 

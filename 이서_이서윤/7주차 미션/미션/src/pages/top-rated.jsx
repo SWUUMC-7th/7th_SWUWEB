@@ -4,14 +4,29 @@ import MovieFetchError from "../components/movieFetchError";
 import { useGetMovies } from "../../hooks/queries/useGetMovies";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton from "../components/skeleton";
+import { useState } from "react";
+import PaginationBar from "../components/PaginationBar";
 
 const TopRated = () => {
+    const [pageNum, setPageNum]=useState(1);
+    const [prevDisabled,setPrevDisabled]=useState(true);
+    
     const {data, isPending, isError} = useQuery({
-        queryFn:()=>useGetMovies({category:'top_rated',pageParam:1}),
-        queryKey:['movies','top_rated'],
+        queryFn:()=>useGetMovies({category:'top_rated',pageParam:pageNum}),
+        queryKey:['movies','top_rated', pageNum],
         cacheTime:10000,
         staleTime:10000
     })
+    const handlePrevPage=()=>{
+        if(pageNum==2){
+            setPrevDisabled(true);
+        }
+        setPageNum((prev)=>prev-1);
+    }
+    const handleNextPage=()=>{
+        setPrevDisabled(false);
+        setPageNum((prev)=>prev+1);
+    }
 
     if(isPending){
         return (
@@ -26,14 +41,22 @@ const TopRated = () => {
     }
 
     return (
-        <MovieGrid>
-            {data.results.map((movie) => (
-                <MovieCard 
-                    key={movie.id} 
-                    movie={movie}
-                />
-            ))}
-        </MovieGrid>
+        <>
+            <MovieGrid>
+                {data.results.map((movie) => (
+                    <MovieCard 
+                        key={movie.id} 
+                        movie={movie}
+                    />
+                ))}
+            </MovieGrid>
+            <PaginationBar 
+                pageNum={pageNum} 
+                handlePrevPage={handlePrevPage} 
+                handleNextPage={handleNextPage}
+                prevDisabled={prevDisabled}
+            />
+        </>
     );
 };
 
