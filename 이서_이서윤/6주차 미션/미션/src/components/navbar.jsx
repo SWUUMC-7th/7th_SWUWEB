@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import styled from "styled-components";
-
+import useIsLogin from '../../hooks/useIsLogin'
 const Container=styled.div`
     display:flex;
     padding:0 20px;
@@ -35,13 +35,33 @@ const SignUp=styled.button`
         background-color:#F72F78;
     }
 `;
+const UserLogin=styled.button`
+    color:white;
+    background:none;
+`;
 const Navbar = () => {
+    const {nickname, setLogout} = useIsLogin();
+
+    const handleLogout = () => {
+        setLogout(); 
+    };
+
     return (
         <Container>
             <Link to={'/'}><Logo>YONGCHA</Logo></Link>
             <Right>
-                <Link to={'/login'}><LogIn>로그인</LogIn></Link>
-                <Link to={'/signup'}><SignUp>회원가입</SignUp></Link>
+                {nickname && (
+                    <>
+                        <UserLogin>{`${nickname}님 환영합니다!`}</UserLogin>
+                        <LogIn onClick={handleLogout}>로그아웃</LogIn>
+                    </>
+                )}
+                {!nickname && (
+                    <>
+                        <Link to={'/login'}><LogIn>로그인</LogIn></Link>
+                        <Link to={'/signup'}><SignUp>회원가입</SignUp></Link>
+                    </>
+                )}
             </Right>
         </Container>
     );
