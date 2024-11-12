@@ -2,7 +2,7 @@ import styled from "styled-components";
 import useForm from "../../hooks/useForm";
 import { validateLogin } from "../../utils/validate";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { fetchDataLogin } from "../../apis/fetchDataLogin";
 import useIsLogin from '../../hooks/useIsLogin';
 
 const Container=styled.div`
@@ -59,22 +59,12 @@ const LogInPage = () => {
     const pwCheck = login.touched.password && login.errors.password;
 
     const navigate=useNavigate();
+
     const handlePressLogin=()=>{
         const data=login.values;
-        const fetchDataLogin = async () => {
-            try{
-                const response = await axios.post('http://localhost:3000/auth/login',data
-                );
-                console.log('로그인 성공');
-                localStorage.setItem('refreshToken',response.data.refreshToken);
-                localStorage.setItem('accessToken',response.data.accessToken);
-                await setLogin(response.data.accessToken);
-                navigate('/',{state:{LoginData:data}});
-            }catch(error){
-                console.log('로그인 실패:',error)
-            }
-        };
-        fetchDataLogin();
+        fetchDataLogin(data);
+        setLogin(localStorage.getItem('accessToken'));
+        navigate('/',{state:{LoginData:data}});
     }
     return (
         <Container>
