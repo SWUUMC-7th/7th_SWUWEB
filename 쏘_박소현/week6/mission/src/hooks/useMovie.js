@@ -1,40 +1,40 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { getMovies } from "../api/movies/getMovies";
 import { getMovieDetail } from "../api/movies/getMovieDetail"; 
 import { getCredits } from "../api/movies/getCredits";
 
 const useMovie = (category, movieId) => {
-  const [data, setData] = useState([]);
-  const [movie, setMovie] = useState(null); 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [credits, setCredits] = useState({});
+  const { data: movieListData, isLoading: isMoviesLoading, isError: isMoviesError } = useQuery(
+    ["movies", category],
+    () => getMovies(category),
+    {
+      enabled: !movieId,
+    }
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        if (movieId) { 
-          const movieDetail = await getMovieDetail(movieId);
-          const creditsData = await getCredits(movieId);
+  const { data: movieDetailData, isLoading: isMovieDetailLoading, isError: isMovieDetailError } = useQuery(
+    ["movieDetail", movieId],
+    () => getMovieDetail(movieId),
+    {
+      enabled: !!movieId,
+    }
+  );
 
-          setMovie(movieDetail);
-          setCredits(creditsData);
-        } else {
-          const data = await getMovies(category);
-          setData(data.results);
-        }
-      } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const { data: creditsData, isLoading: isCreditsLoading, isError: isCreditsError } = useQuery(
+    ["credits", movieId],
+    () => getCredits(movieId),
+    {
+      enabled: !!movieId,
+    }
+  );
 
-    fetchData();
-  }, [category, movieId]); 
-
-  return { data, movie, credits, isLoading, isError };
+  return {
+    data: movieListData?.results || [],
+    movie: movieDetailData || null,
+    credits: creditsData || {},
+    isLoading: isMoviesLoading || isMovieDetailLoading || isCreditsLoading,
+    isError: isMoviesError || isMovieDetailError || isCreditsError,
+  };
 };
 
 export default useMovie;
