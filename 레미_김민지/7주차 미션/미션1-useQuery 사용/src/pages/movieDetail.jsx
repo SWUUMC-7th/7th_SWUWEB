@@ -4,45 +4,39 @@ import { useParams } from "react-router-dom";
 import useCustomFetch from "../hooks/useCustomFetch";
 import LoadingBar from "../components/loadingBar";
 import Error from "../components/error";
+import { useGetMovieDetails } from "../hooks/queries/useGetMovieDetails";
+import { useGetMovieCredits } from "../hooks/queries/useGetMovieCredits";
 
 const MovieDetail = () => {
   const { movieId } = useParams();
-  const { data, isLoading, isError } = useCustomFetch(`/movie/${movieId}?language=ko`);
-  const { data: credits, isLoading: isCreditsLoading } = useCustomFetch(
-    `/movie/${movieId}/credits?language=ko`,
-  );
+  const { data: movieData, isLoading, isError } = useGetMovieDetails(movieId);
+  const { data: credits, isLoading: isCreditsLoading } = useGetMovieCredits(movieId);
 
-  // TODO: 수정 - useCustomFetch안에서 처리,,,아마 DOM 호출,,,
-  const movieData = data?.data;
+  if (isLoading && isCreditsLoading) return <LoadingBar text={`정보 불러오는 중...`} />;
+  if (isError) return <Error />;
+  if (!movieData) return null;
 
   console.log(movieData);
-  // TODO: 왜 이게 될지 공부
-  if (!movieData) {
-    return <></>;
-  }
 
-  if (isLoading) return <LoadingBar text={`<${movieData?.title}>의 정보 불러오는 중...`} />;
-  if (isError) return <Error />;
-
-  const genres = movieData.genres || [];
-  const countries = movieData.production_countries || [];
-  const cast = credits?.data?.cast || [];
-  const crew = credits?.data?.crew || [];
+  const genres = movieData?.genres || [];
+  const countries = movieData?.production_countries || [];
+  const cast = credits?.cast || [];
+  const crew = credits?.crew || [];
 
   return (
     <>
       <DetailContainer>
         <BackgroundImage
-          src={`https://image.tmdb.org/t/p/original${movieData.backdrop_path}`}
+          src={`https://image.tmdb.org/t/p/original${movieData?.backdrop_path}`}
           alt={movieData?.title}
         />
         <GradientOverlay />
         <MovieInfo>
-          <MovieTitle>{movieData.title}</MovieTitle>
+          <MovieTitle>{movieData?.title}</MovieTitle>
           <MovieDetailsRow>
-            <MovieYear>{movieData.release_date}</MovieYear>
-            <MovieRating>⭐ {movieData.vote_average}</MovieRating>
-            <MovieRuntime>{movieData.runtime}분</MovieRuntime>
+            <MovieYear>{movieData?.release_date}</MovieYear>
+            <MovieRating>⭐ {movieData?.vote_average}</MovieRating>
+            <MovieRuntime>{movieData?.runtime}분</MovieRuntime>
           </MovieDetailsRow>
           <GenresContainer>
             {genres.map((genre) => (
@@ -60,8 +54,8 @@ const MovieDetail = () => {
               </CountryInfo>
             ))}
           </CountriesContainer>
-          <MovieTagline>{movieData.tagline}</MovieTagline>
-          <MovieOverview>{movieData.overview}</MovieOverview>
+          <MovieTagline>{movieData?.tagline}</MovieTagline>
+          <MovieOverview>{movieData?.overview}</MovieOverview>
         </MovieInfo>
       </DetailContainer>
       <CreditsSection>
