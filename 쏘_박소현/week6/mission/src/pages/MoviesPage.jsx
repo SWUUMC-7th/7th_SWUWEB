@@ -3,6 +3,7 @@ import Movie from "../components/Movie";
 import styled from "styled-components";
 import useMovie from "../hooks/useMovie";
 import { CircularProgress } from "@mui/material";
+import { useRef, useCallback, useEffect } from "react";
 
 const Container = styled.div`
   margin: 30px auto;
@@ -56,6 +57,35 @@ const MoviesPage = () => {
   const { movieList, isLoading, isError, fetchNextPage, hasNextPage } =
     useMovie(category);
 
+  const loadMoreRef = useRef(null);
+
+  const loadMoreCallback = useCallback(
+    (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasNextPage) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage]
+  );
+
+  useEffect(() => {
+    const currentElement = loadMoreRef.current;
+    const observer = new IntersectionObserver(loadMoreCallback, {
+      rootMargin: "100px", // 100px before the element reaches the bottom
+    });
+
+    if (currentElement) {
+      observer.observe(currentElement);
+    }
+
+    return () => {
+      if (currentElement) {
+        observer.unobserve(currentElement);
+      }
+    };
+  }, [loadMoreCallback]);
+
   if (isLoading) {
     return (
       <Container>
@@ -85,12 +115,7 @@ const MoviesPage = () => {
         ))}
       </MovieContainer>
       {hasNextPage && (
-        <button
-          onClick={() => fetchNextPage()}
-          style={{ margin: "20px auto", display: "block" }}
-        >
-          Load More
-        </button>
+        <div ref={loadMoreRef} style={{ height: "20px", width: "100%" }} />
       )}
     </Container>
   );
