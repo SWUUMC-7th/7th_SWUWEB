@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useGetInfiniteMovies } from "../hooks/queries/useGetInfiniteMovies";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import Error from "../components/error";
 
 const NowPlayingMovies = () => {
   // const {
@@ -24,6 +25,7 @@ const NowPlayingMovies = () => {
     isPending,
     hasNextPage,
     fetchNextPage,
+    isError,
   } = useGetInfiniteMovies("now_playing");
   console.log(movies);
 
@@ -37,10 +39,6 @@ const NowPlayingMovies = () => {
     }
   }, [inView, isFetching, hasNextPage, fetchNextPage]);
 
-  // const { ref, inView } = useInView({
-  //   threshold: 0,
-  // });
-
   if (isPending) {
     return (
       <SkeletonWrapper>
@@ -51,9 +49,9 @@ const NowPlayingMovies = () => {
     );
   }
 
-  // if (isError) {
-  //   return <Error text="영화 불러오는데 오류가 일어났습니다." />;
-  // }
+  if (isError) {
+    return <Error text="영화 불러오는데 오류가 일어났습니다." />;
+  }
 
   return (
     <>
