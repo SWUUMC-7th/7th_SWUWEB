@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
-import Movie from "../components/Movie.jsx";
+import Movie from "../components/Movie";
 import styled from "styled-components";
 import useMovie from "../hooks/useMovie";
+import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   margin: 30px auto;
@@ -15,12 +16,6 @@ const MovieContainer = styled.div`
   max-width: 1300px;
 `;
 
-const LoadingMessage = styled.p`
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-`;
-
 const ErrorMessage = styled.p`
   text-align: center;
   color: red;
@@ -28,12 +23,50 @@ const ErrorMessage = styled.p`
   font-weight: bold;
 `;
 
+const SkeletonContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  max-width: 1300px;
+  margin: 0 auto;
+`;
+
+const Skeleton = styled.div`
+  width: 160px;
+  height: 240px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
+
 const MoviesPage = () => {
   const { category } = useParams();
-  const { data: movies, isLoading, isError } = useMovie(category);
+  const { movieList, isLoading, isError, fetchNextPage, hasNextPage } =
+    useMovie(category);
 
   if (isLoading) {
-    return <LoadingMessage>Loading movies...</LoadingMessage>;
+    return (
+      <Container>
+        <SkeletonContainer>
+          {Array.from({ length: 10 }).map((_, index) => (
+            <Skeleton key={index} />
+          ))}
+        </SkeletonContainer>
+        <CircularProgress style={{ display: "block", margin: "20px auto" }} />
+      </Container>
+    );
   }
 
   if (isError) {
@@ -47,10 +80,18 @@ const MoviesPage = () => {
   return (
     <Container>
       <MovieContainer>
-        {movies.map((movie) => (
+        {movieList.map((movie) => (
           <Movie key={movie.id} movie={movie} />
         ))}
       </MovieContainer>
+      {hasNextPage && (
+        <button
+          onClick={() => fetchNextPage()}
+          style={{ margin: "20px auto", display: "block" }}
+        >
+          Load More
+        </button>
+      )}
     </Container>
   );
 };
