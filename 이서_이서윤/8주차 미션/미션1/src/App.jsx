@@ -16,15 +16,15 @@ function App() {
   const [editingId, setEditingId] = useState('');
   const navigate = useNavigate();
 
-  const { loading, error } = useAddTodo(title, text);
+  const { addTodo, loading, error } = useAddTodo(title, text);
   const {data, isLoading, isError} = useGetTodo();
   const { deleteTodo } = useDeleteTodo();
+  
 
   useEffect(() => {
-    if (Array.isArray(data)) {
+    if (data && Array.isArray(data)) {
       setTodoList(data[0]);
-    }else {
-      // 만약 data가 배열이 아니면 초기화하거나 빈 배열로 설정
+    } else {
       setTodoList([]);
     }
   }, [data]);
@@ -35,7 +35,7 @@ function App() {
   };
 
   // 1. 추가
-  const addTodo = async() => {
+  const handleAdd = async() => {
     if (loading) {
       console.log('로딩 중...');
       return;
@@ -44,6 +44,7 @@ function App() {
       console.error('에러 발생:', error);
       return;
     }
+    addTodo();
     if (title && text) {
       setTitle('');
       setText('');
@@ -99,12 +100,12 @@ function App() {
           id="main_input"
           placeholder="내용을 입력해주세요"
         />
-        <Button onClick={addTodo} id="input_button">
+        <Button onClick={()=>handleAdd()} id="input_button">
           할 일 등록
         </Button>
       </div>
       <div id="list">
-        {todoList.map((todo) => (
+        {todoList && todoList.map((todo) => (
           <div key={todo.id}>
             {/* 수정 중 아닐 때 */}
             {editingId !== todo.id && (
@@ -181,5 +182,6 @@ function App() {
 }
 
 export default App;
+
 
 

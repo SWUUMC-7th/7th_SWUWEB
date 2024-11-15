@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-const useGetTodo=( isDetail)=>{
+const useGetTodo=(isDetail)=>{
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
 
     useEffect(() => {
+        let intervalId;
+
         const fetchData = async () => {
             setIsLoading(true);
             try{
-                const response = await axios.get('http://localhost:3000/todo');
-                console.log('response',response)
-                setData(isDetail ? response.data : response.data);
+                if(isDetail){
+                    const response = await axios.get(`http://localhost:3000/todo/${id}`);
+                    setData(response);
+                }else{
+                    const response = await axios.get('http://localhost:3000/todo');
+                    setData(response.data);
+                }
             }catch(error){
                 setIsError(true);
                 console.log(error)
@@ -21,6 +27,11 @@ const useGetTodo=( isDetail)=>{
             }
         };
         fetchData();
+        intervalId = setInterval(() => {
+            fetchData();
+          }, 1000);
+        return () => clearInterval(intervalId);
+
     }, [isDetail]);
     return {data, isLoading, isError}
 }
