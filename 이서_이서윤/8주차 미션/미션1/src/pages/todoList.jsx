@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useAddTodo from '../hooks/useAddTodo';
 import useGetTodo from '../hooks/useGetTodo';
 import useDeleteTodo from '../hooks/useDeleteTodo';
+import usePatchTodo from '../hooks/usePatchTodo';
 
 function TodoList() {
   const [todoList, setTodoList] = useState([]);
@@ -19,7 +20,7 @@ function TodoList() {
   const { addTodo, loading, error } = useAddTodo(title, text);
   const {data, isLoading, isError} = useGetTodo();
   const { deleteTodo } = useDeleteTodo();
-  
+  const { updateTodo} = usePatchTodo();
 
   useEffect(() => {
     if (data && Array.isArray(data)) {
@@ -53,33 +54,19 @@ function TodoList() {
 
   // 2. 삭제
   const handleDelete = async(id) => {
-    const result = await deleteTodo(id);
-    if (result) {
-      setTodoList(todoList.filter(todo => todo.id !== id)); // 삭제된 todo를 목록에서 제거
-    }
+    await deleteTodo(id);
   };
 
   // 3. 수정
-  const updateTodo = (todoId, newTitle, newText) => {
-    setTodoList((prev) =>
-      prev.map((item) =>
-        item.id === todoId
-          ? { ...item, title: newTitle, task: newText }
-          : item
-      )
-    );
+  const handleUpdate = async(id , title, content) => {
+    await updateTodo(id,title, content);
     setEditingId('');
   };
-
-  // 4. 체크박스 상태 토글
-  const toggleCheckbox = (todoId) => {
-    setTodoList((prev) =>
-      prev.map((item) =>
-        item.id === todoId
-          ? { ...item, isChecked: !item.isChecked }
-          : item
-      )
-    );
+ 
+  //4. 체크박스
+  const handleCheck = async(id , check) => {
+    console.log('check:',check)
+    await updateTodo(id,null,null,check);
   };
 
   return (
@@ -113,8 +100,11 @@ function TodoList() {
               onClick={()=>navigate(`/todo/${todo.id}`)}>
                 <input
                   type="checkbox"
-                  checked={todo.isChecked}
-                  onChange={() => toggleCheckbox(todo.id)}
+                  checked={todo.checked}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCheck(todo.id, !todo.checked)
+                  }}
                 />
                 <div>
                   <div className="todo">{todo.title}</div>
@@ -125,6 +115,8 @@ function TodoList() {
                     onClick={(e) => {
                       e.stopPropagation();
                       setEditingId(todo.id)
+                      setNewTitle(todo.title)
+                      setNewText(todo.content)
                     }}
                     className="button"
                   >
@@ -148,7 +140,7 @@ function TodoList() {
                 <input
                   type="checkbox"
                   checked={todo.checked}
-                  onChange={() => toggleCheckbox(todo.id)}
+                  // onChange={() => toggleCheckbox(todo.id)}
                 />
                 <div id="updateInputBox">
                   <Input
@@ -166,13 +158,13 @@ function TodoList() {
                 </div>
                 <div>
                   <Button
-                    onClick={() => updateTodo(todo.id, newTitle, newText)}
+                    onClick={() => handleUpdate(todo.id, newTitle, newText)}
                     className="button"
                   >
                     수정완료
                   </Button>
                   <Button
-                    onClick={() => deleteTodo(todo.id)}
+                    onClick={() => handleDelete(todo.id)}
                     className="button"
                   >
                     삭제하기
