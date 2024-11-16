@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-const useGetTodo=(isDetail)=>{
+const useGetTodo=(id)=>{
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -12,9 +12,9 @@ const useGetTodo=(isDetail)=>{
         const fetchData = async () => {
             setIsLoading(true);
             try{
-                if(isDetail){
+                if(id){
                     const response = await axios.get(`http://localhost:3000/todo/${id}`);
-                    setData(response);
+                    setData(response.data);
                 }else{
                     const response = await axios.get('http://localhost:3000/todo');
                     setData(response.data);
@@ -32,7 +32,7 @@ const useGetTodo=(isDetail)=>{
           }, 1000);
         return () => clearInterval(intervalId);
 
-    }, [isDetail]);
+    });
     return {data, isLoading, isError}
 }
 
