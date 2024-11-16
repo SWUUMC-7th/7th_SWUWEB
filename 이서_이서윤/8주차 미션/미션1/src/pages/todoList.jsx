@@ -7,6 +7,8 @@ import useAddTodo from '../hooks/useAddTodo';
 import useGetTodo from '../hooks/useGetTodo';
 import useDeleteTodo from '../hooks/useDeleteTodo';
 import usePatchTodo from '../hooks/usePatchTodo';
+import LoadingSpinner from '../components/Loading';
+import Error from '../components/Error';
 
 function TodoList() {
   const [todoList, setTodoList] = useState([]);
@@ -69,6 +71,12 @@ function TodoList() {
     await updateTodo(id,null,null,check);
   };
 
+  if(isLoading){
+    return <LoadingSpinner/>
+  }
+  if(isError){
+    return  <Error/>
+  }
   return (
     <>
       <h1>🍒Todo List🍒</h1>

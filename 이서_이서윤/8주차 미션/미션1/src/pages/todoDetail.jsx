@@ -7,6 +7,8 @@ import styled from "styled-components"
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from '../components/Loading';
+import Error from '../components/Error';
 
 const Wrapper = styled.div`
     margin: 0 auto;
@@ -52,6 +54,13 @@ const TodoDetail = ()=>{
         await updateTodo(id,title, content);
         setIsEditing(false)
     };
+    if(isLoading){
+        return <LoadingSpinner/>
+      }
+      if(isError){
+        return  <Error/>
+      }
+
     return(
         <>
             <h1>🍒Todo List🍒</h1>
