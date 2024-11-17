@@ -5,21 +5,26 @@ import Input from '../components/Input';
 import { useNavigate } from 'react-router-dom';
 // import LoadingSpinner from '../components/Loading';
 // import Error from '../components/Error';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getTodoList } from '../apis/todo';
+import { postTodo } from '../apis/todo';
+import { queryClient } from '../main';
+import { deleteTodo } from '../apis/todo';
+import { patchTodo } from '../apis/todo';
 
 function TodoList() {
   const [todoList, setTodoList] = useState([]);
   const [title, setTitle] = useState('');
   const [newTitle, setNewTitle] = useState('');
-  const [text, setText] = useState('');
-  const [newText, setNewText] = useState('');
+  const [content, setContent] = useState('');
+  const [newContent, setNewContent] = useState('');
   const [editingId, setEditingId] = useState('');
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   const {data} = useQuery({
-    queryFn:()=>getTodoList({title}),
-    queryKey:["todos",title]
+    queryFn:()=>getTodoList({title:search}),
+    queryKey:["todos",search]
   })
 
   useEffect(() => {
@@ -30,52 +35,67 @@ function TodoList() {
     }
   }, [data]);
   
+  const {mutate:postTodoMutation} = useMutation({
+    mutationFn:postTodo,
+    onSuccess:(data)=>{
+      console.log(data);
+      queryClient.invalidateQueries({
+        queryKey:["todos"]
+      })
+    },
+    onError:(error)=>{
+      console.log(error)
+    },
+  });
+
+  const {mutate:deleteTodoMutation} = useMutation({
+    mutationFn:deleteTodo,
+    onSuccess:()=>{
+      queryClient.invalidateQueries({
+        queryKey:["todos"]
+      })
+    },
+    onError:(error)=>{
+      console.log('삭제 실패',error)
+    },
+  });
+  
+  const {mutate:patchTodoMutation} = useMutation({
+    mutationFn:patchTodo,
+    onSuccess:()=>{
+      queryClient.invalidateQueries({
+        queryKey:["todos"]
+      })
+    },
+    onError:(error)=>{
+      console.log('수정 실패',error)
+    },
+  });
   // 렌더링 방지
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
-  // // 1. 추가
-  // const handleAdd = async() => {
-  //   if (loading) {
-  //     console.log('로딩 중...');
-  //     return;
-  //   }
-  //   if (error) {
-  //     console.error('에러 발생:', error);
-  //     return;
-  //   }
-  //   addTodo();
-  //   if (title && text) {
-  //     setTitle('');
-  //     setText('');
-  //   }
-  // };
+  // 1. 추가
+  const handleAdd = async() => {
+    postTodoMutation({title,content})
+    if (title && content) {
+      setTitle('');
+      setContent('');
+    }
+  };
 
-  // // 2. 삭제
-  // const handleDelete = async(id) => {
-  //   await deleteTodo(id);
-  // };
+  // 2. 삭제
+  const handleDelete = async(id) => {
+    deleteTodoMutation({id});
+  };
 
-  // // 3. 수정
-  // const handleUpdate = async(id , title, content) => {
-  //   await updateTodo(id,title, content);
-  //   setEditingId('');
-  // };
+  // 3. 수정
+  const handleUpdate = async(id , title, content) => {
+    patchTodoMutation({id , title, content})
+    setEditingId('');
+  };
  
-  // //4. 체크박스
-  // const handleCheck = async(id , check) => {
-  //   console.log('check:',check)
-  //   await updateTodo(id,null,null,check);
-  // };
-
-  // if(isLoading){
-  //   return <LoadingSpinner/>
-  // }
-  // if(isError){
-  //   return  <Error/>
-  // }
-  
   return (
     <>
       <h1>🍒Todo List🍒</h1>
@@ -89,14 +109,21 @@ function TodoList() {
         />
         <Input
           type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           id="main_input"
           placeholder="내용을 입력해주세요"
         />
         <Button onClick={()=>handleAdd()} id="input_button">
           할 일 등록
         </Button>
+        <Input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          id="main_input"
+          placeholder="검색할 일정의 제목을 입력해주세요"
+        />
       </div>
       <div id="list">
         {todoList && todoList.map((todo) => (
@@ -108,10 +135,8 @@ function TodoList() {
                 <input
                   type="checkbox"
                   checked={todo.checked}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCheck(todo.id, !todo.checked)
-                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={()=>patchTodoMutation({id:todo.id, checked:!todo.checked})}
                 />
                 <div>
                   <div className="todo">{todo.title}</div>
@@ -123,7 +148,7 @@ function TodoList() {
                       e.stopPropagation();
                       setEditingId(todo.id)
                       setNewTitle(todo.title)
-                      setNewText(todo.content)
+                      setNewContent(todo.content)
                     }}
                     className="button"
                   >
@@ -147,7 +172,8 @@ function TodoList() {
                 <input
                   type="checkbox"
                   checked={todo.checked}
-                  // onChange={() => toggleCheckbox(todo.id)}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={()=>patchTodoMutation({id:todo.id, checked:!todo.checked})}
                 />
                 <div id="updateInputBox">
                   <Input
@@ -158,14 +184,14 @@ function TodoList() {
                   />
                   <Input
                     type="text"
-                    value={newText}
-                    onChange={(e) => setNewText(e.target.value)}
+                    value={newContent}
+                    onChange={(e) => setNewContent(e.target.value)}
                     id="update_input"
                   />
                 </div>
                 <div>
                   <Button
-                    onClick={() => handleUpdate(todo.id, newTitle, newText)}
+                    onClick={() => handleUpdate(todo.id, newTitle, newContent)}
                     className="button"
                   >
                     수정완료
