@@ -4,9 +4,13 @@ import styled from "styled-components"
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from '../components/Loading';
-import Error from '../components/Error';
-
+import { getTodo } from "../apis/todo";
+// import LoadingSpinner from '../components/Loading';
+// import Error from '../components/Error';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryClient } from '../main';
+import { deleteTodo } from '../apis/todo';
+import { patchTodo } from '../apis/todo';
 const Wrapper = styled.div`
     margin: 0 auto;
     border:1.5px solid #ed5d47;
@@ -36,33 +40,65 @@ const InputWrapper=styled.div`
 
 const TodoDetail = ()=>{
     const params = useParams();
-    const {data, isLoading, isError} = useGetTodo(params.id);
+    const id=params.id;
     const [isEditing, setIsEditing] = useState(false);
-    const [newTitle, setNewTitle] = useState(data.title);
-    const [newText, setNewText] = useState(data.content);
-    const { deleteTodo } = useDeleteTodo();
-    const { updateTodo} = usePatchTodo();
+    const [newTitle, setNewTitle] = useState('');
+    const [newContent, setNewContent] = useState('');
     const navigate=useNavigate();
-    // const handleDelete = async(id) => {
-    //     await deleteTodo(id);
-    // };
 
-    // const handleUpdate = async(id , title, content) => {
-    //     await updateTodo(id,title, content);
-    //     setIsEditing(false)
-    // };
-    // if(isLoading){
+    const {data} = useQuery({
+        queryFn:()=>getTodo({id}),
+        queryKey:["todos",id]
+    })
+    
+    // if (isLoading) {
     //     return <LoadingSpinner/>
-    //   }
-    //   if(isError){
-    //     return  <Error/>
-    //   }
+    // }
+    
+    //   // 에러 상태 처리
+    // if (isError) {
+    //     return <Error/>
+    // }
+
+    const {mutate:deleteTodoMutation} = useMutation({
+        mutationFn:deleteTodo,
+        onSuccess:()=>{
+          queryClient.invalidateQueries({
+            queryKey:["todos"]
+          })
+          navigate('/')
+        },
+        onError:(error)=>{
+          console.log('삭제 실패',error)
+        },
+    });
+      
+    const {mutate:patchTodoMutation} = useMutation({
+        mutationFn:patchTodo,
+        onSuccess:()=>{
+            queryClient.invalidateQueries({
+            queryKey:["todos"]
+            })
+        },
+        onError:(error)=>{
+            console.log('수정 실패',error)
+        },
+    });
+
+    const handleDelete = async(id) => {
+        deleteTodoMutation({id});
+    };
+
+    const handleUpdate = async(id , title, content) => {
+        patchTodoMutation({id , title, content})
+        setIsEditing(false)
+    };
 
     return(
         <>
             <h1>🍒Todo List🍒</h1>
-            <Wrapper>
-                <div>{`#${data.id}`}</div>
+            {data && <Wrapper>
+                <div>{`#${id}`}</div>
                 <InputWrapper>
                     {!isEditing && 
                         <>  
@@ -71,7 +107,7 @@ const TodoDetail = ()=>{
                             <Button
                                 onClick={()=>{
                                 setNewTitle(data.title)
-                                setNewText(data.content)
+                                setNewContent(data.content)
                                 setIsEditing(true)
                                 }}
                                 className="button"
@@ -91,13 +127,13 @@ const TodoDetail = ()=>{
                                 />
                                 <Input
                                     type="text"
-                                    value={newText}
-                                    onChange={(e) => setNewText(e.target.value)}
+                                    value={newContent}
+                                    onChange={(e) => setNewContent(e.target.value)}
                                     id="update_input"
                                 />
                             </InputContainer>
                             <Button
-                                onClick={() => handleUpdate(data.id, newTitle, newText)}
+                                onClick={() => handleUpdate(id, newTitle, newContent)}
                                 className="button"
                             >
                                 수정완료
@@ -107,7 +143,6 @@ const TodoDetail = ()=>{
                     <Button
                         onClick={()=>{
                             handleDelete(data.id)
-                            navigate('/')
                         }}
                         className="button"
                     >
@@ -116,7 +151,7 @@ const TodoDetail = ()=>{
                 </InputWrapper>
                 <div>{`${data.createdAt}`}</div>
                 <div>{`상태:${data.checked ? '완료' : '진행중'}`}</div>
-            </Wrapper>
+            </Wrapper>}
         </>
     )
 }
