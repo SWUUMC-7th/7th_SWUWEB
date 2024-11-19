@@ -1,21 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import Input from "./components/Input";
 import Button from "./components/Button";
 import { useFetch } from "./hooks/useFetch";
 import Loading from "./components/Loading";
 import Error from "./components/Error";
+import { debounce } from "lodash";
+import { Link } from "react-router-dom";
 
 const App = () => {
   const [text, setText] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
   const [isLoadingVisible, setIsLoadingVisible] = useState(true);
   const { data: toDos, loading, error, getToDos, createToDo, removeToDo, editToDo } = useFetch();
 
   useEffect(() => {
-    getToDos();
-  }, []);
+    getToDos({ title: searchTitle });
+  }, [searchTitle]);
+
+  const handleSearch = useCallback(
+    debounce((query) => {
+      getToDos({ title: query });
+    }, 500),
+    [],
+  );
+
+  const handleSearchInput = (e) => {
+    const value = e.target.value;
+    setSearchTitle(value);
+    handleSearch(value);
+  };
 
   const handleAddToDo = async () => {
     if (!text.trim()) return;
@@ -65,13 +81,12 @@ const App = () => {
 
   useEffect(() => {
     if (loading) {
-      // 로딩 상태가 true일 경우 2초 동안 로딩 화면 유지
       const timer = setTimeout(() => {
-        setIsLoadingVisible(false); // 2초 후 로딩 화면 숨기기
+        setIsLoadingVisible(false);
       }, 2000);
-      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+      return () => clearTimeout(timer);
     } else {
-      setIsLoadingVisible(false); // 로딩이 끝나면 즉시 로딩 화면 숨기기
+      setIsLoadingVisible(false);
     }
   }, [loading]);
 
@@ -81,6 +96,14 @@ const App = () => {
   return (
     <Container>
       <Title>8주차 실습 - API with useEffect</Title>
+      <Form>
+        <StyledInput
+          type="text"
+          value={searchTitle}
+          onChange={handleSearchInput}
+          placeholder="TODO 제목 검색"
+        />
+      </Form>
       <Form
         onSubmit={(e) => {
           e.preventDefault();
@@ -95,45 +118,51 @@ const App = () => {
         <StyledButton type="submit">할 일 등록</StyledButton>
       </Form>
       <TodoList>
-        {toDos?.map((toDo) => (
-          <TodoItem key={toDo.id}>
-            {editingId === toDo.id ? (
-              <Task>
-                <span>{toDo.id}) </span>
-                <StyledInput
-                  placeholder="할 일을 수정해주세요"
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                />
-              </Task>
-            ) : (
-              <Task>
-                <span>{toDo.id}) </span>
-                <span>{toDo.title}</span>
-              </Task>
-            )}
-            <ButtonGroup>
-              <StyledButton onClick={() => handleDeleteToDo(toDo.id)} delete>
-                삭제하기
-              </StyledButton>
+        {toDos?.length === 0 ? (
+          <NoResult>검색 결과가 없습니다.</NoResult>
+        ) : (
+          toDos?.map((toDo) => (
+            <TodoItem key={toDo.id}>
               {editingId === toDo.id ? (
-                <StyledButton onClick={() => handleModifyToDo(toDo.id, editText)} complete>
-                  수정 완료
-                </StyledButton>
+                <Task>
+                  <span>{toDo.id}) </span>
+                  <StyledInput
+                    placeholder="할 일을 수정해주세요"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                </Task>
               ) : (
-                <StyledButton
-                  onClick={() => {
-                    setEditingId(toDo.id);
-                    setEditText(toDo.title);
-                  }}
-                  modify
-                >
-                  수정 진행
-                </StyledButton>
+                <Task>
+                  <span>{toDo.id}) </span>
+                  <Link to={`/todo/${toDo.id}`}>
+                    <span>{toDo.title}</span>
+                  </Link>
+                </Task>
               )}
-            </ButtonGroup>
-          </TodoItem>
-        ))}
+              <ButtonGroup>
+                <StyledButton onClick={() => handleDeleteToDo(toDo.id)} delete>
+                  삭제하기
+                </StyledButton>
+                {editingId === toDo.id ? (
+                  <StyledButton onClick={() => handleModifyToDo(toDo.id, editText)} complete>
+                    수정 완료
+                  </StyledButton>
+                ) : (
+                  <StyledButton
+                    onClick={() => {
+                      setEditingId(toDo.id);
+                      setEditText(toDo.title);
+                    }}
+                    modify
+                  >
+                    수정 진행
+                  </StyledButton>
+                )}
+              </ButtonGroup>
+            </TodoItem>
+          ))
+        )}
       </TodoList>
     </Container>
   );
@@ -203,4 +232,10 @@ const Task = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
+`;
+
+const NoResult = styled.div`
+  text-align: center;
+  font-size: 16px;
+  color: #555;
 `;

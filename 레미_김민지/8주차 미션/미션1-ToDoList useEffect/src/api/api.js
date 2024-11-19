@@ -29,7 +29,19 @@ export const fetchToDos = async () => {
   }
 };
 
-// Delete a to-do
+// GET 단일 투두 호출
+export const getToDo = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/todo/${id}`); // 단일 TODO 조회
+    console.log("API Response (Get Single ToDo):", response.data); // Debugging
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching single to-do:", error);
+    throw error;
+  }
+};
+
+// DELETE
 export const deleteToDo = async (id) => {
   try {
     await axios.delete(`${API_BASE_URL}/todo/${id}`);
@@ -39,7 +51,7 @@ export const deleteToDo = async (id) => {
   }
 };
 
-// Update a to-do
+// UPDATE
 export const updateToDo = async (id, updatedToDo) => {
   try {
     const response = await axios.patch(`${API_BASE_URL}/todo/${id}`, updatedToDo);
