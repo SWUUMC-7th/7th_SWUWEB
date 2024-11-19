@@ -1,8 +1,8 @@
 import { axiosInstance } from '..';
 
-export const getMovies = async ({ category, page = 1 }) => {
+export const getCredits = async (movieId) => {
   try {
-    const response = await axiosInstance.get(`movie/${category}?language=ko-KR&page=${page}`);
+    const response = await axiosInstance.get(`movie/${movieId}/credits?language=ko-KR`);
     console.log(response.data);
     return response.data;
   } catch (error) {

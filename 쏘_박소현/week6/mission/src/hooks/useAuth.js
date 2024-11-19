@@ -1,48 +1,64 @@
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { postSignUp } from "../api/auth/postSignUp";
 import { postSignIn } from "../api/auth/postSignIn";
 import { getMe } from "../api/auth/getMe";
 import { useState } from "react";
 
 const useAuth = () => {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
-  const handleSignUp = async (data) => {
-    try {
-      const response = await postSignUp(data);
+
+  const signUpMutation = useMutation(postSignUp, {
+    onSuccess: (response) => {
       console.log("회원가입 성공:", response);
-      return response;
-    } catch (err) {
-      console.error("회원가입 요청 실패:", err);
-    }
-  };
+    },
+    onError: (error) => {
+      console.error("회원가입 요청 실패:", error);
+    },
+  });
 
-  const handleSignIn = async (data) => {
-    try {
-      const response = await postSignIn(data);
+  const signInMutation = useMutation(postSignIn, {
+    onSuccess: async (response) => {
       console.log("로그인 성공:", response);
-
       localStorage.setItem("refreshToken", response.refreshToken);
       localStorage.setItem("accessToken", response.accessToken);
 
-      const userData = await getMe();
+      const userData = await queryClient.fetchQuery("user", getMe);
       setUser(userData);
+    },
+    onError: (error) => {
+      console.error("로그인 요청 실패:", error);
+    },
+  });
 
-      return response;
-    } catch (err) {
-      console.error("로그인 요청 실패:", err);
-    }
-  };
+  useQuery("user", getMe, {
+    onSuccess: (data) => setUser(data),
+    onError: (error) => console.error("사용자 정보 가져오기 실패:", error),
+    enabled: !!localStorage.getItem("accessToken"),
+  });
 
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
+    queryClient.removeQueries("user");
   };
 
   return {
-    handleSignUp,
-    handleSignIn,
+    handleSignUp: signUpMutation.mutate,
+    handleSignIn: signInMutation.mutate,
     logout,
-    user
+    user,
+    signUpStatus: {
+      isLoading: signUpMutation.isLoading,
+      isError: signUpMutation.isError,
+      isSuccess: signUpMutation.isSuccess,
+    },
+    signInStatus: {
+      isLoading: signInMutation.isLoading,
+      isError: signInMutation.isError,
+      isSuccess: signInMutation.isSuccess,
+    },
   };
 };
 
