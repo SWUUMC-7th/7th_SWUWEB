@@ -3,11 +3,13 @@ import styled from "styled-components";
 import Input from "./components/Input";
 import Button from "./components/Button";
 import { useFetch } from "./hooks/useFetch";
+import Loading from "./components/Loading";
 
 const App = () => {
   const [text, setText] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [isLoadingVisible, setIsLoadingVisible] = useState(true);
   const { data: toDos, loading, error, getToDos, createToDo, removeToDo, editToDo } = useFetch();
 
   useEffect(() => {
@@ -60,7 +62,19 @@ const App = () => {
     }
   };
 
-  if (loading) return <Container>Loading...</Container>;
+  useEffect(() => {
+    if (loading) {
+      // 로딩 상태가 true일 경우 2초 동안 로딩 화면 유지
+      const timer = setTimeout(() => {
+        setIsLoadingVisible(false); // 2초 후 로딩 화면 숨기기
+      }, 2000);
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+    } else {
+      setIsLoadingVisible(false); // 로딩이 끝나면 즉시 로딩 화면 숨기기
+    }
+  }, [loading]);
+
+  if (loading && isLoadingVisible) return <Loading />;
   if (error) return <Container>Error: {error.message}</Container>;
 
   return (
