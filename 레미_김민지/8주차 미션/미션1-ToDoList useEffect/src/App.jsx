@@ -4,6 +4,7 @@ import Input from "./components/Input";
 import Button from "./components/Button";
 import { useFetch } from "./hooks/useFetch";
 import Loading from "./components/Loading";
+import Error from "./components/Error";
 
 const App = () => {
   const [text, setText] = useState("");
@@ -75,7 +76,7 @@ const App = () => {
   }, [loading]);
 
   if (loading && isLoadingVisible) return <Loading />;
-  if (error) return <Container>Error: {error.message}</Container>;
+  if (error) return <Error />;
 
   return (
     <Container>
