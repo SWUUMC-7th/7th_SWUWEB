@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query";
 import styled from "styled-components";
 import useForm from "../hooks/useForm.js";
 import { validateLogin } from "../utils/validate.js";
@@ -9,6 +10,19 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  // React Query의 useMutation 사용
+  const { mutate: handleLogin, isLoading } = useMutation(loginUser, {
+    onSuccess: async ({ accessToken, refreshToken }) => {
+      await login(accessToken); // AuthContext에 액세스 토큰 저장
+      localStorage.setItem("refreshToken", refreshToken); // 로컬 스토리지에 리프레시 토큰 저장
+      console.log("로그인 성공:", { accessToken, refreshToken });
+      navigate("/");
+    },
+    onError: (error) => {
+      console.error("로그인 실패:", error.response?.data);
+    },
+  });
+
   const loginForm = useForm({
     initialValue: {
       email: "",
@@ -19,24 +33,12 @@ const Login = () => {
 
   const isFormValid = !loginForm.errors.email && !loginForm.errors.password;
 
-  const handleLogin = async () => {
+  const handleSubmit = () => {
     if (isFormValid) {
-      try {
-        const { accessToken, refreshToken } = await loginUser({
-          email: loginForm.values.email,
-          password: loginForm.values.password,
-        });
-
-        await login(accessToken);
-
-        localStorage.setItem("refreshToken", refreshToken);
-
-        console.log("로그인 성공:", { accessToken, refreshToken });
-
-        navigate("/");
-      } catch (error) {
-        console.error("로그인 실패:", error.response?.data);
-      }
+      handleLogin({
+        email: loginForm.values.email,
+        password: loginForm.values.password,
+      });
     }
   };
 
@@ -65,11 +67,11 @@ const Login = () => {
           )}
         </InputWrapper>
         <Button
-          onClick={handleLogin}
-          disabled={!isFormValid}
+          onClick={handleSubmit}
+          disabled={!isFormValid || isLoading}
           title={!isFormValid ? "정보를 입력하세요" : ""}
         >
-          로그인
+          {isLoading ? "로그인 중..." : "로그인"}
         </Button>
       </InfoWrapper>
     </Container>
@@ -138,7 +140,7 @@ const Button = styled.button`
   background-color: ${(props) => (props.disabled ? "#ccc" : "#ff213b")};
   font-weight: bold;
   text-align: center;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   color: white;
   transition: background-color 0.2s;
 

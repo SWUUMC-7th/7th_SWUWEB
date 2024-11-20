@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../api/auth.js";
 
 const schema = yup.object({
@@ -23,6 +24,22 @@ const schema = yup.object({
 const Signup = () => {
   const navigate = useNavigate();
 
+  // React Query의 useMutation 설정
+  const {
+    mutate: handleRegister,
+    isLoading,
+    isError,
+    error,
+  } = useMutation(registerUser, {
+    onSuccess: (responseData) => {
+      console.log("회원가입 성공:", responseData);
+      navigate("/login");
+    },
+    onError: (error) => {
+      console.error("회원가입 실패:", error.response?.data || error.message);
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -32,15 +49,8 @@ const Signup = () => {
     mode: "onChange",
   });
 
-  const onSubmit = async (data) => {
-    try {
-      const responseData = await registerUser(data); // 회원가입 API 호출
-      console.log("회원가입 성공:", responseData);
-      navigate("/login");
-    } catch (error) {
-      console.error("회원가입 실패:", error.response?.data);
-      // 에러 처리 로직 추가
-    }
+  const onSubmit = (data) => {
+    handleRegister(data);
   };
 
   return (
@@ -103,8 +113,11 @@ const Signup = () => {
             />
             {errors.passwordCheck && <ErrorMessage>{errors.passwordCheck.message}</ErrorMessage>}
           </InputWrapper>
-          <Button type="submit" disabled={!isValid}>
-            가입하기
+          {isError && (
+            <ErrorMessage>{error.response?.data.message || "회원가입 실패"}</ErrorMessage>
+          )}
+          <Button type="submit" disabled={!isValid || isLoading}>
+            {isLoading ? "가입 중..." : "가입하기"}
           </Button>
         </Form>
       </InfoWrapper>
@@ -196,7 +209,7 @@ const Button = styled.button`
   background-color: ${(props) => (props.disabled ? "#ccc" : "#ff213b")};
   font-weight: bold;
   text-align: center;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   color: white;
   transition: background-color 0.2s;
 
