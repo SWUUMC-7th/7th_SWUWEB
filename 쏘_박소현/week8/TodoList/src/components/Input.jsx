@@ -5,6 +5,8 @@ const StyledInput = styled.input`
   border-radius: 4px;
   padding: 8px;
   width: 100%;
+  ${(props) =>
+    props.disabled && `background-color: #f1f1f1; cursor: not-allowed;`}
 `;
 
 const Input = ({
@@ -13,6 +15,7 @@ const Input = ({
   type = "text",
   defaultValue,
   placeholder,
+  disabled = false,
 }) => {
   return (
     <StyledInput
@@ -21,6 +24,7 @@ const Input = ({
       defaultValue={defaultValue}
       onChange={onChange}
       placeholder={placeholder}
+      disabled={disabled}
     />
   );
 };
