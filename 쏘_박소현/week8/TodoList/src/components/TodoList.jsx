@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 import { useNavigate } from "react-router-dom";
 import { patchTodo } from "../apis/Todo/patchTodo";
+import { deleteTodo } from "../apis/Todo/deleteTodo";
 
 const AddTodo = styled.form`
   display: flex;
@@ -109,6 +110,16 @@ const TodoList = () => {
     setEditingContent("");
   };
 
+  const handleDelete = async (todoId) => {
+    try {
+      await deleteTodo(todoId);
+      fetchTodos();
+    } catch (error) {
+      console.error("삭제에 실패했습니다:", error);
+      alert("삭제에 실패했습니다.");
+    }
+  };
+
   const isButtonDisabled = !title.trim() || !content.trim();
 
   useEffect(() => {
@@ -143,7 +154,6 @@ const TodoList = () => {
         </Button>
       </AddTodo>
 
-      {/* 수정 폼 표시 */}
       {editingTodoId && (
         <AddTodo onSubmit={handleUpdate}>
           <Input
@@ -187,6 +197,7 @@ const TodoList = () => {
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
+                  handleDelete(todo.id);
                 }}
               >
                 삭제하기
