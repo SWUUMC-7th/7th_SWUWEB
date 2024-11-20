@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "./skeleton";
 const Wrapper=styled.div`
     margin:10px;
     height:250px;
@@ -12,7 +13,6 @@ const Wrapper=styled.div`
 `;
 const Div=styled.div`
     position:absolute;
-    top:3px;
     width:150px;
     height:210px;
     &:hover{
@@ -23,6 +23,12 @@ const Img=styled.img`
     width:150px;
     height:210px;
     border-radius:10px;
+`;
+const EmptyImg=styled.div`
+    width:150px;
+    height:210px;
+    border-radius:10px;
+    background-color:grey;
 `;
 const Title=styled.div`
     font-size:14px;
@@ -42,7 +48,11 @@ const MovieCard=({movie})=>{
         <>
             <Wrapper onClick={()=>navigate(`/movies/${movie.id}`,{state:movie})}>
                 <Div></Div>
-                <Img src={`${src}${movie.poster_path}`} alt={movie.title}/>
+                {
+                    movie.poster_path ? 
+                    <Img src={`${src}${movie.poster_path}`} alt={movie.title}/> :
+                    <EmptyImg></EmptyImg>
+                }
                 <Title>{movie.title}</Title>
                 <Date>{movie.release_date}</Date>
             </Wrapper>

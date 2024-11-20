@@ -66,7 +66,8 @@ const HomePage = () => {
                         <Img 
                             src={`${src}${movie.poster_path}`} 
                             alt={movie.title}
-                            onClick={()=>navigate(`/movies/${movie.id}`)}
+                            onClick={()=>{console.log(movie.id)
+                                navigate(`/movies/${movie.id}`)}}
                         />
                         <div>{index+1}</div>
                         <div>{movie.title}</div>
