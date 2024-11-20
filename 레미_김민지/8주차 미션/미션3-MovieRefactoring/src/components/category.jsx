@@ -46,7 +46,7 @@ const categories = [
   },
   {
     id: 5,
-    name: "배우 검색",
+    name: "인기 배우",
     imageUrl: "https://i.ibb.co/Qfj7JyN/3.jpg",
     route: "/actors",
   },
