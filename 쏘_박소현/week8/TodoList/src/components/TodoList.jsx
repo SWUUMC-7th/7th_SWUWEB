@@ -2,8 +2,10 @@ import styled from "styled-components";
 import useTodo from "../hooks/useTodo";
 import Button from "./Button";
 import Input from "./Input";
-import { useEffect, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import debounce from "lodash/debounce";
+import { useNavigate } from "react-router-dom";
+import { patchTodo } from "../apis/Todo/patchTodo";
 
 const AddTodo = styled.form`
   display: flex;
@@ -40,6 +42,7 @@ const Container = styled.div`
 `;
 
 const TodoList = () => {
+  const navigate = useNavigate();
   const {
     todos,
     title,
@@ -54,6 +57,10 @@ const TodoList = () => {
     setSearch,
     searchTodos,
   } = useTodo();
+
+  const [editingTodoId, setEditingTodoId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
+  const [editingContent, setEditingContent] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,14 +90,33 @@ const TodoList = () => {
     debouncedSearch(searchTerm);
   };
 
+  const handleTodoClick = (id) => {
+    navigate(`/todo/${id}`);
+  };
+
+  const handleEditClick = (todo) => {
+    setEditingTodoId(todo.id);
+    setEditingTitle(todo.title);
+    setEditingContent(todo.content);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    await patchTodo(editingTodoId, editingTitle, editingContent, false);
+    fetchTodos();
+    setEditingTodoId(null);
+    setEditingTitle("");
+    setEditingContent("");
+  };
+
+  const isButtonDisabled = !title.trim() || !content.trim();
+
   useEffect(() => {
     fetchTodos();
   }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-  const isButtonDisabled = !title.trim() || !content.trim();
 
   return (
     <div>
@@ -116,16 +142,55 @@ const TodoList = () => {
           할 일 등록
         </Button>
       </AddTodo>
+
+      {/* 수정 폼 표시 */}
+      {editingTodoId && (
+        <AddTodo onSubmit={handleUpdate}>
+          <Input
+            value={editingTitle}
+            onChange={(e) => setEditingTitle(e.target.value)}
+            placeholder="수정할 제목을 입력하세요"
+          />
+          <Input
+            value={editingContent}
+            onChange={(e) => setEditingContent(e.target.value)}
+            placeholder="수정할 내용을 입력하세요"
+          />
+          <Button
+            type="submit"
+            disabled={!editingTitle.trim() || !editingContent.trim()}
+          >
+            수정 완료
+          </Button>
+          <Button type="button" onClick={() => setEditingTodoId(null)}>
+            취소
+          </Button>
+        </AddTodo>
+      )}
+
       <div>
         {todos.map((todo) => (
-          <TodoContainer key={todo.id}>
+          <TodoContainer key={todo.id} onClick={() => handleTodoClick(todo.id)}>
             <TodoText>
               <p>{todo.title}</p>
               <p>{todo.content}</p>
             </TodoText>
             <ButtonContainer>
-              <Button onClick={() => {}}>삭제하기</Button>
-              <Button onClick={() => {}}>수정하기</Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEditClick(todo);
+                }}
+              >
+                수정하기
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                삭제하기
+              </Button>
             </ButtonContainer>
           </TodoContainer>
         ))}

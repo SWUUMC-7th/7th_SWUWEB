@@ -1,4 +1,6 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import TodoList from "./components/TodoList";
+import TodoDetail from "./components/TodoDetail";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -25,12 +27,17 @@ const Title = styled.h1`
 
 function App() {
   return (
-    <AppContainer>
-      <Container>
-        <Title>Todo List</Title>
-        <TodoList />
-      </Container>
-    </AppContainer>
+    <Router>
+      <AppContainer>
+        <Container>
+          <Title>Todo List</Title>
+          <Routes>
+            <Route path="/" element={<TodoList />} />
+            <Route path="/todo/:id" element={<TodoDetail />} />
+          </Routes>
+        </Container>
+      </AppContainer>
+    </Router>
   );
 }
 
