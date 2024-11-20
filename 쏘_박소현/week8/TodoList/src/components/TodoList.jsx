@@ -2,6 +2,7 @@ import styled from "styled-components";
 import useTodo from "../hooks/useTodo";
 import Button from "./Button";
 import Input from "./Input";
+import { useEffect } from "react";
 
 const AddTodo = styled.form`
   display: flex;
@@ -42,6 +43,7 @@ const TodoList = () => {
     addTodo,
     loading,
     error,
+    fetchTodos,
   } = useTodo();
 
   const handleSubmit = async (e) => {
@@ -54,6 +56,10 @@ const TodoList = () => {
     setTitle("");
     setContent("");
   };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -77,8 +83,8 @@ const TodoList = () => {
         {todos.map((todo) => (
           <TodoContainer key={todo.id}>
             <TodoText>
-              <p>{todo.id}</p>
               <p>{todo.title}</p>
+              <p>{todo.content}</p>
             </TodoText>
             <ButtonContainer>
               <Button onClick={() => {}}>삭제하기</Button>

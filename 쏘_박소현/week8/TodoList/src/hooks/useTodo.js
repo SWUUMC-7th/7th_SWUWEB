@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { postTodo } from "../apis/Todo/postTodo";
+import { getTodo } from "../apis/Todo/getTodo";
 
 const useTodo = () => {
   const [todos, setTodos] = useState([]);
@@ -21,6 +22,23 @@ const useTodo = () => {
     }
   };
 
+  const fetchTodos = async () => {
+    setLoading(true);
+    try {
+      const [fetchedTodos] = await getTodo();
+      setTodos(fetchedTodos);
+      setError(null);
+    } catch (err) {
+      setError(err.message || "Failed to fetch todos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return {
     todos,
     loading,
@@ -30,6 +48,7 @@ const useTodo = () => {
     setTitle,
     content,
     setContent,
+    fetchTodos,
   };
 };
 
