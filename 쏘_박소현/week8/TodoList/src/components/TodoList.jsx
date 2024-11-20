@@ -2,12 +2,14 @@ import styled from "styled-components";
 import useTodo from "../hooks/useTodo";
 import Button from "./Button";
 import Input from "./Input";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import debounce from "lodash/debounce";
 
 const AddTodo = styled.form`
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  margin-top: 20px;
 `;
 
 const TodoContainer = styled.div`
@@ -33,6 +35,10 @@ const TodoText = styled.div`
   align-items: center;
 `;
 
+const Container = styled.div`
+  display: flex;
+`;
+
 const TodoList = () => {
   const {
     todos,
@@ -44,6 +50,9 @@ const TodoList = () => {
     loading,
     error,
     fetchTodos,
+    search,
+    setSearch,
+    searchTodos,
   } = useTodo();
 
   const handleSubmit = async (e) => {
@@ -57,6 +66,23 @@ const TodoList = () => {
     setContent("");
   };
 
+  const debouncedSearch = useCallback(
+    debounce((searchTerm) => {
+      if (searchTerm.trim()) {
+        searchTodos(searchTerm);
+      } else {
+        fetchTodos();
+      }
+    }, 500),
+    []
+  );
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearch(searchTerm);
+    debouncedSearch(searchTerm);
+  };
+
   useEffect(() => {
     fetchTodos();
   }, []);
@@ -64,8 +90,17 @@ const TodoList = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const isButtonDisabled = !title.trim() || !content.trim();
+
   return (
     <div>
+      <Container>
+        <Input
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="검색할 todo 제목을 입력하세요."
+        />
+      </Container>
       <AddTodo onSubmit={handleSubmit}>
         <Input
           value={title}
@@ -77,7 +112,9 @@ const TodoList = () => {
           onChange={(e) => setContent(e.target.value)}
           placeholder="내용을 입력하세요"
         />
-        <Button type="submit">할 일 등록</Button>
+        <Button type="submit" disabled={isButtonDisabled}>
+          할 일 등록
+        </Button>
       </AddTodo>
       <div>
         {todos.map((todo) => (

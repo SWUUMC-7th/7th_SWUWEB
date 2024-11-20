@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { postTodo } from "../apis/Todo/postTodo";
 import { getTodo } from "../apis/Todo/getTodo";
+import { getTodoTitle } from "../apis/Todo/getTodoTitle";
 
 const useTodo = () => {
   const [todos, setTodos] = useState([]);
@@ -8,6 +9,7 @@ const useTodo = () => {
   const [error, setError] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [search, setSearch] = useState("");
 
   const addTodo = async (data) => {
     setLoading(true);
@@ -35,6 +37,19 @@ const useTodo = () => {
     }
   };
 
+  const searchTodos = async (searchQuery) => {
+    setLoading(true);
+    try {
+      const [fetchedTodos] = await getTodoTitle(searchQuery);
+      setTodos(fetchedTodos);
+      setError(null);
+    } catch (err) {
+      setError(err.message || "Failed to search todos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchTodos();
   }, []);
@@ -49,6 +64,9 @@ const useTodo = () => {
     content,
     setContent,
     fetchTodos,
+    searchTodos,
+    search,
+    setSearch,
   };
 };
 
