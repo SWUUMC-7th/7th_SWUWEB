@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useTodos } from "../context/TodoContext";
+import useTodo from "../hooks/useTodo";
 import Button from "./Button";
 import Input from "./Input";
 
@@ -35,50 +35,54 @@ const TodoText = styled.div`
 const TodoList = () => {
   const {
     todos,
-    text,
-    setText,
-    editingId,
-    setEditingId,
-    editText,
-    setEditText,
+    title,
+    setTitle,
+    content,
+    setContent,
     addTodo,
-    deleteTodo,
-    updateTodo,
-  } = useTodos();
+    loading,
+    error,
+  } = useTodo();
 
-  const handleSubmit = (e) => e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await addTodo({
+      title: title,
+      content: content,
+      checked: false,
+    });
+    setTitle("");
+    setContent("");
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
       <AddTodo onSubmit={handleSubmit}>
-        <Input value={text} onChange={(e) => setText(e.target.value)} />
-        <Button onClick={addTodo} type="submit">
-          할 일 등록
-        </Button>
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="제목을 입력하세요"
+        />
+        <Input
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="내용을 입력하세요"
+        />
+        <Button type="submit">할 일 등록</Button>
       </AddTodo>
       <div>
         {todos.map((todo) => (
           <TodoContainer key={todo.id}>
             <TodoText>
               <p>{todo.id}</p>
-              {editingId === todo.id ? (
-                <Input
-                  defaultValue={todo.task}
-                  onChange={(e) => setEditText(e.target.value)}
-                />
-              ) : (
-                <p>{todo.task}</p>
-              )}
+              <p>{todo.title}</p>
             </TodoText>
             <ButtonContainer>
-              <Button onClick={() => deleteTodo(todo.id)}>삭제하기</Button>
-              {editingId === todo.id ? (
-                <Button onClick={() => updateTodo(editingId, editText)}>
-                  수정 완료
-                </Button>
-              ) : (
-                <Button onClick={() => setEditingId(todo.id)}>수정 진행</Button>
-              )}
+              <Button onClick={() => {}}>삭제하기</Button>
+              <Button onClick={() => {}}>수정하기</Button>
             </ButtonContainer>
           </TodoContainer>
         ))}

@@ -7,13 +7,20 @@ const StyledInput = styled.input`
   width: 100%;
 `;
 
-const Input = ({ value, onChange, type = "text", defaultValue }) => {
+const Input = ({
+  value,
+  onChange,
+  type = "text",
+  defaultValue,
+  placeholder,
+}) => {
   return (
     <StyledInput
       type={type}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
+      placeholder={placeholder}
     />
   );
 };

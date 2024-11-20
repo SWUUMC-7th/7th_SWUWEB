@@ -7,9 +7,15 @@ const Container = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 500px;
+  width: 600px;
   min-height: 600px;
   margin: auto;
+`;
+
+const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 100vh;
 `;
 
 const Title = styled.h1`
@@ -21,10 +27,12 @@ const Title = styled.h1`
 function App() {
   return (
     <TodoProvider>
-      <Container>
-        <Title>Todo List</Title>
-        <TodoList />
-      </Container>
+      <AppContainer>
+        <Container>
+          <Title>Todo List</Title>
+          <TodoList />
+        </Container>
+      </AppContainer>
     </TodoProvider>
   );
 }
