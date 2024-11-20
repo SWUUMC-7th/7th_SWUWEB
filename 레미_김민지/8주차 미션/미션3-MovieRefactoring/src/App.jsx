@@ -13,6 +13,8 @@ import UpComingMovies from "./pages/upcomingMovies.jsx";
 import TopRatedMovies from "./pages/topRatedMovies.jsx";
 import MovieDetail from "./pages/movieDetail.jsx";
 import Category from "./components/category.jsx";
+import Actors from "./pages/actor.jsx";
+import ActorDetail from "./pages/actorDetail.jsx";
 import RootLayout from "./layout/root-layout.jsx";
 
 const router = createBrowserRouter([
@@ -54,6 +56,14 @@ const router = createBrowserRouter([
             element: <MovieDetail />,
           },
         ],
+      },
+      {
+        path: "actors", // 배우 검색 경로 추가
+        element: <Actors />,
+      },
+      {
+        path: "actors/:actorId",
+        element: <ActorDetail />, // 배우 상세 경로
       },
       {
         path: "login",

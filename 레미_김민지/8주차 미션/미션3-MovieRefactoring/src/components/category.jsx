@@ -44,6 +44,12 @@ const categories = [
     imageUrl: "https://i.ibb.co/kHWp08n/IMG-8454.png",
     route: "/movies/up-coming",
   },
+  {
+    id: 5,
+    name: "배우 검색",
+    imageUrl: "https://i.ibb.co/Qfj7JyN/3.jpg",
+    route: "/actors",
+  },
 ];
 
 export default Category;
@@ -57,6 +63,7 @@ const CategoryGrid = styled.div`
 const CategoryCard = styled.div`
   width: 300px;
   height: 180px;
+  margin-bottom: 36px;
   border-radius: 12px;
   position: relative;
   cursor: pointer;
