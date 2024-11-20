@@ -1,6 +1,36 @@
+import styled from "styled-components";
 import { useTodos } from "../context/TodoContext";
 import Button from "./Button";
 import Input from "./Input";
+
+const AddTodo = styled.form`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const TodoContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  justify-content: space-between;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const TodoText = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
 
 const TodoList = () => {
   const {
@@ -20,34 +50,27 @@ const TodoList = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div className="addTodo">
-          <Input value={text} onChange={(e) => setText(e.target.value)} />
-          <Button onClick={addTodo} type="submit">
-            할 일 등록
-          </Button>
-        </div>
-      </form>
+      <AddTodo onSubmit={handleSubmit}>
+        <Input value={text} onChange={(e) => setText(e.target.value)} />
+        <Button onClick={addTodo} type="submit">
+          할 일 등록
+        </Button>
+      </AddTodo>
       <div>
         {todos.map((todo) => (
-          <div key={todo.id} className="todoContainer">
-            <div style={{ display: "flex", gap: "5px" }}>
+          <TodoContainer key={todo.id}>
+            <TodoText>
+              <p>{todo.id}</p>
               {editingId === todo.id ? (
-                <div className="todoText">
-                  <p>{todo.id}</p>
-                  <Input
-                    defaultValue={todo.task}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                </div>
+                <Input
+                  defaultValue={todo.task}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
               ) : (
-                <div className="todoText">
-                  <p>{todo.id}</p>
-                  <p>{todo.task}</p>
-                </div>
+                <p>{todo.task}</p>
               )}
-            </div>
-            <div className="buttonContainer">
+            </TodoText>
+            <ButtonContainer>
               <Button onClick={() => deleteTodo(todo.id)}>삭제하기</Button>
               {editingId === todo.id ? (
                 <Button onClick={() => updateTodo(editingId, editText)}>
@@ -56,8 +79,8 @@ const TodoList = () => {
               ) : (
                 <Button onClick={() => setEditingId(todo.id)}>수정 진행</Button>
               )}
-            </div>
-          </div>
+            </ButtonContainer>
+          </TodoContainer>
         ))}
       </div>
     </div>
