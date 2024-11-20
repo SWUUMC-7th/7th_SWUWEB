@@ -1,108 +1,71 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import styled from "styled-components";
-import Input from "./components/Input";
-import Button from "./components/Button";
-import { useFetch } from "./hooks/useFetch";
-import Loading from "./components/Loading";
-import Error from "./components/Error";
 import { debounce } from "lodash";
 import { Link } from "react-router-dom";
+import { useFetch } from "./hooks/useFetch";
+import Button from "./components/Button";
 
 const App = () => {
   const [text, setText] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [editText, setEditText] = useState("");
-  const [searchTitle, setSearchTitle] = useState("");
-  const [isLoadingVisible, setIsLoadingVisible] = useState(true);
-  const { data: toDos, loading, error, getToDos, createToDo, removeToDo, editToDo } = useFetch();
+  const [editId, setEditId] = useState(null); // 수정 중인 ToDo ID
+  const [editTitle, setEditTitle] = useState(""); // 수정할 제목
+  const [searchTitle, setSearchTitle] = useState(""); // 검색어 상태
 
-  useEffect(() => {
-    getToDos({ title: searchTitle });
-  }, [searchTitle]);
+  const { toDosQuery, addToDoMutation, deleteToDoMutation, updateToDoMutation } = useFetch();
 
   const handleSearch = useCallback(
     debounce((query) => {
-      getToDos({ title: query });
+      setSearchTitle(query);
     }, 500),
     [],
   );
 
   const handleSearchInput = (e) => {
-    const value = e.target.value;
-    setSearchTitle(value);
-    handleSearch(value);
+    handleSearch(e.target.value);
   };
 
-  const handleAddToDo = async () => {
+  const handleAddToDo = () => {
     if (!text.trim()) return;
-
-    const newToDo = {
-      title: text,
-      content: "Default content for now",
-      checked: false,
-    };
-
-    try {
-      await createToDo(newToDo);
-      setText("");
-      getToDos();
-    } catch (error) {
-      console.error("Error adding to-do:", error);
-    }
+    addToDoMutation.mutate({ title: text, content: "Default content for now", checked: false });
+    setText("");
   };
 
-  const handleModifyToDo = async (id, updatedText) => {
-    if (!updatedText.trim()) return;
-
-    const updatedToDo = {
-      title: updatedText,
-      content: "Updated content",
-      checked: false,
-    };
-
-    try {
-      await editToDo(id, updatedToDo);
-      setEditingId(null);
-      setEditText("");
-      getToDos();
-    } catch (error) {
-      console.error("Failed to update to-do:", error);
-    }
+  const handleDeleteToDo = (id) => {
+    deleteToDoMutation.mutate(id);
   };
 
-  const handleDeleteToDo = async (id) => {
-    try {
-      await removeToDo(id);
-      getToDos();
-    } catch (error) {
-      console.error("Error deleting to-do:", error);
-    }
+  const handleEditClick = (toDo) => {
+    setEditId(toDo.id);
+    setEditTitle(toDo.title);
   };
 
-  useEffect(() => {
-    if (loading) {
-      const timer = setTimeout(() => {
-        setIsLoadingVisible(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    } else {
-      setIsLoadingVisible(false);
-    }
-  }, [loading]);
+  const handleSaveEdit = () => {
+    updateToDoMutation.mutate(
+      {
+        id: editId,
+        updatedToDo: { title: editTitle },
+      },
+      {
+        onSuccess: () => {
+          setEditId(null);
+          setEditTitle("");
+        },
+      },
+    );
+  };
 
-  if (loading && isLoadingVisible) return <Loading />;
-  if (error) return <Error />;
+  if (toDosQuery.isLoading) return <Container>Loading...</Container>;
+  if (toDosQuery.isError) return <Container>Error: {toDosQuery.error.message}</Container>;
+
+  const filteredToDos = toDosQuery.data.filter((toDo) =>
+    toDo.title.toLowerCase().includes(searchTitle.toLowerCase()),
+  );
 
   return (
     <Container>
-      <Title>8주차 실습 - API with tanstack-query</Title>
+      <Title>TODO 관리</Title>
       <Form>
-        <StyledInput
-          type="text"
-          value={searchTitle}
-          onChange={handleSearchInput}
-          placeholder="TODO 제목 검색"
-        />
+        <StyledInput type="text" placeholder="검색어를 입력하세요" onChange={handleSearchInput} />
       </Form>
       <Form
         onSubmit={(e) => {
@@ -115,54 +78,40 @@ const App = () => {
           onChange={(e) => setText(e.target.value)}
           placeholder="할 일을 입력하세요"
         />
-        <StyledButton type="submit">할 일 등록</StyledButton>
+        <StyledButton type="submit">추가</StyledButton>
       </Form>
       <TodoList>
-        {toDos?.length === 0 ? (
-          <NoResult>검색 결과가 없습니다.</NoResult>
-        ) : (
-          toDos?.map((toDo) => (
-            <TodoItem key={toDo.id}>
-              {editingId === toDo.id ? (
-                <Task>
-                  <span>{toDo.id}) </span>
-                  <StyledInput
-                    placeholder="할 일을 수정해주세요"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                </Task>
-              ) : (
-                <Task>
-                  <span>{toDo.id}) </span>
-                  <Link to={`/todo/${toDo.id}`}>
-                    <span>{toDo.title}</span>
-                  </Link>
-                </Task>
-              )}
-              <ButtonGroup>
-                <StyledButton onClick={() => handleDeleteToDo(toDo.id)} delete>
-                  삭제하기
-                </StyledButton>
-                {editingId === toDo.id ? (
-                  <StyledButton onClick={() => handleModifyToDo(toDo.id, editText)} complete>
-                    수정 완료
+        {filteredToDos.map((toDo) => (
+          <TodoItem key={toDo.id}>
+            {editId === toDo.id ? (
+              <Task>
+                <StyledInput
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  placeholder="제목을 수정하세요"
+                />
+                <ButtonGroup>
+                  <StyledButton onClick={handleSaveEdit} complete>
+                    저장
                   </StyledButton>
-                ) : (
-                  <StyledButton
-                    onClick={() => {
-                      setEditingId(toDo.id);
-                      setEditText(toDo.title);
-                    }}
-                    modify
-                  >
-                    수정 진행
-                  </StyledButton>
-                )}
-              </ButtonGroup>
-            </TodoItem>
-          ))
-        )}
+                  <StyledButton onClick={() => setEditId(null)}>취소</StyledButton>
+                </ButtonGroup>
+              </Task>
+            ) : (
+              <Task>
+                <Link to={`/todo/${toDo.id}`}>{toDo.title}</Link>
+              </Task>
+            )}
+            <ButtonGroup>
+              <StyledButton onClick={() => handleEditClick(toDo)} modify>
+                수정
+              </StyledButton>
+              <StyledButton onClick={() => handleDeleteToDo(toDo.id)} delete>
+                삭제
+              </StyledButton>
+            </ButtonGroup>
+          </TodoItem>
+        ))}
       </TodoList>
     </Container>
   );
@@ -232,10 +181,4 @@ const Task = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
-`;
-
-const NoResult = styled.div`
-  text-align: center;
-  font-size: 16px;
-  color: #555;
 `;

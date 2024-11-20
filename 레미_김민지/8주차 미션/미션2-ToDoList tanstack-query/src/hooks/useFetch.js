@@ -1,92 +1,83 @@
-import { useState } from "react";
-import { fetchToDos, addToDo, deleteToDo, updateToDo, getToDo } from "../api/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
+const API_BASE_URL = "http://localhost:3000";
+
+// API 요청 함수들
+const fetchToDos = async () => {
+  const response = await axios.get(`${API_BASE_URL}/todo`);
+  if (Array.isArray(response.data) && Array.isArray(response.data[0])) {
+    return response.data[0];
+  }
+  throw new Error("Unexpected API response format");
+};
+
+const fetchToDoById = async (id) => {
+  const response = await axios.get(`${API_BASE_URL}/todo/${id}`);
+  return response.data;
+};
+
+const createToDo = async (newToDo) => {
+  const response = await axios.post(`${API_BASE_URL}/todo`, newToDo);
+  return response.data;
+};
+
+const updateToDo = async ({ id, updatedToDo }) => {
+  const response = await axios.patch(`${API_BASE_URL}/todo/${id}`, updatedToDo);
+  return response.data;
+};
+
+const deleteToDo = async (id) => {
+  await axios.delete(`${API_BASE_URL}/todo/${id}`);
+};
+
+// Custom Hook
 export const useFetch = () => {
-  const [data, setData] = useState([]); // 전체 데이터
-  const [loading, setLoading] = useState(false); // 로딩 상태
-  const [error, setError] = useState(null); // 에러 상태
+  const queryClient = useQueryClient();
 
-  // Fetch 전체 to-dos
-  const getToDos = async () => {
-    setLoading(true);
-    try {
-      const result = await fetchToDos();
-      setData(result);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch all ToDos
+  const toDosQuery = useQuery({
+    queryKey: ["todos"], // queryKey는 객체 내에 설정
+    queryFn: fetchToDos, // queryFn은 함수
+  });
 
-  // Fetch 단일 to-do
-  const fetchToDoById = async (id) => {
-    setLoading(true);
-    try {
-      const todo = await getToDo(id); // API 호출
-      return todo; // 단일 TODO 반환
-    } catch (err) {
-      setError(err);
-      console.error("Error fetching single to-do:", err);
-      throw err; // 호출부에서 에러를 처리할 수 있도록 던짐
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch a single ToDo by ID
+  const toDoQueryById = (id) =>
+    useQuery({
+      queryKey: ["todo", id], // queryKey는 ID와 함께 고유하게 설정
+      queryFn: () => fetchToDoById(id),
+      enabled: !!id, // ID가 있을 때만 실행
+    });
 
-  // Add a new to-do
-  const createToDo = async (newToDo) => {
-    setLoading(true);
-    try {
-      const addedToDo = await addToDo(newToDo);
-      setData((prevData) => [...prevData, addedToDo]);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Add ToDo Mutation
+  const addToDoMutation = useMutation({
+    mutationFn: createToDo, // mutationFn 설정
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] }); // ToDos 새로고침
+    },
+  });
 
-  // Delete a to-do
-  const removeToDo = async (id) => {
-    setLoading(true);
-    try {
-      await deleteToDo(id);
-      setData((prevData) => prevData.filter((toDo) => toDo.id !== id));
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Update ToDo Mutation
+  const updateToDoMutation = useMutation({
+    mutationFn: updateToDo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
 
-  // Edit a to-do
-  const editToDo = async (id, updatedToDo) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const updated = await updateToDo(id, updatedToDo); // API 호출
-      console.log("Updated To-Do (API Response):", updated); // 디버깅용
-      setData((prevData) =>
-        prevData.map((toDo) => (toDo.id === id ? { ...toDo, ...updated } : toDo)),
-      );
-    } catch (err) {
-      setError(err);
-      console.error("Error updating to-do:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Delete ToDo Mutation
+  const deleteToDoMutation = useMutation({
+    mutationFn: deleteToDo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
 
   return {
-    data,
-    loading,
-    error,
-    getToDos,
-    fetchToDoById,
-    createToDo,
-    removeToDo,
-    editToDo,
+    toDosQuery,
+    toDoQueryById,
+    addToDoMutation,
+    updateToDoMutation,
+    deleteToDoMutation,
   };
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useFetch } from "./hooks/useFetch";
@@ -6,58 +6,35 @@ import { useFetch } from "./hooks/useFetch";
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { fetchToDoById, editToDo, removeToDo } = useFetch();
-  const [todo, setTodo] = useState(null);
-  const [editTitle, setEditTitle] = useState(""); // 제목 수정 상태
-  const [editContent, setEditContent] = useState(""); // 내용 수정 상태
+  const { toDoQueryById, updateToDoMutation, deleteToDoMutation } = useFetch();
+  const { data: todo, isLoading, isError } = toDoQueryById(id);
+
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // TODO 데이터 가져오기
-  useEffect(() => {
-    const fetchTodo = async () => {
-      try {
-        const result = await fetchToDoById(id); // 단일 TODO 조회
-        setTodo(result);
-        setEditTitle(result.title); // 초기 제목 설정
-        setEditContent(result.content); // 초기 내용 설정
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTodo();
-  }, [id, fetchToDoById]);
-
-  // 수정 저장 처리
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!editTitle.trim() || !editContent.trim()) return;
-
-    try {
-      const updatedTodo = { title: editTitle, content: editContent };
-      await editToDo(id, updatedTodo); // 수정 API 호출
-      setTodo({ ...todo, ...updatedTodo }); // 상태 업데이트
-      setIsEditing(false); // 수정 모드 종료
-    } catch (err) {
-      setError(err.message);
-    }
+    updateToDoMutation.mutate(
+      { id, updatedToDo: { title: editTitle, content: editContent } },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+        },
+      },
+    );
   };
 
-  // 삭제 처리
-  const handleDelete = async () => {
-    try {
-      await removeToDo(id); // 삭제 API 호출
-      navigate("/"); // 목록 페이지로 이동
-    } catch (err) {
-      setError(err.message);
-    }
+  const handleDelete = () => {
+    deleteToDoMutation.mutate(id, {
+      onSuccess: () => {
+        navigate("/");
+      },
+    });
   };
 
-  if (loading) return <Container>Loading...</Container>;
-  if (error) return <Container>Error: {error}</Container>;
+  if (isLoading) return <Container>Loading...</Container>;
+  if (isError) return <Container>Error fetching the todo</Container>;
 
   return (
     <Container>
@@ -67,12 +44,12 @@ const Detail = () => {
           <>
             <StyledInput
               type="text"
-              value={editTitle}
+              value={editTitle || todo.title}
               onChange={(e) => setEditTitle(e.target.value)}
               placeholder="TODO 제목 수정"
             />
             <StyledTextarea
-              value={editContent}
+              value={editContent || todo.content}
               onChange={(e) => setEditContent(e.target.value)}
               placeholder="TODO 내용 수정"
             />
@@ -105,7 +82,6 @@ const Detail = () => {
 
 export default Detail;
 
-// 스타일 정의
 const Container = styled.div`
   padding: 20px;
   max-width: 600px;
