@@ -1,4 +1,3 @@
-import { TodoProvider } from "./context/TodoContext";
 import TodoList from "./components/TodoList";
 import styled from "styled-components";
 
@@ -26,14 +25,12 @@ const Title = styled.h1`
 
 function App() {
   return (
-    <TodoProvider>
-      <AppContainer>
-        <Container>
-          <Title>Todo List</Title>
-          <TodoList />
-        </Container>
-      </AppContainer>
-    </TodoProvider>
+    <AppContainer>
+      <Container>
+        <Title>Todo List</Title>
+        <TodoList />
+      </Container>
+    </AppContainer>
   );
 }
 
