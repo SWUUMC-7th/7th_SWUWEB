@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import CartIcon from '../constants/icons.jsx';
+import Icons from '../constants/icons.jsx';
 
 const Bar = styled.div `
     width:100vw;
@@ -7,24 +7,27 @@ const Bar = styled.div `
     background-color:#5852FF;
     display:flex;
     justify-content:space-around;
+    align-items: center;
     position:absolute;
     top:0;
     *{
         color:white;
         font-size:30px;
-        line-height:70px;
+    }
+    svg {
+        width: 50px; 
+        height: 50px; 
     }
 `;
 const Title=styled.div`
     width:800px;
-    font-size:30px;
     font-weight:700;
 `;
 const Navbar = () =>{
     return(
         <Bar>
             <Title>UMC PlayList</Title>
-            <CartIcon/>
+            <Icons.CartIcon/>
         </Bar>
     )
 }

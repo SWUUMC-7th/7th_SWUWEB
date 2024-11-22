@@ -6,8 +6,6 @@ const Bar = styled.div `
     background-color:#5852FF;
     display:flex;
     justify-content:center;
-    position:absolute;
-    top:100vh;
     *{
         color:white;
         font-size:30px;

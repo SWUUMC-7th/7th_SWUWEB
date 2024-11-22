@@ -1,6 +1,5 @@
 import Navbar from "./components/Navbar"
 import CartContainer from "./components/CartContainer"
-import Footer from "./components/Footer"
 
 function App() {
 
@@ -10,7 +9,6 @@ function App() {
         <Navbar/>
       </header>
       <CartContainer/>
-      <Footer/> 
     </>
   )
 }

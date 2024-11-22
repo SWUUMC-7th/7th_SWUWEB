@@ -17,7 +17,7 @@ export const CartIcon = () => {
       </svg>
     );
   };
-  export default CartIcon;
+
   export const ChevronDown = () => {
     return (
       <svg
@@ -47,3 +47,6 @@ export const CartIcon = () => {
       </svg>
     );
   };
+
+  const Icons = {CartIcon, ChevronDown, ChevronUp}
+  export default Icons;
