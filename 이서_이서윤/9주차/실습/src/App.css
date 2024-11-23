@@ -1,0 +1,75 @@
+*{
+  background-color: #F7F8F0;
+  text-align: center;
+  justify-content: center;
+}
+#containerAll{
+  position:fixed;
+  top:50px;
+  left:35%;
+}
+h1{
+  color:rgb(0, 0, 0);
+}
+#inputContainer{
+  width:500px;
+  margin-left: 50px; 
+  display: flex;
+  flex-direction: column; 
+  gap:5px;
+  margin: 50px auto;
+}
+#main_input{
+  width:500px; height:40px;
+  background-color:white;
+  border-radius:10px;
+}
+#input_button{
+  color:rgb(43, 130, 43);
+  font-weight:800;
+  background-color:rgb(213, 255, 213);
+  border:2px solid rgb(43, 130, 43);
+  width:510px;
+  height:40px;
+  border-radius:5px;
+}
+.button{
+  color: #ed5d47;
+  font-weight:800;
+  background-color: #FFB1AB;
+  border:none;
+  height:40px;
+  border-radius:5px;
+  margin:0 10px;
+}
+.todo{
+  font-size:16px;
+}
+.tododone{
+  font-size:16px;
+  text-decoration: line-through;
+}
+.listContainer{
+  width:500px;
+  height:70px;
+  line-height:70px;
+  display: flex;
+  justify-content: space-between;
+  margin:0 auto;
+  border:1.5px solid #ed5d47;
+  border-radius: 20px;
+  margin-bottom:10px;
+  padding: 5px;
+}
+#list{
+  width:500px;
+  margin:10px auto;
+}
+#update_input{
+  width:200px;
+}
+#updateInputBox{
+  display: flex;
+  flex-direction: column; 
+  gap:5px;
+}
