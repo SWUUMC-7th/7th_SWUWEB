@@ -6,11 +6,10 @@ import { calculateTotal } from "./features/cart/cartSlice";
 
 function App() {
   const dispatch=useDispatch();
-  const {cartItems}=useSelector((store)=>store.cart)
+  const {cartItems}=useSelector((store)=>store)
   useEffect(()=>{
     dispatch(calculateTotal());
   },[cartItems,dispatch])
-
   return (
     <>
       <header>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import PropTypes from 'prop-types';
 import { useDispatch } from "react-redux";
 import {allClear} from  "../features/cart/cartSlice.js";
+import { closeModal } from "../features/modal/modalSlice.js";
 const Container=styled.div`
     width:100vw;
     height:100vh;
@@ -39,26 +39,22 @@ const RButton = styled.button`
     color:blue;
 `;
 
-const Modal=({onClose})=>{
+const Modal=()=>{
     const dispatch = useDispatch();
     return(
         <Container>
             <ModalBox>
                 <div>담아두신 모든 음반을 삭제하시겠습니까?</div>
                 <LButton onClick ={()=>{
-                    onClose()
                     dispatch(allClear())
+                    dispatch(closeModal())
                 }}
                     >네
                 </LButton>
-                <RButton onClick ={onClose}>아니요</RButton>
+                <RButton onClick ={()=>dispatch(closeModal())}>아니요</RButton>
             </ModalBox>
         </Container>
     )
 }
-
-Modal.propTypes = {
-    onClose: PropTypes.func.isRequired, // onClose가 필수로 전달되는 함수 타
-};
 
 export default Modal;

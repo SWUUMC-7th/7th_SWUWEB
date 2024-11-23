@@ -40,6 +40,7 @@ const Button=styled.button`
     line-height:20px;
     padding:5px;
     background:none;
+    border:none;
     color:#5852FF;
 `;
 const Amount=styled.div`
