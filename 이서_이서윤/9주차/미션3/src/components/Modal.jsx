@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import useCart from "../store/useCart";
+import useModal from "../store/useModal";
 const Container=styled.div`
     width:100vw;
     height:100vh;
@@ -37,13 +39,18 @@ const RButton = styled.button`
 `;
 
 const Modal=()=>{
+    const {allClear}=useCart();
+    const {closeModal}=useModal();
     return(
         <Container>
             <ModalBox>
                 <div>담아두신 모든 음반을 삭제하시겠습니까?</div>
-                <LButton>네
+                <LButton onClick={()=>{
+                    allClear();
+                    closeModal();
+                }}>네
                 </LButton>
-                <RButton>아니요</RButton>
+                <RButton onClick={()=>closeModal()}>아니요</RButton>
             </ModalBox>
         </Container>
     )

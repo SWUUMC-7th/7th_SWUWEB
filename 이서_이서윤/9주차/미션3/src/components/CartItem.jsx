@@ -1,8 +1,7 @@
 import styled from "styled-components"
 import PropTypes from 'prop-types'; 
 import Icons from '../constants/icons.jsx';
-import { useDispatch } from "react-redux";
-import { increase, decrease, removeItem } from "../features/cart/cartSlice.js";
+import useCart from "../store/useCart.js";
 
 const Menu = styled.div`
     width: 800px;
@@ -48,7 +47,7 @@ const Amount=styled.div`
 `;
 
 const CartItem=({cart})=>{
-    const dispatch = useDispatch();
+    const {removeItem, increase, decrease}=useCart();
     return(
         <Menu key={cart.id}>
             <Img src={cart.img} />
@@ -57,15 +56,16 @@ const CartItem=({cart})=>{
                 <div>{`₩${cart.price}`}</div>
             </Div>
             <AmountWrapper>
-                <Button onClick={()=>dispatch(increase(cart.id))}><Icons.ChevronUp/></Button>
+                <Button onClick={()=> increase(cart.id)}><Icons.ChevronUp/></Button>
                 <Amount>{cart.amount}</Amount>
-                <Button onClick={()=>{
+                <Button onClick={()=> {
                     if(cart.amount===1){
-                        dispatch(removeItem(cart.id));
-                        return;
+                        removeItem(cart.id);
                     }
-                    dispatch(decrease(cart.id));
-                }}><Icons.ChevronDown/></Button>
+                    decrease(cart.id)
+                }}
+                    ><Icons.ChevronDown/>
+                </Button>
             </AmountWrapper>
         </Menu>
     )

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import Footer from "../components/Footer.jsx"
-import { useDispatch, useSelector } from 'react-redux';
+import useCart from '../store/useCart.js';
 import CartItem from './CartItem.jsx';
 import Modal from './Modal.jsx';
-import { openModal } from '../features/modal/modalSlice.js';
+import useModal from '../store/useModal.js';
 
 const Container = styled.div`
     width: 100vw;
@@ -46,7 +46,7 @@ const Total=styled.div`
 const ResetBtn=styled.button`
     color:red;
     background:none;
-    width:150px;
+    width:200px;
     height:40px;
     border:1px solid red;
     border-radius:10px;
@@ -54,6 +54,9 @@ const ResetBtn=styled.button`
 `;
 
 const CartContainer = () => {
+    const {cartItems,total}=useCart();
+    const {isOpen, openModal}=useModal();
+    const isEmpty = !cartItems || cartItems.length === 0; 
     return (
         <Container>
             <Title>당신이 선택한 음반</Title>
@@ -72,7 +75,7 @@ const CartContainer = () => {
                         </Total>
                     </MenuWrapper>
                     {isOpen && <Modal/>}
-                    <ResetBtn onClick={()=>dispatch(openModal())}>장바구니 초기화</ResetBtn>
+                    <ResetBtn onClick={()=>openModal()}>장바구니 초기화</ResetBtn>
                 </>
             )}
             <Footer />

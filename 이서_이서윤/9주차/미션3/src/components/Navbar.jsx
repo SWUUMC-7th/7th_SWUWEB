@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Icons from '../constants/icons.jsx';
+import useCart from '../store/useCart.js';
 const Bar = styled.div `
     width:100vw;
     height:70px;
@@ -35,12 +36,13 @@ const AmountIcon=styled.div`
     margin-left:35px;
 `;
 const Navbar = () =>{
+    const {amount} = useCart();
     return(
         <Bar>
             <Title>UMC PlayList - zustand</Title>
             <div>
                 <Icons.CartIcon/>
-                <AmountIcon>amount</AmountIcon>
+                <AmountIcon>{amount}</AmountIcon>
             </div>
         </Bar>
     )

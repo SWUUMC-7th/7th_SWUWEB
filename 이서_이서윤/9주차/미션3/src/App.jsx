@@ -1,15 +1,13 @@
 import Navbar from "./components/Navbar"
 import CartContainer from "./components/CartContainer"
-import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react";
-import { calculateTotal } from "./features/cart/cartSlice";
+import { useEffect } from "react"
+import useCart from "./store/useCart";
 
 function App() {
-  const dispatch=useDispatch();
-  const {cartItems}=useSelector((store)=>store)
+  const {cartItems,calculateTotal}=useCart();
   useEffect(()=>{
-    dispatch(calculateTotal());
-  },[cartItems,dispatch])
+    calculateTotal()
+  },[cartItems,calculateTotal])
   return (
     <>
       <header>
