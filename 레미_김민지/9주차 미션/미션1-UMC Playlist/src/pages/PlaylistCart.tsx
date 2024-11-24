@@ -10,13 +10,16 @@ const PlaylistCart: React.FC = () => {
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + parseInt(item.price) * item.amount, 0);
   };
+  const totalQuantity = useSelector((state: RootState) =>
+    state.cart.items.reduce((total, item) => total + item.amount, 0),
+  );
 
   return (
     <Container>
       <Header>
         <Title>UMC PlayList</Title>
         <CartIcon>
-          🛒<CartCount>{cartItems.length}</CartCount>
+          🛒<CartCount>{totalQuantity}</CartCount>
         </CartIcon>
       </Header>
       <Content>
