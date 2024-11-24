@@ -1,7 +1,9 @@
+import PlaylistCart from "./pages/PlaylistCart";
+
 function App() {
   return (
     <>
-      <h1>UMC Playlist</h1>
+      <PlaylistCart />
     </>
   );
 }
