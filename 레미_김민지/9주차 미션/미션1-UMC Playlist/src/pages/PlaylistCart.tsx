@@ -1,8 +1,12 @@
-import React from "react";
 import styled from "styled-components";
-import cartItems from "../constants/cartItems";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { increaseAmount, decreaseAmount, resetCart } from "../store/slices/cartSlice";
 
 const PlaylistCart: React.FC = () => {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useDispatch();
+
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + parseInt(item.price) * item.amount, 0);
   };
@@ -28,9 +32,9 @@ const PlaylistCart: React.FC = () => {
                 <AlbumPrice>₩ {parseInt(item.price).toLocaleString()}</AlbumPrice>
               </AlbumInfo>
               <QuantityControl>
-                <QuantityButton>⬆</QuantityButton>
+                <QuantityButton onClick={() => dispatch(increaseAmount(item.id))}>⬆</QuantityButton>
                 <QuantityText>{item.amount}</QuantityText>
-                <QuantityButton>⬇</QuantityButton>
+                <QuantityButton onClick={() => dispatch(decreaseAmount(item.id))}>⬇</QuantityButton>
               </QuantityControl>
             </AlbumItem>
           ))}
@@ -39,7 +43,7 @@ const PlaylistCart: React.FC = () => {
           <TotalLabel>총 가격</TotalLabel>
           <TotalPrice>₩ {calculateTotal().toLocaleString()}</TotalPrice>
         </TotalSection>
-        <ResetButton>장바구니 초기화</ResetButton>
+        <ResetButton onClick={() => dispatch(resetCart())}>장바구니 초기화</ResetButton>
       </Content>
     </Container>
   );

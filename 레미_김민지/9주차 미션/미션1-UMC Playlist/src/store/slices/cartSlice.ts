@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import cartItems from "../../constants/cartItems";
 
 interface CartItem {
   id: string;
@@ -14,7 +15,7 @@ interface CartState {
 }
 
 const initialState: CartState = {
-  items: [],
+  items: cartItems,
 };
 
 const cartSlice = createSlice({
