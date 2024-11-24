@@ -22,22 +22,22 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // 아이템 추가
-    addItem: (state, action: PayloadAction<CartItem>) => {
-      state.items.push(action.payload);
-    },
-    // 아이템 수량 증가
+    // 수량 증가
     increaseAmount: (state, action: PayloadAction<string>) => {
       const item = state.items.find((item) => item.id === action.payload);
       if (item) {
         item.amount += 1;
       }
     },
-    // 아이템 수량 감소
+    // 수량 감소: 0이 되면 removeItem 호출
     decreaseAmount: (state, action: PayloadAction<string>) => {
       const item = state.items.find((item) => item.id === action.payload);
-      if (item && item.amount > 1) {
-        item.amount -= 1;
+      if (item) {
+        if (item.amount > 1) {
+          item.amount -= 1;
+        } else {
+          state.items = state.items.filter((item) => item.id !== action.payload); // 자동 제거
+        }
       }
     },
     // 아이템 삭제
@@ -51,5 +51,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addItem, increaseAmount, decreaseAmount, removeItem, resetCart } = cartSlice.actions;
+export const { increaseAmount, decreaseAmount, removeItem, resetCart } = cartSlice.actions;
 export default cartSlice.reducer;
