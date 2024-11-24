@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { increaseAmount, decreaseAmount, resetCart } from "../store/slices/cartSlice";
+import { increaseAmount, decreaseAmount } from "../store/slices/cartSlice";
+import { openModal } from "../store/slices/modalSlice";
+import Modal from "../components/Modal";
 
 const PlaylistCart: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -46,8 +48,9 @@ const PlaylistCart: React.FC = () => {
           <TotalLabel>총 가격</TotalLabel>
           <TotalPrice>₩ {calculateTotal().toLocaleString()}</TotalPrice>
         </TotalSection>
-        <ResetButton onClick={() => dispatch(resetCart())}>장바구니 초기화</ResetButton>
+        <ResetButton onClick={() => dispatch(openModal())}>장바구니 초기화</ResetButton>
       </Content>
+      <Modal />
     </Container>
   );
 };
