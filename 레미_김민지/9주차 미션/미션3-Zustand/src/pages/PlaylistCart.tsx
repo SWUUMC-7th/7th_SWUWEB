@@ -1,33 +1,29 @@
+import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
-import { increaseAmount, decreaseAmount } from "../store/slices/cartSlice";
-import { openModal } from "../store/slices/modalSlice";
+import { useCartStore } from "../store/cartStore";
+import { useModalStore } from "../store/modalStore";
 import Modal from "../components/Modal";
 
 const PlaylistCart: React.FC = () => {
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const dispatch = useDispatch();
+  const { items, increaseAmount, decreaseAmount } = useCartStore();
+  const { openModal } = useModalStore();
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + parseInt(item.price) * item.amount, 0);
+    return items.reduce((total, item) => total + parseInt(item.price) * item.amount, 0);
   };
-  const totalQuantity = useSelector((state: RootState) =>
-    state.cart.items.reduce((total, item) => total + item.amount, 0),
-  );
 
   return (
     <Container>
       <Header>
         <Title>UMC PlayList</Title>
         <CartIcon>
-          🛒<CartCount>{totalQuantity}</CartCount>
+          🛒<CartCount>{items.reduce((sum, item) => sum + item.amount, 0)}</CartCount>
         </CartIcon>
       </Header>
       <Content>
         <SectionTitle>당신이 선택한 음반</SectionTitle>
         <AlbumList>
-          {cartItems.map((item) => (
+          {items.map((item) => (
             <AlbumItem key={item.id}>
               <AlbumImage src={item.img} alt={item.title} />
               <AlbumInfo>
@@ -37,9 +33,9 @@ const PlaylistCart: React.FC = () => {
                 <AlbumPrice>₩ {parseInt(item.price).toLocaleString()}</AlbumPrice>
               </AlbumInfo>
               <QuantityControl>
-                <QuantityButton onClick={() => dispatch(increaseAmount(item.id))}>⬆</QuantityButton>
+                <QuantityButton onClick={() => increaseAmount(item.id)}>⬆</QuantityButton>
                 <QuantityText>{item.amount}</QuantityText>
-                <QuantityButton onClick={() => dispatch(decreaseAmount(item.id))}>⬇</QuantityButton>
+                <QuantityButton onClick={() => decreaseAmount(item.id)}>⬇</QuantityButton>
               </QuantityControl>
             </AlbumItem>
           ))}
@@ -48,7 +44,7 @@ const PlaylistCart: React.FC = () => {
           <TotalLabel>총 가격</TotalLabel>
           <TotalPrice>₩ {calculateTotal().toLocaleString()}</TotalPrice>
         </TotalSection>
-        <ResetButton onClick={() => dispatch(openModal())}>장바구니 초기화</ResetButton>
+        <ResetButton onClick={openModal}>장바구니 초기화</ResetButton>
       </Content>
       <Modal />
     </Container>
@@ -56,6 +52,8 @@ const PlaylistCart: React.FC = () => {
 };
 
 export default PlaylistCart;
+
+// Styled Components는 기존과 동일
 
 const Container = styled.div`
   width: 100%;

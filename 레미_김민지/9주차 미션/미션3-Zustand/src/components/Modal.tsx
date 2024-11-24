@@ -1,19 +1,17 @@
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
-import { closeModal } from "../store/slices/modalSlice";
-import { resetCart } from "../store/slices/cartSlice";
+import { useModalStore } from "../store/modalStore";
+import { useCartStore } from "../store/cartStore";
 
 const Modal: React.FC = () => {
-  const isOpen = useSelector((state: RootState) => state.modal.isOpen);
-  const dispatch = useDispatch();
+  const { isOpen, closeModal } = useModalStore();
+  const { resetCart } = useCartStore();
 
   if (!isOpen) return null;
 
   return (
     <Overlay>
       <ModalContainer>
-        <CloseButton onClick={() => dispatch(closeModal())}>✖</CloseButton>
+        <CloseButton onClick={closeModal}>✖</CloseButton>
         <ModalContent>
           <ModalTitle>장바구니 비우기</ModalTitle>
           <ModalMessage>정말로 장바구니를 비우시겠습니까?</ModalMessage>
@@ -22,13 +20,13 @@ const Modal: React.FC = () => {
           <ModalButton
             primary
             onClick={() => {
-              dispatch(resetCart());
-              dispatch(closeModal());
+              resetCart();
+              closeModal();
             }}
           >
             네, 비우겠습니다
           </ModalButton>
-          <ModalButton onClick={() => dispatch(closeModal())}>아니요</ModalButton>
+          <ModalButton onClick={closeModal}>아니요</ModalButton>
         </ButtonGroup>
       </ModalContainer>
     </Overlay>
