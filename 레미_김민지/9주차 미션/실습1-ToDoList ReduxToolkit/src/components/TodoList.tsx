@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
-interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-}
+import { useSelector, useDispatch } from "react-redux";
+import { addTodo, toggleTodo, deleteTodo } from "../slices/todoSlice";
+import { RootState } from "../app/store";
 
 const TodoApp: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const todos = useSelector((state: RootState) => state.todos.todos);
+  const dispatch = useDispatch();
   const [text, setText] = useState<string>("");
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  console.log("Current Redux Todos:", todos);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -22,24 +22,9 @@ const TodoApp: React.FC = () => {
 
   const handleAddTodo = (): void => {
     if (text.trim()) {
-      const newTodo: Todo = {
-        id: Date.now(),
-        text: text.trim(),
-        completed: false,
-      };
-      setTodos([...todos, newTodo]);
+      dispatch(addTodo(text));
       setText("");
     }
-  };
-
-  const handleToggleTodo = (id: number): void => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)),
-    );
-  };
-
-  const handleDeleteTodo = (id: number): void => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   const formatDate = (date: Date): string => {
@@ -75,10 +60,10 @@ const TodoApp: React.FC = () => {
               <Checkbox
                 type="checkbox"
                 checked={todo.completed}
-                onChange={() => handleToggleTodo(todo.id)}
+                onChange={() => dispatch(toggleTodo(todo.id))}
               />
               <TodoText completed={todo.completed}>{todo.text}</TodoText>
-              <DeleteButton onClick={() => handleDeleteTodo(todo.id)}>🗑</DeleteButton>
+              <DeleteButton onClick={() => dispatch(deleteTodo(todo.id))}>🗑</DeleteButton>
             </TodoItem>
           ))}
         </TodoList>
