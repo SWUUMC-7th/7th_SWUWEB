@@ -1,38 +1,43 @@
 import React from "react";
 import styled from "styled-components";
+import cartItems from "../constants/cartItems";
 
 const PlaylistCart: React.FC = () => {
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => total + parseInt(item.price) * item.amount, 0);
+  };
+
   return (
     <Container>
       <Header>
         <Title>UMC PlayList</Title>
         <CartIcon>
-          🛒<CartCount>12</CartCount>
+          🛒<CartCount>{cartItems.length}</CartCount>
         </CartIcon>
       </Header>
       <Content>
         <SectionTitle>당신이 선택한 음반</SectionTitle>
         <AlbumList>
-          {Array(7)
-            .fill(0)
-            .map((_, idx) => (
-              <AlbumItem key={idx}>
-                <AlbumImage src={`https://via.placeholder.com/50`} alt="Album cover" />
-                <AlbumInfo>
-                  <AlbumTitle>Vancouver | BIG Naughty (서동현)</AlbumTitle>
-                  <AlbumPrice>₩ 25,000</AlbumPrice>
-                </AlbumInfo>
-                <QuantityControl>
-                  <QuantityButton>⬆</QuantityButton>
-                  <QuantityText>1</QuantityText>
-                  <QuantityButton>⬇</QuantityButton>
-                </QuantityControl>
-              </AlbumItem>
-            ))}
+          {cartItems.map((item) => (
+            <AlbumItem key={item.id}>
+              <AlbumImage src={item.img} alt={item.title} />
+              <AlbumInfo>
+                <AlbumTitle>
+                  {item.title} | {item.singer}
+                </AlbumTitle>
+                <AlbumPrice>₩ {parseInt(item.price).toLocaleString()}</AlbumPrice>
+              </AlbumInfo>
+              <QuantityControl>
+                <QuantityButton>⬆</QuantityButton>
+                <QuantityText>{item.amount}</QuantityText>
+                <QuantityButton>⬇</QuantityButton>
+              </QuantityControl>
+            </AlbumItem>
+          ))}
         </AlbumList>
         <TotalSection>
           <TotalLabel>총 가격</TotalLabel>
-          <TotalPrice>₩ 276,000</TotalPrice>
+          <TotalPrice>₩ {calculateTotal().toLocaleString()}</TotalPrice>
         </TotalSection>
         <ResetButton>장바구니 초기화</ResetButton>
       </Content>
