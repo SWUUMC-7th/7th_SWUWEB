@@ -1,12 +1,6 @@
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import {
-  increase,
-  decrease,
-  removeItem,
-  calculateTotals,
-} from "../store/cartSlice";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import useCartStore from "../store/useCartStore";
 
 const CartItemWrapper = styled.div`
   display: flex;
@@ -51,21 +45,28 @@ const QuantityButton = styled.button`
 `;
 
 const CartItem = ({ item }) => {
-  const dispatch = useDispatch();
+  const { increase, decrease, removeItem, calculateTotals } = useCartStore(
+    (state) => ({
+      increase: state.increase,
+      decrease: state.decrease,
+      removeItem: state.removeItem,
+      calculateTotals: state.calculateTotals,
+    })
+  );
 
   const handleIncrease = () => {
-    dispatch(increase(item.id));
-    dispatch(calculateTotals());
+    increase(item.id);
+    calculateTotals();
   };
 
   const handleDecrease = () => {
-    dispatch(decrease(item.id));
-    dispatch(calculateTotals());
+    decrease(item.id);
+    calculateTotals();
   };
 
   const handleRemove = () => {
-    dispatch(removeItem(item.id));
-    dispatch(calculateTotals());
+    removeItem(item.id);
+    calculateTotals();
   };
 
   return (

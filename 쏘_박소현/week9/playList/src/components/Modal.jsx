@@ -1,6 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
-import { clearCart } from "../store/cartSlice";
-import { closeModal } from "../store/modalSlice";
+import useStore from "../store/modalStore";
 import styled from "styled-components";
 
 const ModalContainer = styled.div`
@@ -45,16 +43,15 @@ const Button = styled.button`
 `;
 
 const Modal = () => {
-  const dispatch = useDispatch();
-  const isOpen = useSelector((state) => state.modal.isOpen);
+  const { isOpen, clearCart, closeModal } = useStore();
 
   const handleConfirm = () => {
-    dispatch(clearCart());
-    dispatch(closeModal());
+    clearCart();
+    closeModal();
   };
 
   const handleCancel = () => {
-    dispatch(closeModal());
+    closeModal();
   };
 
   if (!isOpen) return null;

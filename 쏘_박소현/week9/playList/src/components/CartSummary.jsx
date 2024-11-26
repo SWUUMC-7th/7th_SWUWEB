@@ -1,7 +1,10 @@
-import { useSelector } from "react-redux";
+import useCartStore from "../store/useCartStore";
 
 const CartSummary = () => {
-  const { totalAmount, totalQuantity } = useSelector((state) => state.cart);
+  const { totalAmount, totalQuantity } = useCartStore((state) => ({
+    totalAmount: state.totalAmount,
+    totalQuantity: state.totalQuantity,
+  }));
 
   return (
     <div>
