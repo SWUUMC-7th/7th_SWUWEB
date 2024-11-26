@@ -6,7 +6,7 @@ import {
   removeItem,
   calculateTotals,
 } from "../store/cartSlice";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io"; // react-icons에서 화살표 아이콘 불러오기
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 const CartItemWrapper = styled.div`
   display: flex;
