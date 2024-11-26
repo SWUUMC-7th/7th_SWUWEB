@@ -5,6 +5,7 @@ import CartItem from "./components/CartItem";
 import CartSummary from "./components/CartSummary";
 import ClearCartButton from "./components/ClearCartButton";
 import { calculateTotals } from "./store/cartSlice";
+import Modal from "./components/Modal";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const App = () => {
       </div>
       <CartSummary />
       <ClearCartButton />
+      <Modal />
     </div>
   );
 };

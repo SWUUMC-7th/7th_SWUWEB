@@ -1,16 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
-import cartItems from '../constants/cartItems';
+import { createSlice } from "@reduxjs/toolkit";
+import cartItems from "../constants/cartItems";
 
-// 초기 상태 설정
 const initialState = {
   items: cartItems,
   totalAmount: 0,
   totalQuantity: 0,
 };
 
-// cartSlice 생성
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
     increase: (state, action) => {
@@ -22,7 +20,9 @@ const cartSlice = createSlice({
       if (item) {
         item.amount -= 1;
         if (item.amount < 1) {
-          state.items = state.items.filter((item) => item.id !== action.payload);
+          state.items = state.items.filter(
+            (item) => item.id !== action.payload
+          );
         }
       }
     },
@@ -45,5 +45,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { increase, decrease, removeItem, clearCart, calculateTotals } = cartSlice.actions;
+export const { increase, decrease, removeItem, clearCart, calculateTotals } =
+  cartSlice.actions;
 export default cartSlice.reducer;
