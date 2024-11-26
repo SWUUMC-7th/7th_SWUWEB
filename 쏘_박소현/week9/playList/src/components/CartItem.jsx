@@ -6,7 +6,7 @@ import {
   removeItem,
   calculateTotals,
 } from "../store/cartSlice";
-import { ChevronUp, ChevronDown } from "../constants/icons";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io"; // react-icons에서 화살표 아이콘 불러오기
 
 const CartItemWrapper = styled.div`
   display: flex;
@@ -47,6 +47,7 @@ const QuantityButton = styled.button`
   font-size: 18px;
   cursor: pointer;
   margin: 0 5px;
+  color: #5177ff;
 `;
 
 const CartItem = ({ item }) => {
@@ -76,11 +77,11 @@ const CartItem = ({ item }) => {
       </ItemInfo>
       <QuantityControls>
         <QuantityButton onClick={handleDecrease}>
-          <ChevronDown />
+          <IoIosArrowDown />
         </QuantityButton>
         <span>{item.amount}</span>
         <QuantityButton onClick={handleIncrease}>
-          <ChevronUp />
+          <IoIosArrowUp />
         </QuantityButton>
       </QuantityControls>
       <button onClick={handleRemove}>Remove</button>
