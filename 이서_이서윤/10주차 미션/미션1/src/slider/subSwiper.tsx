@@ -2,8 +2,8 @@ import { Navigation} from "swiper/modules";
 import  { useRef } from "react";
 import { Swiper } from "swiper/react";
 import styled from "styled-components";
-import "swiper/css";
-import "swiper/css/pagination";
+// import "swiper/css";
+// import "swiper/css/pagination";
 import PropTypes from "prop-types";
 
 const Container=styled.div`

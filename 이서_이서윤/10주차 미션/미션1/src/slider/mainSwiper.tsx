@@ -1,8 +1,8 @@
 import { Autoplay, Pagination} from "swiper/modules";
 import { Swiper } from "swiper/react";
 import styled from "styled-components";
-import "swiper/css";
-import "swiper/css/pagination";
+// import "swiper/css";
+// import "swiper/css/pagination";
 import PropTypes from "prop-types";
 
 const mainBannerSwiperBox = styled.div`
