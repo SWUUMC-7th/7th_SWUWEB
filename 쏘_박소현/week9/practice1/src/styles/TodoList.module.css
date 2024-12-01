@@ -1,0 +1,35 @@
+.listContainer {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.text {
+  flex-grow: 1;
+}
+
+.completed {
+  flex-grow: 1;
+  text-decoration: line-through;
+  color: gray;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 18px;
+}
