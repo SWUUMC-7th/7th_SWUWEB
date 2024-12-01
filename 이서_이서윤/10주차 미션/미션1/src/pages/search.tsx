@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import useCustomFetch from "../../hooks/useCustomFetch";
-import MovieCard from "../components/moviecard";
+import MovieCard from "../components/movieCard";
 import Skeleton from "../components/skeleton";
 import { debounce } from "../../utils/debounce";
 
@@ -42,7 +42,7 @@ const Search = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
   const { data, isLoading } = useCustomFetch(
-    `/search/movie?query=${searchValue}&language=ko-KR`
+    `/search/movie?query=${searchValue}&language=ko-KR`, false
   );
 
   const debouncedSearch = debounce(() => {
@@ -53,7 +53,7 @@ const Search = () => {
     }
   }, 500);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value); 
   };
 
@@ -85,7 +85,7 @@ const Search = () => {
           ))}
         {!isLoading &&
           movies.length > 0 &&
-          movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
+          movies.map((movie) => <MovieCard movie={movie} />)}
         {isSearched && movies.length === 0 && searchValue && (
           <NoMovie>{`검색하신 "${searchValue}"에 해당하는 영화가 없습니다.`}</NoMovie>
         )}

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 const Wrapper=styled.div`
@@ -35,7 +34,18 @@ const Title=styled.div`
 const Date=styled.div`
     font-size:11px;
 `;
-const MovieCard=({movie})=>{
+
+interface MovieProps {
+    id:number,
+    poster_path:string,
+    title:string,
+    release_date:string
+}
+interface Movie{
+    movie:MovieProps
+}
+
+const MovieCard=({movie}:Movie)=>{
     const src='https://image.tmdb.org/t/p/w500';
     const navigate=useNavigate();
     return(

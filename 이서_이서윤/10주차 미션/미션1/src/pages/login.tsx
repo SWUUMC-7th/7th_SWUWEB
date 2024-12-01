@@ -46,62 +46,70 @@ const Error=styled.div`
     margin-top:-5px;
     margin-bottom:15px;
 `;
+
 const LogInPage = () => {
-    const login = useForm({
-        initialValue:{
-            email:'',
-            password:'',
-        },
-        validate: validateLogin 
-    }); 
-    const {setLogin}=useIsLogin();
-    const emailCheck = login.touched.email && login.errors.email;
-    const pwCheck = login.touched.password && login.errors.password;
+  const login  = useForm({
+    initialValue: {
+      email: '',
+      password: '',
+    },
+    validate: validateLogin,
+  });
 
-    const navigate=useNavigate();
+  const { setLogin } = useIsLogin();
+  const emailCheck = login.touched.email && login.errors.email;
+  const pwCheck = login.touched.password && login.errors.password;
 
-    const {mutate} = useMutation({
-        mutationFn:postLogin,
-        onSuccess:(data)=>{
-            console.log(data)
-            setLogin(localStorage.getItem('accessToken'));
-            navigate('/',{state:{LoginData:data}});
-        },
-        onError:(error)=>{
-            console.log(error)
-          },
-    })
+  const navigate = useNavigate();
 
-    const handlePressLogin=()=>{
-        const data=login.values;
-        mutate({data});
-    }
-    return (
-        <Container>
-            <LogInBox>
-                <Title>로그인</Title>
-                <Input 
-                    placeholder="이메일을 입력해주세요" 
-                    error={emailCheck}
-                    {...login.getTextInputProps('email')}
-                />
-                {emailCheck && <Error>{login.errors.email}</Error>}
-                <Input 
-                    type="password"
-                    placeholder="비밀번호를 입력해주세요" 
-                    error={pwCheck}
-                    {...login.getTextInputProps('password')}
-                />
-                {pwCheck && <Error>{login.errors.password}</Error>}
-                <LoginBtn
-                    disabled={!login.values.email || !login.values.password || login.errors.email || login.errors.password}
-                    onClick={handlePressLogin}
-                >
-                    로그인
-                </LoginBtn>
-            </LogInBox>
-        </Container>
-    );  
+  const { mutate } = useMutation({
+    mutationFn: postLogin,
+    onSuccess: (data: { accessToken: string }) => {
+      console.log(data);
+      setLogin(data.accessToken);
+      navigate('/', { state: { LoginData: data } });
+    },
+    onError: (error: unknown) => {
+      console.log(error);
+    },
+  });
+
+  const handlePressLogin = () => {
+    const data = login.values;
+    mutate(data); 
+  };
+
+  return (
+    <Container>
+      <LogInBox>
+        <Title>로그인</Title>
+        <Input
+          placeholder="이메일을 입력해주세요"
+          error={emailCheck}
+          {...login.getTextInputProps('email')}
+        />
+        {emailCheck && <Error>{login.errors.email}</Error>}
+        <Input
+          type="password"
+          placeholder="비밀번호를 입력해주세요"
+          error={pwCheck}
+          {...login.getTextInputProps('password')}
+        />
+        {pwCheck && <Error>{login.errors.password}</Error>}
+        <LoginBtn
+          disabled={
+            !login.values.email ||
+            !login.values.password ||
+            login.errors.email ||
+            login.errors.password
+          }
+          onClick={handlePressLogin}
+        >
+          로그인
+        </LoginBtn>
+      </LogInBox>
+    </Container>
+  );
 };
 
 export default LogInPage;

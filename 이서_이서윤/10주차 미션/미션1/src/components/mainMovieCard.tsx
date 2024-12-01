@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { useGetMovies } from "../../hooks/queries/useGetMovies";
-import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 
 const Container=styled.div`
@@ -30,8 +29,8 @@ const Title=styled.div`
     margin-top:-20px;
 `;
 
-const MainMovieCard=({id, index})=>{  
-    const { data } = useQuery({
+const MainMovieCard=({ id, index }: { id: number; index: number })=>{  
+    const { data }= useQuery({
         queryFn: () => useGetMovies({ category: `${id}`, isDetail: true }),
         queryKey: ["movies", "detail", id],
         cacheTime: 10000,
@@ -53,10 +52,5 @@ const MainMovieCard=({id, index})=>{
         </Container>
     )
 }
-
-MainMovieCard.propTypes = {
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    index: PropTypes.number.isRequired,
-  };
 
 export default MainMovieCard

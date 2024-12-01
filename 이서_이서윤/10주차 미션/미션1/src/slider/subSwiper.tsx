@@ -1,10 +1,8 @@
 import { Navigation} from "swiper/modules";
 import  { useRef } from "react";
 import { Swiper } from "swiper/react";
+import { Swiper as SwiperInstance} from "swiper";
 import styled from "styled-components";
-// import "swiper/css";
-// import "swiper/css/pagination";
-import PropTypes from "prop-types";
 
 const Container=styled.div`
     display:flex;
@@ -17,8 +15,12 @@ const Button =styled.div`
     line-height:300px;
 `;
 
-const SubSwiper = ({ children }) =>{
-    const swiperRef = useRef(null);
+interface SubSwiperProps {
+    children: React.ReactNode;
+  }
+
+const SubSwiper: React.FC<SubSwiperProps> = ({ children }) =>{
+    const swiperRef = useRef<SwiperInstance|null>(null);
 
     const handlePrev = () => {
     swiperRef.current?.slidePrev(); // 이전 슬라이드로 이동
@@ -46,9 +48,5 @@ const SubSwiper = ({ children }) =>{
         </Container>
     )
 }
-
-SubSwiper.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
 
 export default SubSwiper;

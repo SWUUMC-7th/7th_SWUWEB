@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import LoginContext from "../content/loginContext";
+import LoginContext from "../content/LoginText";
 
 const useIsLogin = () => useContext(LoginContext);
 

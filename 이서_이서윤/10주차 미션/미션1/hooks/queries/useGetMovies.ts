@@ -1,6 +1,12 @@
 import { axiosInstance } from "../../apis/axios-instance";
 
-const useGetMovies = async ({ category, pageParam, isDetail }) => {
+interface getMoviesProps{
+    category:string, 
+    pageParam?:number, 
+    isDetail?:boolean
+}
+
+const useGetMovies = async ({category, pageParam, isDetail}:getMoviesProps) => {
     let data; 
     if (isDetail) {
         const response = await axiosInstance.get(`/movie/${category}?language=ko-KR`, {
@@ -12,7 +18,7 @@ const useGetMovies = async ({ category, pageParam, isDetail }) => {
         data = response.data; 
     }
     console.log('data fetch:',category)
-    return data; // 최종적으로 데이터를 반환
+    return data;
 };
 
 export { useGetMovies };

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import styled from "styled-components";
 
 const Bar = styled.div`
@@ -16,7 +15,14 @@ const Button = styled.button`
     &:last-child{background-color:#F2075D;}
 `;
 
-const PaginationBar = ({pageNum,handlePrevPage,handleNextPage,prevDisabled}) =>{
+interface PaginationProps{
+    pageNum:number,
+    handlePrevPage:() => void,
+    handleNextPage:() => void ,
+    prevDisabled:boolean
+}
+
+const PaginationBar = ({pageNum,handlePrevPage,handleNextPage,prevDisabled}:PaginationProps) =>{
     return(
         <Bar>
             <Button 

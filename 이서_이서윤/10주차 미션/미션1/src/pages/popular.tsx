@@ -1,4 +1,4 @@
-import MovieCard from "../components/moviecard";
+import MovieCard from "../components/movieCard";
 import { MovieGrid } from "../layout/movieGrid";
 import MovieFetchError from "../components/movieFetchError";
 import { useGetMovies } from "../../hooks/queries/useGetMovies";
@@ -6,6 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import Skeleton from "../components/skeleton";
 import { useState } from "react";
 import PaginationBar from "../components/PaginationBar";
+
+interface Movie {
+    id:number,
+    poster_path:string,
+    title:string,
+    release_date:string
+}
 
 const Popular = () => {
     const [pageNum, setPageNum]=useState(1);
@@ -43,7 +50,7 @@ const Popular = () => {
     return (
         <>
             <MovieGrid>
-                {data.results.map((movie) => (
+                {data.results.map((movie:Movie) => (
                     <MovieCard 
                         key={movie.id} 
                         movie={movie}

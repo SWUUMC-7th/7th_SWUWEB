@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
 import styled from "styled-components";
-import userDefault from "../assets/userDefault.png";
+import userDefault from '../assets/userDefault.png';
 
 const Container=styled.div`
     width:150px; height:180px;
@@ -27,7 +26,10 @@ const Character=styled.div`
     overflow: hidden;
     -webkit-line-clamp: 2;
 `;
-const CastInfo = ({cast, isCrew}) =>{
+
+
+
+const CastInfo= ({ cast, isCrew }:CastInfoProps) =>{
     const src='https://image.tmdb.org/t/p/w500';
     return(
         <Container>

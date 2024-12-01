@@ -1,9 +1,8 @@
 import { Autoplay, Pagination} from "swiper/modules";
 import { Swiper } from "swiper/react";
 import styled from "styled-components";
-// import "swiper/css";
-// import "swiper/css/pagination";
-import PropTypes from "prop-types";
+import "swiper/css";
+import "swiper/css/pagination";
 
 const mainBannerSwiperBox = styled.div`
   position: relative;
@@ -30,9 +29,13 @@ const mainBannerSwiperBox = styled.div`
   }
 `;
 
+interface MainSwiperProps {
+  children: React.ReactNode;
+}
+
 const S = { mainBannerSwiperBox };
 
-const MainSwiper = ({ children }) => {
+const MainSwiper: React.FC<MainSwiperProps> = ({ children }) => {
   return (
     <S.mainBannerSwiperBox>
       <Swiper
@@ -53,9 +56,4 @@ const MainSwiper = ({ children }) => {
     </S.mainBannerSwiperBox>
   );
 };
-
-MainSwiper.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
 export { MainSwiper };

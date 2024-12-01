@@ -2,12 +2,16 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import {LoginContextProvider} from '../content/loginContext';
+import {LoginContextProvider} from '../content/LoginText';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <LoginContextProvider>
-      <App />
-    </LoginContextProvider>
-  </StrictMode>,
-)
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <LoginContextProvider>
+        <App />
+      </LoginContextProvider>
+    </StrictMode>
+  );
+}

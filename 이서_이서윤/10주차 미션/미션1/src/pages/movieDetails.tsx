@@ -66,6 +66,13 @@ const CreditWrapper=styled.div`
     gap:5px;
     flex-wrap:wrap;
 `;
+interface CrewProps{
+    id:number,
+    profile_path: string | null,
+    name: string,
+    character: string,
+    job?: string | undefined
+}
 const MovieDetails = () =>{
     const params=useParams();
     const param=params.movieId;
@@ -112,7 +119,7 @@ const MovieDetails = () =>{
                 <h2>감독/출연</h2>
                 <CreditWrapper>
                     <>
-                        {credits.crew && credits.crew.map((crew)=>(
+                        {credits.crew && credits.crew.map((crew:CrewProps)=>(
                             crew.job==='Director' && (
                                 <CastInfo 
                                 key={crew.id}
@@ -120,10 +127,11 @@ const MovieDetails = () =>{
                                 isCrew={true}
                                 />)
                         )) }
-                        {credits.cast && credits.cast.map((cast)=>(
+                        {credits.cast && credits.cast.map((cast:CrewProps)=>(
                         <CastInfo 
                         key={cast.id}
                         cast={cast}
+                        isCrew={false}
                         />
                     )) }
                     </>

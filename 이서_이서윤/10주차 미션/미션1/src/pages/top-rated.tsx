@@ -1,4 +1,4 @@
-import MovieCard from "../components/moviecard";
+import MovieCard from "../components/movieCard";
 import { MovieGrid } from "../layout/movieGrid";
 import MovieFetchError from "../components/movieFetchError";
 import { useGetMovies } from "../../hooks/queries/useGetMovies";
@@ -7,12 +7,19 @@ import Skeleton from "../components/skeleton";
 import { useState } from "react";
 import PaginationBar from "../components/PaginationBar";
 
+interface Movie {
+    id:number,
+    poster_path:string,
+    title:string,
+    release_date:string
+}
+
 const TopRated = () => {
     const [pageNum, setPageNum]=useState(1);
     const [prevDisabled,setPrevDisabled]=useState(true);
     
     const {data, isPending, isError} = useQuery({
-        queryFn:()=>useGetMovies({category:'top_rated',pageParam:pageNum}),
+        queryFn:()=>useGetMovies({category:'top_rated',pageParam:pageNum, isDetail:false}),
         queryKey:['movies','top_rated', pageNum],
         cacheTime:10000,
         staleTime:10000
@@ -43,7 +50,7 @@ const TopRated = () => {
     return (
         <>
             <MovieGrid>
-                {data.results.map((movie) => (
+                {data.results.map((movie:Movie) => (
                     <MovieCard 
                         key={movie.id} 
                         movie={movie}

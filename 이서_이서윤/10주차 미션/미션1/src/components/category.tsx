@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import styled from "styled-components";
 
 const Container=styled.div`
@@ -19,7 +18,11 @@ const Text=styled.div`
     top:120px;
     left:10px;
 `;
-const Category=({img, text})=>{
+interface CategoryProps{
+    img:string, 
+    text:string
+}
+const Category=({img, text}:CategoryProps)=>{
     return(
         <Container>
             <Img src={img} alt={text}/>

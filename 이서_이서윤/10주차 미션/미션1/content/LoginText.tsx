@@ -1,11 +1,23 @@
-import { createContext,  useState, useEffect, useCallback  } from "react";
+import { createContext,  useState, useEffect, useCallback,ReactNode  } from "react";
 import axios from "axios";
-import PropTypes from "prop-types"; 
-const LoginContext = createContext();
 
-export const LoginContextProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
-  const [nickname, setNickname] = useState(null);
+interface LoginContextType {
+    accessToken: string | null;
+    nickname: string | null;
+    setLogin: (token: string) => void;
+    setLogout: () => void;
+  }
+
+  const LoginContext = createContext<LoginContextType>({
+    accessToken: null,
+    nickname: null,
+    setLogin: () => {},
+    setLogout: () => {},
+  });
+
+export const LoginContextProvider = ({ children }: { children: ReactNode }) => {
+  const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem("accessToken"));
+  const [nickname, setNickname] = useState<string | null>(null);
 
   
   const fetchUserInfo = useCallback( async () => {
@@ -28,28 +40,24 @@ export const LoginContextProvider = ({ children }) => {
         fetchUserInfo();
     },[ fetchUserInfo])
 
-    const setLogin = async (token) => {
+    const setLogin = async (token:string) => {
         localStorage.setItem("accessToken", token);
         setAccessToken(token);
         fetchUserInfo(); 
       };
     
     const setLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem('refreshToken');
-    setAccessToken(null);
-    setNickname(null);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem('refreshToken');
+        setAccessToken(null);
+        setNickname(null);
     };
 
     return (
-    <LoginContext.Provider value={{ accessToken, nickname, setLogin, setLogout }}>
-        {children}
-    </LoginContext.Provider>
+        <LoginContext.Provider value={{ accessToken, nickname, setLogin, setLogout }}>
+            {children}
+        </LoginContext.Provider>
     );
-    };
-    
-    LoginContextProvider.propTypes = {
-        children: PropTypes.node.isRequired,
-      };
+};
 
-    export default LoginContext;
+export default LoginContext;

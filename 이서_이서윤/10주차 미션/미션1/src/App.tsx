@@ -1,16 +1,16 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-// import HomePage from "./pages/home.jsx";
-// import NotFound from "./pages/not-found.jsx";
-// import Movies from "./pages/movies.jsx";
-// import RootLayout from './layout/root-layout.jsx';
-// import LogIn from './pages/login.jsx';
-// import SignUp from './pages/signup.jsx';
-// import Search from "./pages/search.jsx";
-// import NowPaying from "./pages/now-playing.jsx";
-// import Popular from "./pages/popular.jsx";
-// import TopRated from "./pages/top-rated.jsx";
-// import UpComing from "./pages/up-coming.jsx";
-// import MovieDetails from "./pages/movieDetails.jsx";
+import HomePage from "./pages/home.tsx";
+import NotFound from "./pages/not-found.tsx";
+import Movies from "./pages/movies.tsx";
+import RootLayout from './layout/root-layout.tsx';
+import LogIn from './pages/login.tsx';
+import SignUp from './pages/signup.tsx';
+import Search from "./pages/search.tsx";
+import NowPaying from "./pages/now-playing.tsx";
+import Popular from "./pages/popular.tsx";
+import TopRated from "./pages/top-rated.tsx";
+import UpComing from "./pages/up-coming.tsx";
+import MovieDetails from "./pages/movieDetails.tsx";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

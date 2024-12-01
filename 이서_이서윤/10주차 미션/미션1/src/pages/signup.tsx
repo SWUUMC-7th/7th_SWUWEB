@@ -70,6 +70,11 @@ const Birth=styled.div`
     width:300px;
     >input{width:100px !important ;}
 `;
+interface SignupData {
+    email: string;
+    password: string;
+    passwordCheck: string;
+}
 const SignUpPage = () => {
     const schema = yup.object().shape({
         name:yup.string().required('이름을 입력해주세요.'),
@@ -77,6 +82,7 @@ const SignUpPage = () => {
         password:yup.string().min(8,'비밀번호는 8자 이상이어야 합니다.').max(16,'비밀번호는 16자 이하여야 합니다.')
         .required('비밀번호를 입력해주세요.'),
         passwordCheck: yup.string()
+        .nullable()
         .oneOf([yup.ref('password'), null], '비밀번호가 일치하지 않습니다.')
         .required('비밀번호 확인은 필수입니다.')
     })
@@ -96,7 +102,7 @@ const SignUpPage = () => {
             console.log(error)
           },
     })
-    const onSubmit = (data) => {
+    const onSubmit = (data:SignupData) => {
         console.log('data:',data)
         mutate({data});
     }
@@ -115,10 +121,10 @@ const SignUpPage = () => {
                         <Gender>
                             <div>성별</div>
                             <label>
-                                <input type="radio" label="gender" value="male"/>남
+                                <input type="radio" name="gender" value="male"/>남
                             </label>
                             <label>
-                            <input type="radio" label="gender" value="female"/>여
+                            <input type="radio" name="gender" value="female"/>여
                             </label>
                         </Gender>
                         <Birth>

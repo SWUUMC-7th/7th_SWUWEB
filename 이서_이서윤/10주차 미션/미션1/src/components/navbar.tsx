@@ -39,6 +39,7 @@ const UserLogin=styled.button`
     color:white;
     background:none;
 `;
+
 const Navbar = () => {
     const {nickname, setLogout} = useIsLogin();
 
