@@ -1,3 +1,4 @@
+export { default as Error } from "./Error";
 export { default as InfiniteMovieList } from "./InfiniteMovieList";
 export { default as MovieCard } from "./MovieCard";
 export { default as NavBar } from "./NavBar";
