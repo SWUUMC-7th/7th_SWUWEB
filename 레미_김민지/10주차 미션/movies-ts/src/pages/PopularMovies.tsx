@@ -4,7 +4,7 @@ import { useInView } from "react-intersection-observer";
 import { useGetInfiniteMovies } from "../api/hooks/useGetInfiniteMovies";
 import { Error, LoadingBar, MovieCard, SkeletonList } from "../components/_index";
 
-const NowPlayingMovies: React.FC = () => {
+const PopularMovies: React.FC = () => {
   const {
     data: movies,
     isFetching,
@@ -12,7 +12,7 @@ const NowPlayingMovies: React.FC = () => {
     hasNextPage,
     fetchNextPage,
     isError,
-  } = useGetInfiniteMovies("now_playing");
+  } = useGetInfiniteMovies("popular");
 
   const { ref, inView } = useInView({ threshold: 0 });
 
@@ -28,7 +28,7 @@ const NowPlayingMovies: React.FC = () => {
 
   return (
     <>
-      <h1 style={{ marginBottom: 20 }}>현재 상영중인 영화</h1>
+      <h1 style={{ marginBottom: 20 }}>인기 영화</h1>
       <MovieGrid>
         {movies?.pages.flatMap((page) =>
           page.results.map((movie) => (
@@ -42,7 +42,7 @@ const NowPlayingMovies: React.FC = () => {
   );
 };
 
-export default NowPlayingMovies;
+export default PopularMovies;
 
 const MovieGrid = styled.div`
   display: grid;
