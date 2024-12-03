@@ -1,7 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import RoutePaths from "./RoutePaths";
 import RootLayout from "../layouts/RootLayout";
-import { Home, Movies, NotFound, Search } from "../pages/_index";
+import {
+  Home,
+  Movies,
+  NotFound,
+  NowPlayingMovies,
+  PopularMovies,
+  Search,
+  TopRatedMovies,
+  UpcomingMovies,
+} from "../pages/_index";
 
 const router = createBrowserRouter([
   {
@@ -18,26 +27,26 @@ const router = createBrowserRouter([
         element: <Movies />,
         children: [
           //       {
-          //         path: RoutePaths.MOVIES_NOW_PLAYING,
-          //         element: <NowPlayingMovies />,
-          //       },
-          //       {
-          //         path: RoutePaths.MOVIES_POPULAR,
-          //         element: <PopularMovies />,
-          //       },
-          //       {
-          //         path: RoutePaths.MOVIES_TOP_RATED,
-          //         element: <TopRatedMovies />,
-          //       },
-          //       {
-          //         path: RoutePaths.MOVIES_UPCOMING,
-          //         element: <UpComingMovies />,
-          //       },
-          //       {
           //         path: RoutePaths.MOVIE_DETAIL,
           //         element: <MovieDetail />,
           //       },
         ],
+      },
+      {
+        path: RoutePaths.MOVIES_NOW_PLAYING,
+        element: <NowPlayingMovies />,
+      },
+      {
+        path: RoutePaths.MOVIES_POPULAR,
+        element: <PopularMovies />,
+      },
+      {
+        path: RoutePaths.MOVIES_TOP_RATED,
+        element: <TopRatedMovies />,
+      },
+      {
+        path: RoutePaths.MOVIES_UPCOMING,
+        element: <UpcomingMovies />,
       },
       //   {
       //     path: RoutePaths.ACTORS,
