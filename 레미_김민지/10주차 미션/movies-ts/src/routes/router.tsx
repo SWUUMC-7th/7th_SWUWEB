@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import RoutePaths from "./RoutePaths";
 import RootLayout from "../layouts/RootLayout";
-import { Home, Movies, NotFound } from "../pages/_index";
+import { Home, Movies, NotFound, Search } from "../pages/_index";
 
 const router = createBrowserRouter([
   {
@@ -55,10 +55,10 @@ const router = createBrowserRouter([
       //     path: RoutePaths.SIGNUP,
       //     element: <SignUp />,
       //   },
-      //   {
-      //     path: RoutePaths.SEARCH,
-      //     element: <Search />,
-      //   },
+      {
+        path: RoutePaths.SEARCH,
+        element: <Search />,
+      },
     ],
   },
 ]);
