@@ -3,6 +3,7 @@ import RoutePaths from "./RoutePaths";
 import RootLayout from "../layouts/RootLayout";
 import {
   Home,
+  MovieDetail,
   Movies,
   NotFound,
   NowPlayingMovies,
@@ -25,12 +26,10 @@ const router = createBrowserRouter([
       {
         path: RoutePaths.MOVIES,
         element: <Movies />,
-        children: [
-          //       {
-          //         path: RoutePaths.MOVIE_DETAIL,
-          //         element: <MovieDetail />,
-          //       },
-        ],
+      },
+      {
+        path: RoutePaths.MOVIE_DETAIL,
+        element: <MovieDetail />,
       },
       {
         path: RoutePaths.MOVIES_NOW_PLAYING,
