@@ -3,12 +3,14 @@ import RoutePaths from "./RoutePaths";
 import RootLayout from "../layouts/RootLayout";
 import {
   Home,
+  Login,
   MovieDetail,
   Movies,
   NotFound,
   NowPlayingMovies,
   PopularMovies,
   Search,
+  Signup,
   TopRatedMovies,
   UpcomingMovies,
 } from "../pages/_index";
@@ -55,14 +57,14 @@ const router = createBrowserRouter([
       //     path: RoutePaths.ACTOR_DETAIL,
       //     element: <ActorDetail />,
       //   },
-      //   {
-      //     path: RoutePaths.LOGIN,
-      //     element: <Login />,
-      //   },
-      //   {
-      //     path: RoutePaths.SIGNUP,
-      //     element: <SignUp />,
-      //   },
+      {
+        path: RoutePaths.LOGIN,
+        element: <Login />,
+      },
+      {
+        path: RoutePaths.SIGNUP,
+        element: <Signup />,
+      },
       {
         path: RoutePaths.SEARCH,
         element: <Search />,
